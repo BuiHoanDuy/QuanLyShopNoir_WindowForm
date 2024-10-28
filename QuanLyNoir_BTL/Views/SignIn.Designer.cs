@@ -123,6 +123,7 @@
             btn_signin.TabIndex = 7;
             btn_signin.Text = "Sign in";
             btn_signin.UseVisualStyleBackColor = false;
+            btn_signin.Click += btn_signin_Click;
             // 
             // btn_forgotpassword
             // 
@@ -132,6 +133,7 @@
             btn_forgotpassword.TabIndex = 6;
             btn_forgotpassword.Text = "Forgot Password";
             btn_forgotpassword.UseVisualStyleBackColor = true;
+            btn_forgotpassword.Click += btn_forgotpassword_Click;
             // 
             // chbx_rememberme
             // 

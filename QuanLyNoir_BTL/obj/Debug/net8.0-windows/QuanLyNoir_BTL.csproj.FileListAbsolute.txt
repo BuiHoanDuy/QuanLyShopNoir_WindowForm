@@ -146,3 +146,5 @@ C:\Users\Aus\Documents\Subjects\LapTrinhTrucQuan\BTL\QuanLyNoir_BTL\QuanLyNoir_B
 C:\Users\Aus\Documents\Subjects\LapTrinhTrucQuan\BTL\QuanLyNoir_BTL\QuanLyNoir_BTL\bin\Debug\net8.0-windows\runtimes\win-x86\native\sni.dll
 C:\Users\Aus\Documents\Subjects\LapTrinhTrucQuan\BTL\QuanLyNoir_BTL\QuanLyNoir_BTL\bin\Debug\net8.0-windows\runtimes\unix\lib\netcoreapp2.1\System.Data.SqlClient.dll
 C:\Users\Aus\Documents\Subjects\LapTrinhTrucQuan\BTL\QuanLyNoir_BTL\QuanLyNoir_BTL\bin\Debug\net8.0-windows\runtimes\win\lib\netcoreapp2.1\System.Data.SqlClient.dll
+C:\Users\Aus\Documents\Subjects\LapTrinhTrucQuan\BTL\QuanLyNoir_BTL\QuanLyNoir_BTL\obj\Debug\net8.0-windows\QuanLyNoir_BTL.Views.AddNewProduct.resources
+C:\Users\Aus\Documents\Subjects\LapTrinhTrucQuan\BTL\QuanLyNoir_BTL\QuanLyNoir_BTL\bin\Debug\net8.0-windows\QuanLyNoir_BTL.dll.config
