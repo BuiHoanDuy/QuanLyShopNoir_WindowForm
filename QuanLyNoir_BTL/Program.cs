@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore;
+
 namespace QuanLyNoir_BTL
 {
     internal static class Program
@@ -13,7 +15,7 @@ namespace QuanLyNoir_BTL
             ApplicationConfiguration.Initialize();
            // Application.Run(new SignIn());
             Application.Run(new ManageProduct());
-
+            // Scaffold-DbContext "Server=LAPTOP-2L3R0R91\\MYCOMPUTER_DUY;Database=ShopNoir_Test.db;Trusted_Connection=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models
         }
     }
 }
