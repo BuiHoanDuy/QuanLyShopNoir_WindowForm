@@ -33,6 +33,7 @@
             label2 = new Label();
             label1 = new Label();
             panel2 = new Panel();
+            splitter1 = new Splitter();
             btn_signin = new Button();
             btn_forgotpassword = new Button();
             chbx_rememberme = new CheckBox();
@@ -42,7 +43,6 @@
             label4 = new Label();
             label3 = new Label();
             label6 = new Label();
-            splitter1 = new Splitter();
             panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             panel2.SuspendLayout();
@@ -64,6 +64,7 @@
             pictureBox1.Location = new Point(59, 24);
             pictureBox1.Name = "pictureBox1";
             pictureBox1.Size = new Size(392, 425);
+            pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
             pictureBox1.TabIndex = 2;
             pictureBox1.TabStop = false;
             // 
@@ -101,6 +102,15 @@
             panel2.Name = "panel2";
             panel2.Size = new Size(636, 780);
             panel2.TabIndex = 1;
+            // 
+            // splitter1
+            // 
+            splitter1.BackColor = SystemColors.ActiveCaptionText;
+            splitter1.Location = new Point(0, 0);
+            splitter1.Name = "splitter1";
+            splitter1.Size = new Size(4, 780);
+            splitter1.TabIndex = 8;
+            splitter1.TabStop = false;
             // 
             // btn_signin
             // 
@@ -187,16 +197,7 @@
             label6.TabIndex = 2;
             label6.Text = "Noir";
             // 
-            // splitter1
-            // 
-            splitter1.BackColor = SystemColors.ActiveCaptionText;
-            splitter1.Location = new Point(0, 0);
-            splitter1.Name = "splitter1";
-            splitter1.Size = new Size(4, 780);
-            splitter1.TabIndex = 8;
-            splitter1.TabStop = false;
-            // 
-            // Form1
+            // SignIn
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -205,7 +206,7 @@
             Controls.Add(label6);
             Controls.Add(panel2);
             Controls.Add(panel1);
-            Name = "Form1";
+            Name = "SignIn";
             Text = "Form1";
             TopMost = true;
             Load += Form1_Load;

@@ -8,6 +8,7 @@ public partial class ShopNoirTestContext : DbContext
 {
     public ShopNoirTestContext()
     {
+        this.Database.SetCommandTimeout(120); // 120 giây
     }
 
     public ShopNoirTestContext(DbContextOptions<ShopNoirTestContext> options)

@@ -54,13 +54,16 @@
             label4 = new Label();
             label3 = new Label();
             groupBox3 = new GroupBox();
-            label12 = new Label();
+            lbl_priceFilter = new Label();
             label10 = new Label();
             label9 = new Label();
             label11 = new Label();
             label8 = new Label();
-            hScrollBar1 = new HScrollBar();
+            scrb_price = new HScrollBar();
             pnl_product = new Panel();
+            btn_previous = new Button();
+            btn_next = new Button();
+            lbl_page = new Label();
             panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             panel2.SuspendLayout();
@@ -150,7 +153,6 @@
             btn_newcollection.TabIndex = 3;
             btn_newcollection.Text = "New Collection";
             btn_newcollection.UseVisualStyleBackColor = true;
-            btn_newcollection.Click += btn_newcollection_Click;
             // 
             // btn_bag
             // 
@@ -310,12 +312,12 @@
             // 
             // groupBox3
             // 
-            groupBox3.Controls.Add(label12);
+            groupBox3.Controls.Add(lbl_priceFilter);
             groupBox3.Controls.Add(label10);
             groupBox3.Controls.Add(label9);
             groupBox3.Controls.Add(label11);
             groupBox3.Controls.Add(label8);
-            groupBox3.Controls.Add(hScrollBar1);
+            groupBox3.Controls.Add(scrb_price);
             groupBox3.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 163);
             groupBox3.Location = new Point(41, 541);
             groupBox3.Name = "groupBox3";
@@ -324,14 +326,14 @@
             groupBox3.TabStop = false;
             groupBox3.Text = "Price";
             // 
-            // label12
+            // lbl_priceFilter
             // 
-            label12.AutoSize = true;
-            label12.Location = new Point(108, 41);
-            label12.Name = "label12";
-            label12.Size = new Size(45, 20);
-            label12.TabIndex = 15;
-            label12.Text = "0.00$";
+            lbl_priceFilter.AutoSize = true;
+            lbl_priceFilter.Location = new Point(108, 41);
+            lbl_priceFilter.Name = "lbl_priceFilter";
+            lbl_priceFilter.Size = new Size(45, 20);
+            lbl_priceFilter.TabIndex = 15;
+            lbl_priceFilter.Text = "0.00$";
             // 
             // label10
             // 
@@ -369,12 +371,17 @@
             label8.TabIndex = 1;
             label8.Text = "0.00";
             // 
-            // hScrollBar1
+            // scrb_price
             // 
-            hScrollBar1.Location = new Point(15, 75);
-            hScrollBar1.Name = "hScrollBar1";
-            hScrollBar1.Size = new Size(251, 26);
-            hScrollBar1.TabIndex = 0;
+            scrb_price.Location = new Point(15, 75);
+            scrb_price.Maximum = 1009;
+            scrb_price.Name = "scrb_price";
+            scrb_price.Size = new Size(251, 26);
+            scrb_price.TabIndex = 0;
+            scrb_price.Scroll += scrb_price_Scroll;
+            scrb_price.Minimum = 0; // Giá tối thiểu
+            scrb_price.LargeChange = 10; // Giá trị thay đổi mỗi lần kéo
+            scrb_price.SmallChange = 10; // Giá trị thay đổi mỗi lần nhấp
             // 
             // pnl_product
             // 
@@ -383,11 +390,43 @@
             pnl_product.Size = new Size(902, 630);
             pnl_product.TabIndex = 13;
             // 
+            // btn_previous
+            // 
+            btn_previous.Location = new Point(800, 844);
+            btn_previous.Name = "btn_previous";
+            btn_previous.Size = new Size(94, 29);
+            btn_previous.TabIndex = 14;
+            btn_previous.Text = "Previous";
+            btn_previous.UseVisualStyleBackColor = true;
+            btn_previous.Click += btn_previous_Click;
+            // 
+            // btn_next
+            // 
+            btn_next.Location = new Point(979, 844);
+            btn_next.Name = "btn_next";
+            btn_next.Size = new Size(94, 29);
+            btn_next.TabIndex = 15;
+            btn_next.Text = "Next";
+            btn_next.UseVisualStyleBackColor = true;
+            btn_next.Click += btn_next_Click;
+            // 
+            // lbl_page
+            // 
+            lbl_page.AutoSize = true;
+            lbl_page.Location = new Point(900, 848);
+            lbl_page.Name = "lbl_page";
+            lbl_page.Size = new Size(18, 20);
+            lbl_page.TabIndex = 16;
+            lbl_page.Text = "...";
+            // 
             // ManageProduct
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1405, 848);
+            ClientSize = new Size(1405, 895);
+            Controls.Add(lbl_page);
+            Controls.Add(btn_next);
+            Controls.Add(btn_previous);
             Controls.Add(pnl_product);
             Controls.Add(groupBox3);
             Controls.Add(groupBox2);
@@ -451,8 +490,11 @@
         private Label label9;
         private Label label11;
         private Label label8;
-        private HScrollBar hScrollBar1;
-        private Label label12;
+        private HScrollBar scrb_price;
+        private Label lbl_priceFilter;
         private Panel pnl_product;
+        private Button btn_previous;
+        private Button btn_next;
+        private Label lbl_page;
     }
 }

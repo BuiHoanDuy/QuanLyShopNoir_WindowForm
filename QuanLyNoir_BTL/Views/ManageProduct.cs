@@ -1,12 +1,9 @@
-﻿using QuanLyNoir_BTL.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using QuanLyNoir_BTL.Models;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Data.Entity;
 using System.Drawing;
+using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -14,138 +11,174 @@ namespace QuanLyNoir_BTL
 {
     public partial class ManageProduct : Form
     {
-        //ShopNoirTestContext dbContext = new ShopNoirTestContext();
+        private readonly ShopNoirTestContext _dbContext = new ShopNoirTestContext();
+        private int currentPage = 1;
+        private const int PageSize = 8; // Số lượng bản ghi nhỏ hơn để tối ưu hóa
+        private int totalRecords;
+
         public ManageProduct()
         {
             InitializeComponent();
             pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
             pictureBox2.SizeMode = PictureBoxSizeMode.StretchImage;
-            hScrollBar1.Height = 20;
-
+            scrb_price.Height = 20;
         }
 
-        private void btn_newcollection_Click(object sender, EventArgs e)
+        private async void ManageProduct_Load(object sender, EventArgs e)
         {
-
+            await LoadProductsAsync(pnl_product);
+            lbl_priceFilter.Text = $"Giá: ${scrb_price.Value}";
         }
-        public void LoadProducts(Panel pnl_product)
+
+        private async Task LoadProductsAsync(Panel pnl_product)
         {
-            // Xóa các control cũ
-            pnl_product.Controls.Clear();
-            using (var dbContext = new ShopNoirTestContext())
+            try
             {
-                // Lấy danh sách sản phẩm từ cơ sở dữ liệu
-                var productInformation = (from p in dbContext.Products.AsNoTracking()
-                                          join pc in dbContext.ProductColors.AsNoTracking()
-                                          on p.Id equals pc.ProductId
-                                          select new
-                                          {
-                                              ProductId = p.Id,
-                                              ProductName = p.ProdName,
-                                              p.Price,
-                                              p.Wid,
-                                              p.Hei,
-                                              ProductInventory = pc.Inventory,
-                                              ProductColorCode = pc.ColorCode,
-                                              ProductColorName = pc.ColorName,
-                                              p.ProdDesc,
-                                              ProductImageUrl = pc.ImageUrl
-                                          }).ToList();
+                totalRecords = await _dbContext.ProductColors.CountAsync();
+                lbl_page.Text = $"Trang {currentPage} / {Math.Ceiling((double)totalRecords / PageSize)}";
 
-                int x = 10, y = 10; // Tọa độ ban đầu cho sản phẩm đầu tiên
-                const int padding = 10; // Khoảng cách giữa các sản phẩm
+                pnl_product.Controls.Clear();
+
+                var productInformation = await _dbContext.Products
+                    .Include(p => p.ProductColors) // Eager load liên kết
+                    .Select(p => new
+                    {
+                        p.Id,
+                        p.ProdName,
+                        p.Price,
+                        p.Wid,
+                        p.Hei,
+                        ColorInfo = p.ProductColors.Select(pc => new
+                        {
+                            pc.Inventory,
+                            pc.ColorName,
+                            pc.ImageUrl
+                        }).FirstOrDefault() // Lấy thông tin màu đầu tiên
+                    })
+                    .AsNoTracking()
+                    .Skip((currentPage - 1) * PageSize)
+                    .Take(PageSize)
+                    .ToListAsync();
+
+                int x = 10, y = 10;
+                const int padding = 10;
 
                 foreach (var product in productInformation)
                 {
-                    // Tạo Panel cho từng sản phẩm
-                    Panel productPanel = new Panel
-                    {
-                        Width = 200,
-                        Height = 300,
-                        BorderStyle = BorderStyle.FixedSingle,
-                        Location = new Point(x, y),
-                        Margin = new Padding(padding)
-                    };
-
-                    // Tạo Label cho tên sản phẩm
-                    Label lblName = new Label
-                    {
-                        Text = product.ProductName,
-                        Font = new Font("Arial", 12, FontStyle.Bold),
-                        Location = new Point(10, 10),
-                        AutoSize = true
-                    };
-
-                    // Tạo PictureBox cho ảnh sản phẩm
-                    //PictureBox picImage = new PictureBox
-                    //{
-                    //    Size = new Size(100, 100),
-                    //    Location = new Point(50, 40),
-                    //    SizeMode = PictureBoxSizeMode.StretchImage
-                    //};
-                    //if (product.ProductImageUrl != null)
-                    //{
-                    //    using (MemoryStream ms = new MemoryStream(product.ProductImageUrl))
-                    //    {
-                    //        picImage.Image = Image.FromStream(ms);
-                    //    }
-                    //}
-
-                    // Tạo các Label cho các thông tin khác
-                    Label lblPrice = new Label
-                    {
-                        Text = $"Price: ${product.Price}",
-                        Location = new Point(10, 150),
-                        AutoSize = true
-                    };
-
-                    Label lblSize = new Label
-                    {
-                        Text = $"Size: {product.Wid} x {product.Hei}",
-                        Location = new Point(10, 180),
-                        AutoSize = true
-                    };
-
-                    Label lblColor = new Label
-                    {
-                        Text = $"Color: {product.ProductColorName}",
-                        Location = new Point(10, 210),
-                        AutoSize = true
-                    };
-
-                    Label lblInventory = new Label
-                    {
-                        Text = $"Inventory: {product.ProductInventory} items",
-                        Location = new Point(10, 240),
-                        AutoSize = true
-                    };
-
-                    // Thêm các control vào panel sản phẩm
-                    productPanel.Controls.Add(lblName);
-        //            productPanel.Controls.Add(picImage);
-                    productPanel.Controls.Add(lblPrice);
-                    productPanel.Controls.Add(lblSize);
-                    productPanel.Controls.Add(lblColor);
-                    productPanel.Controls.Add(lblInventory);
-
-                    // Thêm panel sản phẩm vào pnl_product
+                    var productPanel = CreateProductPanel(product, x, y);
                     pnl_product.Controls.Add(productPanel);
 
-                    // Cập nhật vị trí cho sản phẩm tiếp theo
                     x += productPanel.Width + padding;
-                    if (x + productPanel.Width > pnl_product.Width) // Khi đạt giới hạn chiều rộng của panel chính
+                    if (x + productPanel.Width > pnl_product.Width)
                     {
-                        x = 10; // Reset lại x
-                        y += productPanel.Height + padding; // Tăng y để tạo hàng mới
+                        x = 10;
+                        y += productPanel.Height + padding;
                     }
                 }
+
+                btn_previous.Enabled = currentPage > 1;
+                btn_next.Enabled = currentPage < Math.Ceiling((double)totalRecords / PageSize);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi khi tải dữ liệu: " + ex.Message);
             }
         }
 
-
-        private void ManageProduct_Load(object sender, EventArgs e)
+        private Panel CreateProductPanel(dynamic product, int x, int y)
         {
-            LoadProducts(pnl_product);
+            Panel productPanel = new Panel
+            {
+                Width = 200,
+                Height = 300,
+                BorderStyle = BorderStyle.FixedSingle,
+                Location = new Point(x, y),
+                Margin = new Padding(10)
+            };
+
+            Label lblName = new Label
+            {
+                Text = product.ProdName,
+                Font = new Font("Arial", 12, FontStyle.Bold),
+                Location = new Point(10, 10),
+                AutoSize = true
+            };
+
+            PictureBox picImage = new PictureBox
+            {
+                Size = new Size(100, 100),
+                Location = new Point(50, 40),
+                SizeMode = PictureBoxSizeMode.StretchImage
+            };
+
+            if (product.ColorInfo?.ImageUrl != null)
+            {
+                // Giả sử ColorInfo.ImageUrl là một byte[]
+                using (MemoryStream ms = new MemoryStream(product.ColorInfo.ImageUrl))
+                {
+                    picImage.Image = Image.FromStream(ms);
+                }
+            }
+
+            Label lblPrice = new Label
+            {
+                Text = $"Price: ${product.Price}",
+                Location = new Point(10, 150),
+                AutoSize = true
+            };
+
+            Label lblSize = new Label
+            {
+                Text = $"Size: {product.Wid} x {product.Hei}",
+                Location = new Point(10, 180),
+                AutoSize = true
+            };
+
+            Label lblColor = new Label
+            {
+                Text = $"Color: {product.ColorInfo?.ColorName}",
+                Location = new Point(10, 210),
+                AutoSize = true
+            };
+
+            Label lblInventory = new Label
+            {
+                Text = $"Inventory: {product.ColorInfo?.Inventory} items",
+                Location = new Point(10, 240),
+                AutoSize = true
+            };
+
+            productPanel.Controls.Add(lblName);
+            productPanel.Controls.Add(picImage);
+            productPanel.Controls.Add(lblPrice);
+            productPanel.Controls.Add(lblSize);
+            productPanel.Controls.Add(lblColor);
+            productPanel.Controls.Add(lblInventory);
+
+            return productPanel;
+        }
+
+        private async void btn_previous_Click(object sender, EventArgs e)
+        {
+            if (currentPage > 1)
+            {
+                currentPage--;
+                await LoadProductsAsync(pnl_product);
+            }
+        }
+
+        private async void btn_next_Click(object sender, EventArgs e)
+        {
+            if (currentPage < Math.Ceiling((double)totalRecords / PageSize))
+            {
+                currentPage++;
+                await LoadProductsAsync(pnl_product);
+            }
+        }
+
+        private void scrb_price_Scroll(object sender, ScrollEventArgs e)
+        {
+            lbl_priceFilter.Text = $"Giá: ${scrb_price.Value}"; // Cập nhật lbl_priceFilter với giá hiện tại
         }
     }
 }
