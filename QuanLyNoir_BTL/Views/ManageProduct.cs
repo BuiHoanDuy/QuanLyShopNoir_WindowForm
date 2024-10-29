@@ -21,7 +21,9 @@ namespace QuanLyNoir_BTL
 
         private System.Windows.Forms.Timer _timer = new System.Windows.Forms.Timer();
         private const int TimerInterval = 500; // Thời gian chờ 500ms
-        public ManageProduct()
+
+        private bool ROLE; // 1 là admin, 0 là quản lý (0: chỉ có quyền bán sản phẩm, 1: có toàn quyền)
+        public ManageProduct(string username, bool role)
         {
             InitializeComponent();
             pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -31,6 +33,9 @@ namespace QuanLyNoir_BTL
             // Cấu hình Timer
             _timer.Interval = TimerInterval; // Thay đổi thời gian nếu cần
             _timer.Tick += Timer_Tick; // Đăng ký sự kiện
+
+            lbl_name.Text = username;
+            ROLE = role;
         }
         private void Timer_Tick(object sender, EventArgs e)
         {
@@ -249,7 +254,7 @@ namespace QuanLyNoir_BTL
         }
 
 
-            private async void btn_previous_Click(object sender, EventArgs e)
+        private async void btn_previous_Click(object sender, EventArgs e)
         {
             if (currentPage > 1)
             {
@@ -355,5 +360,16 @@ namespace QuanLyNoir_BTL
             await LoadProductsAsync(pnl_product);
         }
 
+        private void ManageProduct_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Application.Exit(); // Đóng toàn bộ ứng dụng nếu người dùng chọn "Yes"
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            SignIn signInForm = new SignIn();
+            signInForm.Show();
+            this.Hide(); // Ẩn form đăng nhập
+        }
     }
 }

@@ -18,10 +18,6 @@ namespace QuanLyNoir_BTL
             LoginForm_Load(null, null);
         }
 
-        private void Form1_Load(object sender, EventArgs e)
-        {
-        }
-
         private void btn_signin_Click(object sender, EventArgs e)
         {
 
@@ -32,9 +28,11 @@ namespace QuanLyNoir_BTL
             var user = _dbContext.Accounts.FirstOrDefault(u => u.Username == username && u.Password == password);
 
             if (user != null)
-            {
+            {        
                 // Đăng nhập thành công
-                MessageBox.Show("Đăng nhập thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                ManageProduct manageProductForm = new ManageProduct(user.Name, user.Role);
+                this.Hide(); // Ẩn form đăng nhập
+                manageProductForm.Show();
 
                 // Xử lý Remember Me
                 if (chbx_rememberme.Checked)

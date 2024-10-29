@@ -209,9 +209,8 @@
             Controls.Add(panel2);
             Controls.Add(panel1);
             Name = "SignIn";
-            Text = "Form1";
+            Text = "Login";
             TopMost = true;
-            Load += Form1_Load;
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();

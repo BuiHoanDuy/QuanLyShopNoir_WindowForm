@@ -61,6 +61,7 @@
             btn_next = new Button();
             lbl_page = new Label();
             btn_reset = new Button();
+            lbl_name = new Label();
             panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             panel2.SuspendLayout();
@@ -72,12 +73,13 @@
             // 
             // button1
             // 
-            button1.Location = new Point(1344, 12);
+            button1.Location = new Point(1246, 12);
             button1.Name = "button1";
             button1.Size = new Size(106, 29);
             button1.TabIndex = 0;
             button1.Text = "Sign out";
             button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click;
             // 
             // panel1
             // 
@@ -402,11 +404,21 @@
             btn_reset.UseVisualStyleBackColor = false;
             btn_reset.Click += btn_filternow_Click;
             // 
+            // lbl_name
+            // 
+            lbl_name.AutoSize = true;
+            lbl_name.Location = new Point(1358, 16);
+            lbl_name.Name = "lbl_name";
+            lbl_name.Size = new Size(47, 20);
+            lbl_name.TabIndex = 18;
+            lbl_name.Text = "name";
+            // 
             // ManageProduct
             // 
             AutoScaleDimensions = new SizeF(9F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1524, 895);
+            Controls.Add(lbl_name);
             Controls.Add(btn_reset);
             Controls.Add(lbl_page);
             Controls.Add(btn_next);
@@ -427,6 +439,7 @@
             Name = "ManageProduct";
             Text = "ManageProduct";
             TransparencyKey = Color.FromArgb(255, 192, 192);
+            FormClosing += ManageProduct_FormClosing;
             Load += ManageProduct_Load;
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
@@ -478,5 +491,6 @@
         private Button btn_next;
         private Label lbl_page;
         private Button btn_reset;
+        private Label lbl_name;
     }
 }
