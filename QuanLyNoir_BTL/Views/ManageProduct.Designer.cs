@@ -62,6 +62,8 @@
             lbl_page = new Label();
             btn_reset = new Button();
             lbl_name = new Label();
+            llbl_addnewproduct = new LinkLabel();
+            btn_addnewproduct = new Button();
             panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             panel2.SuspendLayout();
@@ -413,11 +415,36 @@
             lbl_name.TabIndex = 18;
             lbl_name.Text = "name";
             // 
+            // llbl_addnewproduct
+            // 
+            llbl_addnewproduct.AutoSize = true;
+            llbl_addnewproduct.DisabledLinkColor = Color.Black;
+            llbl_addnewproduct.LinkColor = Color.Black;
+            llbl_addnewproduct.Location = new Point(551, 127);
+            llbl_addnewproduct.Name = "llbl_addnewproduct";
+            llbl_addnewproduct.Size = new Size(127, 20);
+            llbl_addnewproduct.TabIndex = 0;
+            llbl_addnewproduct.TabStop = true;
+            llbl_addnewproduct.Text = "Add new product";
+            llbl_addnewproduct.VisitedLinkColor = Color.Black;
+            llbl_addnewproduct.LinkClicked += llbl_addnewproduct_LinkClicked;
+            // 
+            // btn_addnewproduct
+            // 
+            btn_addnewproduct.Image = (Image)resources.GetObject("btn_addnewproduct.Image");
+            btn_addnewproduct.Location = new Point(511, 123);
+            btn_addnewproduct.Name = "btn_addnewproduct";
+            btn_addnewproduct.Size = new Size(34, 28);
+            btn_addnewproduct.TabIndex = 19;
+            btn_addnewproduct.UseVisualStyleBackColor = true;
+            // 
             // ManageProduct
             // 
             AutoScaleDimensions = new SizeF(9F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1524, 895);
+            Controls.Add(btn_addnewproduct);
+            Controls.Add(llbl_addnewproduct);
             Controls.Add(lbl_name);
             Controls.Add(btn_reset);
             Controls.Add(lbl_page);
@@ -492,5 +519,7 @@
         private Label lbl_page;
         private Button btn_reset;
         private Label lbl_name;
+        private LinkLabel llbl_addnewproduct;
+        private Button btn_addnewproduct;
     }
 }

@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using QuanLyNoir_BTL.Views;
 
 namespace QuanLyNoir_BTL
 {
@@ -13,8 +14,9 @@ namespace QuanLyNoir_BTL
             // To customize application configuration such as set high DPI settings or default font,
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
-            Application.Run(new SignIn());
-           // Application.Run(new ManageProduct());
+            // Application.Run(new SignIn());
+             Application.Run(new ManageProduct("Duy",true));
+            //Application.Run(new AddNewProduct(true));
             // Scaffold-DbContext "Server=LAPTOP-2L3R0R91\\MYCOMPUTER_DUY;Database=ShopNoir_Test.db;Trusted_Connection=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models
         }
     }

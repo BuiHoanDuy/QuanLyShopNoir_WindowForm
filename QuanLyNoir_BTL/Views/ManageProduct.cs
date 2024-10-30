@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using QuanLyNoir_BTL.Models;
+using QuanLyNoir_BTL.Views;
 using System;
 using System.Drawing;
 using System.IO;
@@ -48,7 +49,7 @@ namespace QuanLyNoir_BTL
         private async void ManageProduct_Load(object sender, EventArgs e)
         {
             await LoadProductsAsync(pnl_product);
-            lbl_priceFilter.Text = $"Giá: ${scrb_price.Value}";
+            lbl_priceFilter.Text = $"Price: ${scrb_price.Value}";
         }
 
         private async Task LoadProductsAsync(Panel pnl_product)
@@ -61,7 +62,7 @@ namespace QuanLyNoir_BTL
                 decimal priceLimit = scrb_price.Value;
 
                 totalRecords = await _dbContext.ProductColors.CountAsync();
-                lbl_page.Text = $"Trang {currentPage} / {Math.Ceiling((double)totalRecords / PageSize)}";
+                lbl_page.Text = $"Page {currentPage} / {Math.Ceiling((double)totalRecords / PageSize)}";
 
                 pnl_product.Controls.Clear();
 
@@ -88,6 +89,7 @@ namespace QuanLyNoir_BTL
                         p.Hei,
                         ColorInfo = p.ProductColors.Select(pc => new
                         {
+                            pc.Id,
                             pc.Inventory,
                             pc.ColorName,
                             pc.ImageUrl,
@@ -209,8 +211,8 @@ namespace QuanLyNoir_BTL
 
             // Tạo context menu
             ContextMenuStrip optionsMenu = new ContextMenuStrip();
-            optionsMenu.Items.Add("Sửa thông tin").Click += (s, e) => EditProduct(product.Id);
-            optionsMenu.Items.Add("Xóa sản phẩm").Click += (s, e) => DeleteProduct(product.Id);
+            optionsMenu.Items.Add("Sửa thông tin").Click += (s, e) => EditProduct(product.ColorInfo.Id);
+            optionsMenu.Items.Add("Xóa sản phẩm").Click += (s, e) => DeleteProduct(product.ColorInfo.Id);
 
             // Gán context menu cho nút
             btnOptions.Click += (s, e) => optionsMenu.Show(btnOptions, new Point(0, btnOptions.Height));
@@ -229,26 +231,45 @@ namespace QuanLyNoir_BTL
 
         private void EditProduct(int productColorId)
         {
-            // Xử lý logic sửa thông tin sản phẩm
-            var productColor = _dbContext.ProductColors.FirstOrDefault(pc => pc.Id == productColorId);
+            // Tìm sản phẩm theo productColorId
+            var productColor = _dbContext.ProductColors
+                .Include(pc => pc.Product) // Bao gồm thông tin sản phẩm
+                .FirstOrDefault(pc => pc.Id == productColorId);
+
             if (productColor != null)
             {
-                // Hiển thị form chỉnh sửa và cập nhật sản phẩm
-                // (Cần tạo form chỉnh sửa và hiển thị tại đây)
+                // Tạo và hiển thị form AddNewProduct
+                AddNewProduct editForm = new AddNewProduct(_dbContext, false, productColor.Id);
+                editForm.ShowDialog(); // Hiển thị như một dialog để chờ người dùng đóng form này
+                LoadProductsAsync(pnl_product).ConfigureAwait(false); // Tải lại danh sách sản phẩm sau khi sửa
+            }
+            else
+            {
+                MessageBox.Show("Không tìm thấy sản phẩm để chỉnh sửa.", productColorId.ToString());
             }
         }
 
-        private async void DeleteProduct(int productColorId)
+        private void DeleteProduct(int productColorId)
         {
             var result = MessageBox.Show("Bạn có chắc chắn muốn xóa sản phẩm này không?", "Xác nhận xóa", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
             if (result == DialogResult.Yes)
             {
-                var productColor = await _dbContext.ProductColors.FindAsync(productColorId);
+                // Retrieve the ProductColor entry to delete
+                var productColor = _dbContext.ProductColors
+                    .FirstOrDefault(pc => pc.Id == productColorId);
+
                 if (productColor != null)
                 {
+                    // Remove the ProductColor entry only
                     _dbContext.ProductColors.Remove(productColor);
-                    await _dbContext.SaveChangesAsync();
-                    await LoadProductsAsync(pnl_product);
+                    _dbContext.SaveChanges();
+
+                    // Refresh the product list in the UI
+                    LoadProductsAsync(pnl_product).ConfigureAwait(false);
+                }
+                else
+                {
+                    MessageBox.Show("Không tìm thấy sản phẩm để xóa.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
@@ -355,7 +376,8 @@ namespace QuanLyNoir_BTL
             resetButtonTypeFilter();
             btn_voucher.ForeColor = Color.Pink;
             btn_voucher.BackColor = Color.DarkSlateGray;
-            currentType = "voucher"; // Đặt loại sản phẩm là 'voucher'
+            //  currentType = "voucher"; // Đặt loại sản phẩm là 'voucher'
+            currentType = "Type C"; // Đặt loại sản phẩm là 'voucher'
             currentPage = 1; // Quay lại trang đầu
             await LoadProductsAsync(pnl_product);
         }
@@ -371,5 +393,14 @@ namespace QuanLyNoir_BTL
             signInForm.Show();
             this.Hide(); // Ẩn form đăng nhập
         }
+
+        private void llbl_addnewproduct_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            AddNewProduct newForm = new AddNewProduct(_dbContext, true, 1);
+            newForm.ShowDialog(); // Hiển thị như một dialog để chờ người dùng đóng form này
+            LoadProductsAsync(pnl_product).ConfigureAwait(false); // Tải lại danh sách sản phẩm sau khi sửa
+        }
+
+        
     }
 }
