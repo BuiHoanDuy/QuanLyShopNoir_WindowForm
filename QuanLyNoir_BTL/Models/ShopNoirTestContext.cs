@@ -34,6 +34,7 @@ public partial class ShopNoirTestContext : DbContext
 
     public virtual DbSet<UserAddress> UserAddresses { get; set; }
 
+    public virtual DbSet<ProductColorView> ProductColorViews { get; set; }
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
         => optionsBuilder.UseSqlServer("Server=LAPTOP-2L3R0R91\\MYCOMPUTER_DUY;Database=ShopNoir_Test;Trusted_Connection=True;TrustServerCertificate=true;Connection Timeout=120;");
@@ -247,6 +248,23 @@ public partial class ShopNoirTestContext : DbContext
                 .HasForeignKey(d => d.AccountId)
                 .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK__UserAddre__accou__6383C8BA");
+        });
+
+        modelBuilder.Entity<ProductColorView>(entity =>
+        {
+            entity.HasNoKey();
+            entity.ToView("ProductColorView"); // Name of the SQL view created in the database
+            entity.Property(e => e.ProductId).HasColumnName("ProductId");
+            entity.Property(e => e.ProdName).HasColumnName("prod_name");
+            entity.Property(e => e.Price).HasColumnName("Price");
+            entity.Property(e => e.Type).HasColumnName("Type");
+            entity.Property(e => e.Wid).HasColumnName("Wid");
+            entity.Property(e => e.Hei).HasColumnName("Hei");
+            entity.Property(e => e.ProductColorId).HasColumnName("ProductColorId");
+            entity.Property(e => e.Inventory).HasColumnName("Inventory");
+            entity.Property(e => e.ColorName).HasColumnName("color_name");
+            entity.Property(e => e.ImageUrl).HasColumnName("image_url");
+            entity.Property(e => e.ColorCode).HasColumnName("color_code");
         });
 
         OnModelCreatingPartial(modelBuilder);

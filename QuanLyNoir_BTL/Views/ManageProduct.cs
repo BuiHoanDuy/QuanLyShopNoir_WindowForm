@@ -213,6 +213,8 @@ namespace QuanLyNoir_BTL
             ContextMenuStrip optionsMenu = new ContextMenuStrip();
             optionsMenu.Items.Add("Sửa thông tin").Click += (s, e) => EditProduct(product.ColorInfo.Id);
             optionsMenu.Items.Add("Xóa sản phẩm").Click += (s, e) => DeleteProduct(product.ColorInfo.Id);
+            optionsMenu.Items.Add("Thêm màu sắc").Click += (s, e) => AddColorToProduct(product.Id);
+
 
             // Gán context menu cho nút
             btnOptions.Click += (s, e) => optionsMenu.Show(btnOptions, new Point(0, btnOptions.Height));
@@ -229,6 +231,24 @@ namespace QuanLyNoir_BTL
             return productPanel;
         }
 
+        private void AddColorToProduct(Guid productId)
+        {
+            // Tìm sản phẩm theo productColorId
+            var product = _dbContext.Products
+                .FirstOrDefault(p => p.Id == productId);
+
+            if (product != null)
+            {
+                // Tạo và hiển thị form AddNewProduct
+                AddNewProduct AddNewColorForm = new AddNewProduct(_dbContext, productId);
+                AddNewColorForm.ShowDialog(); // Hiển thị như một dialog để chờ người dùng đóng form này
+                LoadProductsAsync(pnl_product).ConfigureAwait(false); // Tải lại danh sách sản phẩm sau khi sửa
+            }
+            else
+            {
+                MessageBox.Show("Không tìm thấy sản phẩm để chỉnh sửa.", productId.ToString());
+            }
+        }
         private void EditProduct(int productColorId)
         {
             // Tìm sản phẩm theo productColorId
@@ -401,6 +421,6 @@ namespace QuanLyNoir_BTL
             LoadProductsAsync(pnl_product).ConfigureAwait(false); // Tải lại danh sách sản phẩm sau khi sửa
         }
 
-        
+
     }
 }

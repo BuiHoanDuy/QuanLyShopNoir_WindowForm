@@ -64,6 +64,10 @@
             lbl_name = new Label();
             llbl_addnewproduct = new LinkLabel();
             btn_addnewproduct = new Button();
+            loadWorker = new System.ComponentModel.BackgroundWorker();
+            deleteWorker = new System.ComponentModel.BackgroundWorker();
+            createWorker = new System.ComponentModel.BackgroundWorker();
+            progressBar1 = new ProgressBar();
             panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             panel2.SuspendLayout();
@@ -438,11 +442,23 @@
             btn_addnewproduct.TabIndex = 19;
             btn_addnewproduct.UseVisualStyleBackColor = true;
             // 
+            // loadWorker
+            // 
+
+            // 
+            // progressBar1
+            // 
+            progressBar1.Location = new Point(-19, -4);
+            progressBar1.Name = "progressBar1";
+            progressBar1.Size = new Size(1559, 17);
+            progressBar1.TabIndex = 20;
+            // 
             // ManageProduct
             // 
             AutoScaleDimensions = new SizeF(9F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1524, 895);
+            Controls.Add(progressBar1);
             Controls.Add(btn_addnewproduct);
             Controls.Add(llbl_addnewproduct);
             Controls.Add(lbl_name);
@@ -521,5 +537,9 @@
         private Label lbl_name;
         private LinkLabel llbl_addnewproduct;
         private Button btn_addnewproduct;
+        private System.ComponentModel.BackgroundWorker loadWorker;
+        private System.ComponentModel.BackgroundWorker deleteWorker;
+        private System.ComponentModel.BackgroundWorker createWorker;
+        private ProgressBar progressBar1;
     }
 }

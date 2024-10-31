@@ -19,17 +19,19 @@ namespace QuanLyNoir_BTL.Views
     {
         private readonly ShopNoirTestContext _dbContext; // Reference to database context
         private int currentProductColorId = -1; // Store product ID if updating an existing product
-
+        private Guid currentProductId;
         private ProductSize? selectedSize = null;
 
         private string colorName = "Color name";
 
-        //íNew: True -> Add New Item, False -> Update
+        //isNew: True -> Add New Item, False -> Update
         public AddNewProduct(ShopNoirTestContext dbContext, bool isNew, int productColorId)
         {
             InitializeComponent();
             _dbContext = dbContext;
             currentProductColorId = productColorId;
+
+            btn_addcolor.Visible = false;
 
             SetupBackgroundWorker();
             SetupPlaceholder();
@@ -44,12 +46,32 @@ namespace QuanLyNoir_BTL.Views
                 btn_addtostore.Visible = false;
             }
 
-            SetupPlaceholder();
+            //       SetupPlaceholder();
 
-            if (currentProductColorId != -1)
+            if (!isNew)
             {
                 LoadProductData(currentProductColorId);
             }
+        }
+        public AddNewProduct(ShopNoirTestContext dbContext, Guid productId)
+        {
+            InitializeComponent();
+            _dbContext = dbContext;
+            currentProductId = productId;
+
+            SetupBackgroundWorker();
+            SetupPlaceholder();
+
+            tbx_name.Enabled = false;
+            cbbx_type.Enabled = false;
+            tbx_width.Enabled = false;
+            tbx_height.Enabled = false;
+
+            btn_update.Visible = false;
+            btn_addtostore.Visible = false;
+            btn_addcolor.Visible = true;
+
+            LoadProductData(currentProductId);
         }
         private void LoadProductData(int productColorId)
         {
@@ -72,19 +94,55 @@ namespace QuanLyNoir_BTL.Views
                     cbbx_type.Text = product.Type;
                 }
             }
- 
         }
-        private async Task ValidateAndSaveProductAsync(bool isNew)
+        private void LoadProductData(Guid productId)
+        {
+            var product = _dbContext.Products.FirstOrDefault(p => p.Id == productId);
+            if (product != null)
+            {
+                tbx_name.Text = product.ProdName;
+                tbx_material.Text = product.ProdDesc;
+                tbx_price.Text = product.Price.ToString();
+                tbx_width.Text = product.Wid.ToString();
+                tbx_height.Text = product.Hei.ToString();
+                cbbx_type.Text = product.Type;
+            }
+        }
+        private async Task ValidateAndSaveProductAsync(bool isNew, bool isAddColor)
         {
             // Call the appropriate function based on isNew flag
-            if (isNew)
-            {
-                await AddNewProductAndColorAsync();
-            }
+            if (isAddColor == true) await AddNewColorAsync();
             else
             {
-                await UpdateProductAndColorAsync();
+                if (isNew)
+                {
+                    await AddNewProductAndColorAsync();
+                }
+                else
+                {
+                    await UpdateProductAndColorAsync();
+                }
             }
+        }
+
+        private async Task AddNewColorAsync()
+        {
+            int.TryParse(tbx_inventory.Text, out int inventory);
+            decimal.TryParse(tbx_price.Text, out decimal price);
+
+            var productColor = new ProductColor
+            {
+                ProductId = currentProductId,
+                ColorName = tbx_colorNote.Text,
+                ColorCode = lbl_colorCode.Text,
+                Inventory = inventory,
+                Total = inventory,
+                Size = (int)selectedSize.Value,
+                ImageUrl = ImageToByteArray(pictureBox1.Image)
+            };
+            _dbContext.ProductColors.Add(productColor);
+
+            await _dbContext.SaveChangesAsync();
         }
         private async Task AddNewProductAndColorAsync()
         {
@@ -208,16 +266,18 @@ namespace QuanLyNoir_BTL.Views
 
         private void btn_addtostore_Click(object sender, EventArgs e)
         {
-            StartBackgroundOperation(true);
-           // ValidateAndSaveProductAsync(true);
+            StartBackgroundOperation(true, false);
         }
 
         private void btn_update_Click(object sender, EventArgs e)
         {
-            StartBackgroundOperation(false);
-          //  ValidateAndSaveProductAsync(false);
+            StartBackgroundOperation(false, false);
         }
-        private void StartBackgroundOperation(bool isNew)
+        private void btn_addcolor_Click(object sender, EventArgs e)
+        {
+            StartBackgroundOperation(true, true);
+        }
+        private void StartBackgroundOperation(bool isNew, bool isAddColor)
         {
             ClearValidationMarks();
 
@@ -278,14 +338,15 @@ namespace QuanLyNoir_BTL.Views
             progressBar1.Style = ProgressBarStyle.Marquee; // Show indeterminate progress
             progressBar1.Visible = true;
 
-            var operationArgs = new { IsNew = isNew };
+            var operationArgs = new { IsNew = isNew, IsAddColor = isAddColor };
             bgWorker.RunWorkerAsync(operationArgs);
         }
         private async void BgWorker_DoWork(object sender, DoWorkEventArgs e)
         {
             dynamic args = e.Argument;
             bool isNew = args.IsNew;
-            await ValidateAndSaveProductAsync(isNew);
+            bool isAddColor = args.IsAddColor;
+            await ValidateAndSaveProductAsync(isNew, isAddColor);
         }
         private void BgWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
@@ -491,7 +552,6 @@ namespace QuanLyNoir_BTL.Views
                 tbx_colorNote.ForeColor = Color.Gray; // Màu sắc cho placeholder
             }
         }
-
     }
 }
  

@@ -77,6 +77,7 @@
             lbl_color = new Label();
             bgWorker = new System.ComponentModel.BackgroundWorker();
             progressBar1 = new ProgressBar();
+            btn_addcolor = new Button();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
@@ -168,6 +169,9 @@
             cbbx_type.Name = "cbbx_type";
             cbbx_type.Size = new Size(279, 28);
             cbbx_type.TabIndex = 0;
+            cbbx_type.Items.Add("Type A");
+            cbbx_type.Items.Add("Type B");
+            cbbx_type.Items.Add("Type C");
             // 
             // groupBox3
             // 
@@ -547,7 +551,7 @@
             // 
             // btn_update
             // 
-            btn_update.Location = new Point(481, 659);
+            btn_update.Location = new Point(481, 604);
             btn_update.Name = "btn_update";
             btn_update.Size = new Size(394, 45);
             btn_update.TabIndex = 18;
@@ -573,11 +577,23 @@
             progressBar1.Size = new Size(994, 15);
             progressBar1.TabIndex = 21;
             // 
+            // btn_addcolor
+            // 
+            btn_addcolor.Location = new Point(481, 659);
+            btn_addcolor.Name = "btn_addcolor";
+            btn_addcolor.Size = new Size(394, 45);
+            btn_addcolor.TabIndex = 22;
+            btn_addcolor.Text = "Add Color";
+            btn_addcolor.UseVisualStyleBackColor = true;
+            btn_addcolor.Visible = false;
+            btn_addcolor.Click += btn_addcolor_Click;
+            // 
             // AddNewProduct
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(987, 715);
+            Controls.Add(btn_addcolor);
             Controls.Add(progressBar1);
             Controls.Add(lbl_color);
             Controls.Add(btn_update);
@@ -671,5 +687,6 @@
         private Label lbl_height;
         private System.ComponentModel.BackgroundWorker bgWorker;
         private ProgressBar progressBar1;
+        private Button btn_addcolor;
     }
 }
