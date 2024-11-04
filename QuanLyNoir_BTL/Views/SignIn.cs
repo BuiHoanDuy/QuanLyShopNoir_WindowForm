@@ -11,6 +11,7 @@ namespace QuanLyNoir_BTL
         public SignIn()
         {
             InitializeComponent();
+            this.StartPosition = FormStartPosition.CenterScreen;
             pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
             btn_signin.MouseEnter += btn_signin_MouseEnter;
             btn_signin.MouseLeave += btn_signin_MouseLeave;

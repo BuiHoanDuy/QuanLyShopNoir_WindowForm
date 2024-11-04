@@ -28,6 +28,7 @@ namespace QuanLyNoir_BTL.Views
         public AddNewProduct(ShopNoirTestContext dbContext, bool isNew, int productColorId)
         {
             InitializeComponent();
+            this.StartPosition = FormStartPosition.CenterScreen;
             _dbContext = dbContext;
             currentProductColorId = productColorId;
 
@@ -111,6 +112,7 @@ namespace QuanLyNoir_BTL.Views
         private async Task ValidateAndSaveProductAsync(bool isNew, bool isAddColor)
         {
             // Call the appropriate function based on isNew flag
+
             if (isAddColor == true) await AddNewColorAsync();
             else
             {
@@ -151,17 +153,40 @@ namespace QuanLyNoir_BTL.Views
             int.TryParse(tbx_inventory.Text, out int inventory);
             decimal.TryParse(tbx_price.Text, out decimal price);
 
-            var product = new Product
+            Product product = null;
+
+            if (this.InvokeRequired)
             {
-                Id = Guid.NewGuid(),
-                ProdName = tbx_name.Text,
-                ProdDesc = tbx_material.Text,
-                Price = price,
-                Wid = width,
-                Hei = height,
-                Type = cbbx_type.Text
-            };
+                this.Invoke((MethodInvoker)delegate
+                {
+                    product = new Product
+                    {
+                        Id = Guid.NewGuid(),
+                        ProdName = tbx_name.Text,
+                        ProdDesc = tbx_material.Text,
+                        Price = price,
+                        Wid = width,
+                        Hei = height,
+                        Type = cbbx_type.Text
+                    };
+                });
+            }
+            else
+            {
+                product = new Product
+                {
+                    Id = Guid.NewGuid(),
+                    ProdName = tbx_name.Text,
+                    ProdDesc = tbx_material.Text,
+                    Price = price,
+                    Wid = width,
+                    Hei = height,
+                    Type = cbbx_type.Text
+                };
+            }
+
             _dbContext.Products.Add(product);
+
 
             var productColor = new ProductColor
             {
@@ -198,12 +223,27 @@ namespace QuanLyNoir_BTL.Views
             var product = _dbContext.Products.FirstOrDefault(p => p.Id == productColor.ProductId);
             if (product != null)
             {
-                product.ProdName = tbx_name.Text;
-                product.ProdDesc = tbx_material.Text;
-                product.Price = price;
-                product.Wid = width;
-                product.Hei = height;
-                product.Type = cbbx_type.Text;
+                if (this.InvokeRequired)
+                {
+                    this.Invoke((MethodInvoker)delegate
+                    {
+                        product.ProdName = tbx_name.Text;
+                        product.ProdDesc = tbx_material.Text;
+                        product.Price = price;
+                        product.Wid = width;
+                        product.Hei = height;
+                        product.Type = cbbx_type.Text;
+                    });
+                }
+                else
+                {
+                    product.ProdName = tbx_name.Text;
+                    product.ProdDesc = tbx_material.Text;
+                    product.Price = price;
+                    product.Wid = width;
+                    product.Hei = height;
+                    product.Type = cbbx_type.Text;
+                }
             }
 
             await _dbContext.SaveChangesAsync();
@@ -351,7 +391,7 @@ namespace QuanLyNoir_BTL.Views
         private void BgWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             progressBar1.Visible = false; // Hide progress bar when done
-            MessageBox.Show("Operation completed successfully!", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show("Thêm dữ liệu thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
             this.Close();
         }
         private Image ByteArrayToImage(byte[] byteArray)
@@ -359,22 +399,30 @@ namespace QuanLyNoir_BTL.Views
             if (byteArray == null) return null;
             using (var ms = new MemoryStream(byteArray))
             {
-                return Image.FromStream(ms);
+                Image img = Image.FromStream(ms);
+                return new Bitmap(img); // Tạo bản sao để không phụ thuộc vào MemoryStream
             }
         }
         private byte[] ImageToByteArray(Image image)
         {
-            if (image == null)
+            try
             {
-                // Return null or an empty byte array, depending on your requirements
+                if (image == null)
+                {
+                    // Return null or an empty byte array, depending on your requirements
 
-                return null;
+                    return null;
+                }
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    image.Save(ms, System.Drawing.Imaging.ImageFormat.Jpeg); // Save as PNG or desired format
+                    return ms.ToArray();
+                }
             }
-
-            using (MemoryStream ms = new MemoryStream())
+            catch (Exception e)
             {
-                image.Save(ms, System.Drawing.Imaging.ImageFormat.Jpeg); // Save as PNG or desired format
-                return ms.ToArray();
+                MessageBox.Show("Lỗi tải ảnh");
+                return null;
             }
         }
 
@@ -554,4 +602,3 @@ namespace QuanLyNoir_BTL.Views
         }
     }
 }
- 

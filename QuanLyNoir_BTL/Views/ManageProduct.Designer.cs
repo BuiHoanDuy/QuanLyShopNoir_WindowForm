@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ManageProduct));
-            button1 = new Button();
+            btn_signout = new Button();
             panel1 = new Panel();
             button4 = new Button();
             button3 = new Button();
@@ -77,15 +77,15 @@
             groupBox3.SuspendLayout();
             SuspendLayout();
             // 
-            // button1
+            // btn_signout
             // 
-            button1.Location = new Point(1246, 12);
-            button1.Name = "button1";
-            button1.Size = new Size(106, 29);
-            button1.TabIndex = 0;
-            button1.Text = "Sign out";
-            button1.UseVisualStyleBackColor = true;
-            button1.Click += button1_Click;
+            btn_signout.Location = new Point(1246, 12);
+            btn_signout.Name = "btn_signout";
+            btn_signout.Size = new Size(106, 29);
+            btn_signout.TabIndex = 0;
+            btn_signout.Text = "Sign out";
+            btn_signout.UseVisualStyleBackColor = true;
+            btn_signout.Click += button1_Click;
             // 
             // panel1
             // 
@@ -442,10 +442,6 @@
             btn_addnewproduct.TabIndex = 19;
             btn_addnewproduct.UseVisualStyleBackColor = true;
             // 
-            // loadWorker
-            // 
-
-            // 
             // progressBar1
             // 
             progressBar1.Location = new Point(-19, -4);
@@ -477,7 +473,7 @@
             Controls.Add(btn_newcollection);
             Controls.Add(label1);
             Controls.Add(panel1);
-            Controls.Add(button1);
+            Controls.Add(btn_signout);
             Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 163);
             Name = "ManageProduct";
             Text = "ManageProduct";
@@ -502,7 +498,7 @@
 
         #endregion
 
-        private Button button1;
+        private Button btn_signout;
         private Panel panel1;
         private Button button4;
         private Button button3;

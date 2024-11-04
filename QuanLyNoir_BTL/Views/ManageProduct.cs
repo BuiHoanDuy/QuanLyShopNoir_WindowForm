@@ -27,6 +27,7 @@ namespace QuanLyNoir_BTL
         public ManageProduct(string username, bool role)
         {
             InitializeComponent();
+            this.StartPosition = FormStartPosition.CenterScreen;
             pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
             pictureBox2.SizeMode = PictureBoxSizeMode.StretchImage;
             scrb_price.Height = 20;
@@ -325,14 +326,20 @@ namespace QuanLyNoir_BTL
 
         private async void tbx_search_TextChanged(object sender, EventArgs e)
         {
+            _timer.Stop();
             currentPage = 1;
-            await LoadProductsAsync(pnl_product);
+            currentPage = 1;
+            _timer.Start();
+          //  await LoadProductsAsync(pnl_product);
         }
 
         private async void tbx_inventory_TextChanged(object sender, EventArgs e)
         {
+            _timer.Stop();
             currentPage = 1;
-            await LoadProductsAsync(pnl_product);
+            currentPage = 1;
+            _timer.Start();
+           // await LoadProductsAsync(pnl_product);
         }
 
         private void btn_filternow_Click(object sender, EventArgs e)
