@@ -165,13 +165,11 @@
             // cbbx_type
             // 
             cbbx_type.FormattingEnabled = true;
+            cbbx_type.Items.AddRange(new object[] { "Type A", "Type B", "Type C" });
             cbbx_type.Location = new Point(14, 42);
             cbbx_type.Name = "cbbx_type";
             cbbx_type.Size = new Size(279, 28);
             cbbx_type.TabIndex = 0;
-            cbbx_type.Items.Add("Type A");
-            cbbx_type.Items.Add("Type B");
-            cbbx_type.Items.Add("Type C");
             // 
             // groupBox3
             // 

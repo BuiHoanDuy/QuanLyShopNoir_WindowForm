@@ -67,40 +67,69 @@ namespace QuanLyNoir_BTL
 
                 pnl_product.Controls.Clear();
 
+                //Truy vấn lấy tất cả các product color và size 
+                var productColorQuery = _dbContext.ProductColors
+                    .Include(p => p.Product)
+                    .Where(pc => pc.Inventory < inventoryThreshold
+                    && pc.Product.ProdName.ToLower().Contains(searchTerm)
+                    && pc.Product.Price < priceLimit);
+
                 // Truy vấn sản phẩm với bộ lọc theo loại sản phẩm hiện tại
-                var productQuery = _dbContext.Products
-                    .Include(p => p.ProductColors)
-                    .Where(p => p.ProdName.ToLower().Contains(searchTerm)
-                                && p.ProductColors.Any(pc => pc.Inventory < inventoryThreshold && p.Price < priceLimit));
+                //var productQuery = _dbContext.Products
+                //    .Include(p => p.ProductColors)
+                //    .Where(p => p.ProdName.ToLower().Contains(searchTerm)
+                //                && p.ProductColors.Any(pc => pc.Inventory < inventoryThreshold && p.Price < priceLimit));
 
                 if (!string.IsNullOrEmpty(currentType))
                 {
                     // Nếu currentType không rỗng, thêm điều kiện lọc theo loại sản phẩm
-                    productQuery = productQuery.Where(p => p.Type == currentType);
+                    //productQuery = productQuery.Where(p => p.Type == currentType);
+                    productColorQuery = productColorQuery.Where(pc => pc.Product.Type == currentType);
+
                 }
 
-                var productInformation = await productQuery
-                    .OrderByDescending(p => p.Price) // Sắp xếp theo giá giảm dần
-                    .Select(p => new
+                var productInformation = await productColorQuery
+                    .OrderByDescending(pc => pc.Product.ProdName) // Sắp xếp theo giá giảm dần
+                    .Select(pc => new
                     {
-                        p.Id,
-                        p.ProdName,
-                        p.Price,
-                        p.Wid,
-                        p.Hei,
-                        ColorInfo = p.ProductColors.Select(pc => new
-                        {
-                            pc.Id,
-                            pc.Inventory,
-                            pc.ColorName,
-                            pc.ImageUrl,
-                            pc.ColorCode
-                        }).FirstOrDefault()
+                        pc.Id,
+                        pc.Inventory,
+                        pc.ColorName,
+                        pc.ImageUrl,
+                        pc.ColorCode,
+                        pc.ProductId,
+                        pc.Product.ProdName,
+                        pc.Product.Price,
+                        pc.Product.Wid,
+                        pc.Product.Hei,
+                        pc.Product.Type,
                     })
                     .AsNoTracking()
                     .Skip((currentPage - 1) * PageSize)
                     .Take(PageSize)
                     .ToListAsync();
+                //var productInformation = await productQuery
+                //    .OrderByDescending(p => p.Price) // Sắp xếp theo giá giảm dần
+                //    .Select(p => new
+                //    {
+                //        p.Id,
+                //        p.ProdName,
+                //        p.Price,
+                //        p.Wid,
+                //        p.Hei,
+                //        ColorInfo = p.ProductColors.Select(pc => new
+                //        {
+                //            pc.Id,
+                //            pc.Inventory,
+                //            pc.ColorName,
+                //            pc.ImageUrl,
+                //            pc.ColorCode
+                //        }).FirstOrDefault()
+                //    })
+                //    .AsNoTracking()
+                //    .Skip((currentPage - 1) * PageSize)
+                //    .Take(PageSize)
+                //    .ToListAsync();
 
                 int x = 10, y = 10;
                 const int padding = 20; // Tăng khoảng cách giữa các ô sản phẩm
@@ -154,9 +183,9 @@ namespace QuanLyNoir_BTL
                 SizeMode = PictureBoxSizeMode.StretchImage
             };
 
-            if (product.ColorInfo?.ImageUrl != null)
+            if (product.ImageUrl != null)
             {
-                using (MemoryStream ms = new MemoryStream(product.ColorInfo.ImageUrl))
+                using (MemoryStream ms = new MemoryStream(product.ImageUrl))
                 {
                     picImage.Image = Image.FromStream(ms);
                 }
@@ -183,21 +212,21 @@ namespace QuanLyNoir_BTL
                 BorderStyle = BorderStyle.FixedSingle
             };
 
-            if (product.ColorInfo?.ColorCode != null)
+            if (product.ColorCode != null)
             {
-                colorPanel.BackColor = ColorTranslator.FromHtml(product.ColorInfo.ColorCode);
+                colorPanel.BackColor = ColorTranslator.FromHtml(product.ColorCode);
             }
 
             Label lblColor = new Label
             {
-                Text = $"Color: {product.ColorInfo?.ColorName}",
+                Text = $"Color: {product.ColorName}",
                 Location = new Point(10, 270),
                 AutoSize = true
             };
 
             Label lblInventory = new Label
             {
-                Text = $"Inventory: {product.ColorInfo?.Inventory} items",
+                Text = $"Inventory: {product.Inventory} items",
                 Location = new Point(10, 300),
                 AutoSize = true
             };
@@ -212,9 +241,9 @@ namespace QuanLyNoir_BTL
 
             // Tạo context menu
             ContextMenuStrip optionsMenu = new ContextMenuStrip();
-            optionsMenu.Items.Add("Sửa thông tin").Click += (s, e) => EditProduct(product.ColorInfo.Id);
-            optionsMenu.Items.Add("Xóa sản phẩm").Click += (s, e) => DeleteProduct(product.ColorInfo.Id);
-            optionsMenu.Items.Add("Thêm màu sắc").Click += (s, e) => AddColorToProduct(product.Id);
+            optionsMenu.Items.Add("Sửa thông tin").Click += (s, e) => EditProduct(product.Id);
+            optionsMenu.Items.Add("Xóa sản phẩm").Click += (s, e) => DeleteProduct(product.Id);
+            optionsMenu.Items.Add("Thêm màu sắc").Click += (s, e) => AddColorToProduct(product.ProductId);
 
 
             // Gán context menu cho nút
