@@ -442,6 +442,14 @@
             btn_addnewproduct.TabIndex = 19;
             btn_addnewproduct.UseVisualStyleBackColor = true;
             // 
+            // loadWorker
+            // 
+            loadWorker.WorkerReportsProgress = true;
+            loadWorker.WorkerSupportsCancellation = true;
+            loadWorker.DoWork += loadWorker_DoWork;
+            loadWorker.ProgressChanged += loadWorker_ProgressChanged;
+            loadWorker.RunWorkerCompleted += loadWorker_RunWorkerCompleted;
+            // 
             // progressBar1
             // 
             progressBar1.Location = new Point(-19, -4);

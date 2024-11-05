@@ -1,12 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using QuanLyNoir_BTL.Enums;
 using QuanLyNoir_BTL.Models;
 using QuanLyNoir_BTL.Views;
-using System;
-using System.Drawing;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace QuanLyNoir_BTL
 {
@@ -45,12 +40,18 @@ namespace QuanLyNoir_BTL
             _timer.Stop();
 
             // Gọi lại LoadProductsAsync để tải lại sản phẩm
-            LoadProductsAsync(pnl_product).ConfigureAwait(false);
+            if (!loadWorker.IsBusy)
+            {
+                loadWorker.RunWorkerAsync();
+            }
         }
         private async void ManageProduct_Load(object sender, EventArgs e)
         {
-            await LoadProductsAsync(pnl_product);
             lbl_priceFilter.Text = $"Price: ${scrb_price.Value}";
+            if (!loadWorker.IsBusy)
+            {
+                loadWorker.RunWorkerAsync();
+            }
         }
 
         private async Task LoadProductsAsync(Panel pnl_product)
@@ -74,12 +75,6 @@ namespace QuanLyNoir_BTL
                     && pc.Product.ProdName.ToLower().Contains(searchTerm)
                     && pc.Product.Price < priceLimit);
 
-                // Truy vấn sản phẩm với bộ lọc theo loại sản phẩm hiện tại
-                //var productQuery = _dbContext.Products
-                //    .Include(p => p.ProductColors)
-                //    .Where(p => p.ProdName.ToLower().Contains(searchTerm)
-                //                && p.ProductColors.Any(pc => pc.Inventory < inventoryThreshold && p.Price < priceLimit));
-
                 if (!string.IsNullOrEmpty(currentType))
                 {
                     // Nếu currentType không rỗng, thêm điều kiện lọc theo loại sản phẩm
@@ -98,6 +93,7 @@ namespace QuanLyNoir_BTL
                         pc.ImageUrl,
                         pc.ColorCode,
                         pc.ProductId,
+                        pc.Size,
                         pc.Product.ProdName,
                         pc.Product.Price,
                         pc.Product.Wid,
@@ -108,28 +104,6 @@ namespace QuanLyNoir_BTL
                     .Skip((currentPage - 1) * PageSize)
                     .Take(PageSize)
                     .ToListAsync();
-                //var productInformation = await productQuery
-                //    .OrderByDescending(p => p.Price) // Sắp xếp theo giá giảm dần
-                //    .Select(p => new
-                //    {
-                //        p.Id,
-                //        p.ProdName,
-                //        p.Price,
-                //        p.Wid,
-                //        p.Hei,
-                //        ColorInfo = p.ProductColors.Select(pc => new
-                //        {
-                //            pc.Id,
-                //            pc.Inventory,
-                //            pc.ColorName,
-                //            pc.ImageUrl,
-                //            pc.ColorCode
-                //        }).FirstOrDefault()
-                //    })
-                //    .AsNoTracking()
-                //    .Skip((currentPage - 1) * PageSize)
-                //    .Take(PageSize)
-                //    .ToListAsync();
 
                 int x = 10, y = 10;
                 const int padding = 20; // Tăng khoảng cách giữa các ô sản phẩm
@@ -200,7 +174,7 @@ namespace QuanLyNoir_BTL
 
             Label lblSize = new Label
             {
-                Text = $"Size: {product.Wid} x {product.Hei}",
+                Text = $"Size: {Enum.GetName(typeof(ProductSize), product.Size)} ({product.Wid} x {product.Hei})",
                 Location = new Point(10, 240),
                 AutoSize = true
             };
@@ -272,7 +246,10 @@ namespace QuanLyNoir_BTL
                 // Tạo và hiển thị form AddNewProduct
                 AddNewProduct AddNewColorForm = new AddNewProduct(_dbContext, productId);
                 AddNewColorForm.ShowDialog(); // Hiển thị như một dialog để chờ người dùng đóng form này
-                LoadProductsAsync(pnl_product).ConfigureAwait(false); // Tải lại danh sách sản phẩm sau khi sửa
+                if (!loadWorker.IsBusy)
+                {
+                    loadWorker.RunWorkerAsync();
+                }
             }
             else
             {
@@ -291,7 +268,10 @@ namespace QuanLyNoir_BTL
                 // Tạo và hiển thị form AddNewProduct
                 AddNewProduct editForm = new AddNewProduct(_dbContext, false, productColor.Id);
                 editForm.ShowDialog(); // Hiển thị như một dialog để chờ người dùng đóng form này
-                LoadProductsAsync(pnl_product).ConfigureAwait(false); // Tải lại danh sách sản phẩm sau khi sửa
+                if (!loadWorker.IsBusy)
+                {
+                    loadWorker.RunWorkerAsync();
+                }
             }
             else
             {
@@ -315,7 +295,10 @@ namespace QuanLyNoir_BTL
                     _dbContext.SaveChanges();
 
                     // Refresh the product list in the UI
-                    LoadProductsAsync(pnl_product).ConfigureAwait(false);
+                    if (!loadWorker.IsBusy)
+                    {
+                        loadWorker.RunWorkerAsync();
+                    }
                 }
                 else
                 {
@@ -329,8 +312,11 @@ namespace QuanLyNoir_BTL
         {
             if (currentPage > 1)
             {
-                currentPage--;
-                await LoadProductsAsync(pnl_product);
+                if (!loadWorker.IsBusy)
+                {
+                    currentPage--;
+                    loadWorker.RunWorkerAsync();
+                }
             }
         }
 
@@ -338,16 +324,19 @@ namespace QuanLyNoir_BTL
         {
             if (currentPage < Math.Ceiling((double)totalRecords / PageSize))
             {
-                currentPage++;
-                await LoadProductsAsync(pnl_product);
+                if (!loadWorker.IsBusy)
+                {
+                    currentPage++;
+                    loadWorker.RunWorkerAsync();
+                }
             }
         }
 
-        private void scrb_price_Scroll(object sender, ScrollEventArgs e)
+        private async void scrb_price_Scroll(object sender, ScrollEventArgs e)
         {
             lbl_priceFilter.Text = $"Giá: ${scrb_price.Value}";
-
             _timer.Stop();
+            await Task.Delay(TimerInterval); // Delay before restarting to avoid rapid calls
             currentPage = 1;
             _timer.Start();
         }
@@ -359,7 +348,6 @@ namespace QuanLyNoir_BTL
             currentPage = 1;
             currentPage = 1;
             _timer.Start();
-          //  await LoadProductsAsync(pnl_product);
         }
 
         private async void tbx_inventory_TextChanged(object sender, EventArgs e)
@@ -368,7 +356,6 @@ namespace QuanLyNoir_BTL
             currentPage = 1;
             currentPage = 1;
             _timer.Start();
-           // await LoadProductsAsync(pnl_product);
         }
 
         private void btn_filternow_Click(object sender, EventArgs e)
@@ -403,7 +390,10 @@ namespace QuanLyNoir_BTL
             //currentType = "bag"; // Đặt loại sản phẩm là 'bag'
             currentType = "Type B"; // Đặt loại sản phẩm là 'bag'
             currentPage = 1; // Quay lại trang đầu
-            await LoadProductsAsync(pnl_product);
+            if (!loadWorker.IsBusy)
+            {
+                loadWorker.RunWorkerAsync();
+            }
         }
 
         private async void btn_jacket_Click(object sender, EventArgs e)
@@ -414,7 +404,10 @@ namespace QuanLyNoir_BTL
             //currentType = "jacket"; // Đặt loại sản phẩm là 'jacket'
             currentType = "Type A"; // Đặt loại sản phẩm là 'jacket'
             currentPage = 1; // Quay lại trang đầu
-            await LoadProductsAsync(pnl_product);
+            if (!loadWorker.IsBusy)
+            {
+                loadWorker.RunWorkerAsync();
+            }
         }
 
         private async void btn_newcollection_Click(object sender, EventArgs e)
@@ -424,7 +417,10 @@ namespace QuanLyNoir_BTL
             btn_newcollection.BackColor = Color.DarkSlateGray;
             currentType = null; // select tất cả các sản phẩm
             currentPage = 1; // Quay lại trang đầu
-            await LoadProductsAsync(pnl_product);
+            if (!loadWorker.IsBusy)
+            {
+                loadWorker.RunWorkerAsync();
+            }
         }
 
         private async void btn_voucher_Click(object sender, EventArgs e)
@@ -435,7 +431,10 @@ namespace QuanLyNoir_BTL
             //  currentType = "voucher"; // Đặt loại sản phẩm là 'voucher'
             currentType = "Type C"; // Đặt loại sản phẩm là 'voucher'
             currentPage = 1; // Quay lại trang đầu
-            await LoadProductsAsync(pnl_product);
+            if (!loadWorker.IsBusy)
+            {
+                loadWorker.RunWorkerAsync();
+            }
         }
 
         private void ManageProduct_FormClosing(object sender, FormClosingEventArgs e)
@@ -454,9 +453,132 @@ namespace QuanLyNoir_BTL
         {
             AddNewProduct newForm = new AddNewProduct(_dbContext, true, 1);
             newForm.ShowDialog(); // Hiển thị như một dialog để chờ người dùng đóng form này
-            LoadProductsAsync(pnl_product).ConfigureAwait(false); // Tải lại danh sách sản phẩm sau khi sửa
+            if (!loadWorker.IsBusy)
+            {
+                loadWorker.RunWorkerAsync();
+            }
         }
 
+        private async Task<List<ProductInfomation>> FetchProducts()
+        {
+            // Lấy giá trị từ các trường
+            string searchTerm = tbx_search.Text.Trim().ToLower();
+            int inventoryThreshold = string.IsNullOrEmpty(tbx_inventory.Text) ? int.MaxValue : int.Parse(tbx_inventory.Text);
+            decimal priceLimit = scrb_price.Value;
 
+            totalRecords = _dbContext.ProductColors.Count();
+            if (lbl_page.InvokeRequired)
+            {
+                lbl_page.Invoke((MethodInvoker)delegate
+                {
+                    lbl_page.Text = $"Page {currentPage} / {Math.Ceiling((double)totalRecords / PageSize)}";
+                    btn_previous.Enabled = currentPage > 1;
+                    btn_next.Enabled = currentPage < Math.Ceiling((double)totalRecords / PageSize);
+                });
+            }
+            else
+            {
+                lbl_page.Text = $"Page {currentPage} / {Math.Ceiling((double)totalRecords / PageSize)}";
+                btn_previous.Enabled = currentPage > 1;
+                btn_next.Enabled = currentPage < Math.Ceiling((double)totalRecords / PageSize);
+            }
+
+            //Truy vấn lấy tất cả các product color và size 
+            var productColorQuery = _dbContext.ProductColors
+                .Include(p => p.Product)
+                .Where(pc => pc.Inventory < inventoryThreshold
+                && pc.Product.ProdName.ToLower().Contains(searchTerm)
+                && pc.Product.Price < priceLimit);
+
+            if (!string.IsNullOrEmpty(currentType))
+            {
+                // Nếu currentType không rỗng, thêm điều kiện lọc theo loại sản phẩm
+                //productQuery = productQuery.Where(p => p.Type == currentType);
+                productColorQuery = productColorQuery.Where(pc => pc.Product.Type == currentType);
+
+            }
+
+            return await productColorQuery
+                .OrderByDescending(pc => pc.Product.ProdName) // Sắp xếp theo giá giảm dần
+                .Select(pc => new ProductInfomation
+                {
+                    Id = pc.Id,
+                    Inventory = pc.Inventory,
+                    ColorName = pc.ColorName,
+                    ImageUrl = pc.ImageUrl,
+                    ColorCode = pc.ColorCode,
+                    ProductId = pc.ProductId,
+                    Size = pc.Size,
+                    ProdName = pc.Product.ProdName,
+                    Price = pc.Product.Price,
+                    Wid = pc.Product.Wid,
+                    Hei = pc.Product.Hei,
+                    Type = pc.Product.Type,
+                })
+                .AsNoTracking()
+                .Skip((currentPage - 1) * PageSize)
+                .Take(PageSize)
+                .ToListAsync();
+        }
+        private void loadWorker_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
+        {
+            // Cập nhật ProgressBar.visible từ DoWork
+            this.Invoke((MethodInvoker)delegate {
+                progressBar1.Visible = true;
+                pnl_product.Controls.Clear();
+            });
+            // Fetch products asynchronously
+            var productInformation = FetchProducts().Result; // Await FetchProducts method
+
+            int progress = 0;
+
+            int x = 10, y = 10;
+            const int padding = 20;
+
+            foreach (var product in productInformation)
+            {
+                var productPanel = CreateProductPanel(product, x, y);
+                this.Invoke((MethodInvoker)delegate {
+                    pnl_product.Controls.Add(productPanel);
+                });
+
+                x += productPanel.Width + padding;
+                if (x + productPanel.Width > pnl_product.Width)
+                {
+                    x = 10;
+                    y += productPanel.Height + padding;
+                }
+                progress++;
+
+                // Báo cáo tiến độ
+                int percentComplete = (int)((double)progress / productInformation.Count * 100);
+                loadWorker.ReportProgress(percentComplete);
+            }
+        }
+
+        private void loadWorker_ProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e)
+        {
+            // Cập nhật giá trị ProgressBar
+            progressBar1.Value = e.ProgressPercentage;
+        }
+
+        private void loadWorker_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
+        {
+            // Ẩn ProgressBar khi hoàn thành
+            progressBar1.Visible = false;
+
+            // Kiểm tra lỗi hoặc huỷ bỏ
+            if (e.Cancelled)
+            {
+                MessageBox.Show("Tải dữ liệu bị hủy bỏ.");
+                return;
+            }
+            else if (e.Error != null)
+            {
+                MessageBox.Show("Lỗi khi tải dữ liệu: " + e.Error.Message);
+                return;
+            }
+   
+        }
     }
 }
