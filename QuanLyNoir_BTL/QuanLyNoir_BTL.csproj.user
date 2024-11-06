@@ -7,6 +7,9 @@
     <Compile Update="Views\ManageProduct.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="Views\ManageProductControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Update="Views\SignIn.cs">
       <SubType>Form</SubType>
     </Compile>

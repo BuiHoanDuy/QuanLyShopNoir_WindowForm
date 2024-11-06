@@ -1,17 +1,6 @@
 ﻿using QuanLyNoir_BTL.Enums;
 using QuanLyNoir_BTL.Models;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using QuanLyNoir_BTL.Enums;
-using System.Data.Entity;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace QuanLyNoir_BTL.Views
 {
@@ -153,13 +142,13 @@ namespace QuanLyNoir_BTL.Views
             int.TryParse(tbx_inventory.Text, out int inventory);
             decimal.TryParse(tbx_price.Text, out decimal price);
 
-            Product product = null;
+            Models.Product product = null;
 
             if (this.InvokeRequired)
             {
                 this.Invoke((MethodInvoker)delegate
                 {
-                    product = new Product
+                    product = new Models.Product
                     {
                         Id = Guid.NewGuid(),
                         ProdName = tbx_name.Text,
@@ -173,7 +162,7 @@ namespace QuanLyNoir_BTL.Views
             }
             else
             {
-                product = new Product
+                product = new Models.Product
                 {
                     Id = Guid.NewGuid(),
                     ProdName = tbx_name.Text,

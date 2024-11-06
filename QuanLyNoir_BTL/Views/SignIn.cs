@@ -31,7 +31,7 @@ namespace QuanLyNoir_BTL
             if (user != null)
             {        
                 // Đăng nhập thành công
-                ManageProduct manageProductForm = new ManageProduct(user.Name, user.Role);
+                ManageProduct manageProductForm = new ManageProduct(user.Name);
                 this.Hide(); // Ẩn form đăng nhập
                 manageProductForm.Show();
 
