@@ -41,8 +41,34 @@ namespace QuanLyNoir_BTL
 
         private void btn_manageproduct_Click(object sender, EventArgs e)
         {
+            updateEffectClickedButton(btn_manageproduct);
             pnl_control.Controls.Clear();  // Xóa các UserControl hiện tại
             pnl_control.Controls.Add(manageProductControl);
+        }
+
+        private void btn_manageAccount_Click(object sender, EventArgs e)
+        {
+            updateEffectClickedButton(btn_manageAccount);
+            ManageAccountControl manageAccountControl = new ManageAccountControl();
+            pnl_control.Controls.Clear();  // Xóa các UserControl hiện tại
+            pnl_control.Controls.Add(manageAccountControl);   
+        }
+        private void updateEffectClickedButton(Button btn)
+        {
+            btn_manageAccount.BackColor = Color.White;
+            btn_manageVoucher.BackColor = Color.White;
+            btn_manageproduct.BackColor = Color.White;
+            btn_manageOrder.BackColor = Color.White;
+            btn_analyseRevenue.BackColor = Color.White;
+
+            btn_manageAccount.ForeColor = Color.Black;
+            btn_manageVoucher.ForeColor = Color.Black;
+            btn_manageproduct.ForeColor = Color.Black;
+            btn_manageOrder.ForeColor = Color.Black;
+            btn_analyseRevenue.ForeColor = Color.Black;
+
+            btn.BackColor = Color.FromArgb(0, 64, 0);
+            btn.ForeColor = Color.FromArgb(255, 128, 255);
         }
     }
 }

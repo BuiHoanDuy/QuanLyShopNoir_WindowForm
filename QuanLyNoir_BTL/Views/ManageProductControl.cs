@@ -28,11 +28,6 @@ namespace QuanLyNoir_BTL.Views
             _timer.Tick += Timer_Tick; // Đăng ký sự kiện
         }
 
-        private void pnl_control_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
         private void Timer_Tick(object sender, EventArgs e)
         {
             // Dừng Timer

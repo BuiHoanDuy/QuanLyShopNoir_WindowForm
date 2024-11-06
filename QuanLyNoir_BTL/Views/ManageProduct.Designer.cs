@@ -33,8 +33,8 @@ namespace QuanLyNoir_BTL
             panel1 = new Panel();
             btn_manageAccount = new Button();
             btn_manageVoucher = new Button();
-            button4 = new Button();
-            button3 = new Button();
+            btn_analyseRevenue = new Button();
+            btn_manageOrder = new Button();
             btn_manageproduct = new Button();
             label6 = new Label();
             lbl_name = new Label();
@@ -57,8 +57,8 @@ namespace QuanLyNoir_BTL
             panel1.BorderStyle = BorderStyle.FixedSingle;
             panel1.Controls.Add(btn_manageAccount);
             panel1.Controls.Add(btn_manageVoucher);
-            panel1.Controls.Add(button4);
-            panel1.Controls.Add(button3);
+            panel1.Controls.Add(btn_analyseRevenue);
+            panel1.Controls.Add(btn_manageOrder);
             panel1.Controls.Add(btn_manageproduct);
             panel1.Controls.Add(label6);
             panel1.Location = new Point(-2, 47);
@@ -68,13 +68,15 @@ namespace QuanLyNoir_BTL
             // 
             // btn_manageAccount
             // 
+            btn_manageAccount.BackColor = Color.White;
             btn_manageAccount.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 163);
             btn_manageAccount.Location = new Point(273, 10);
             btn_manageAccount.Name = "btn_manageAccount";
             btn_manageAccount.Size = new Size(204, 44);
             btn_manageAccount.TabIndex = 8;
             btn_manageAccount.Text = "Manage Account";
-            btn_manageAccount.UseVisualStyleBackColor = true;
+            btn_manageAccount.UseVisualStyleBackColor = false;
+            btn_manageAccount.Click += btn_manageAccount_Click;
             // 
             // btn_manageVoucher
             // 
@@ -86,25 +88,25 @@ namespace QuanLyNoir_BTL
             btn_manageVoucher.Text = "Manage Voucher";
             btn_manageVoucher.UseVisualStyleBackColor = true;
             // 
-            // button4
+            // btn_analyseRevenue
             // 
-            button4.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 163);
-            button4.Location = new Point(1247, 10);
-            button4.Name = "button4";
-            button4.Size = new Size(204, 44);
-            button4.TabIndex = 6;
-            button4.Text = "Analyse Revenue";
-            button4.UseVisualStyleBackColor = true;
+            btn_analyseRevenue.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 163);
+            btn_analyseRevenue.Location = new Point(1247, 10);
+            btn_analyseRevenue.Name = "btn_analyseRevenue";
+            btn_analyseRevenue.Size = new Size(204, 44);
+            btn_analyseRevenue.TabIndex = 6;
+            btn_analyseRevenue.Text = "Analyse Revenue";
+            btn_analyseRevenue.UseVisualStyleBackColor = true;
             // 
-            // button3
+            // btn_manageOrder
             // 
-            button3.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 163);
-            button3.Location = new Point(998, 10);
-            button3.Name = "button3";
-            button3.Size = new Size(204, 44);
-            button3.TabIndex = 5;
-            button3.Text = "Manage Order";
-            button3.UseVisualStyleBackColor = true;
+            btn_manageOrder.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 163);
+            btn_manageOrder.Location = new Point(998, 10);
+            btn_manageOrder.Name = "btn_manageOrder";
+            btn_manageOrder.Size = new Size(204, 44);
+            btn_manageOrder.TabIndex = 5;
+            btn_manageOrder.Text = "Manage Order";
+            btn_manageOrder.UseVisualStyleBackColor = true;
             // 
             // btn_manageproduct
             // 
@@ -170,8 +172,8 @@ namespace QuanLyNoir_BTL
 
         private Button btn_signout;
         private Panel panel1;
-        private Button button4;
-        private Button button3;
+        private Button btn_analyseRevenue;
+        private Button btn_manageOrder;
         private Button btn_manageproduct;
         private Label label6;
         private Label lbl_name;

@@ -147,7 +147,6 @@
             pnl_control.Name = "pnl_control";
             pnl_control.Size = new Size(1528, 789);
             pnl_control.TabIndex = 22;
-            pnl_control.Paint += pnl_control_Paint;
             // 
             // progressBar1
             // 
