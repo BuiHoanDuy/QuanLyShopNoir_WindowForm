@@ -1,7 +1,7 @@
 ﻿
 namespace QuanLyNoir_BTL
 {
-    partial class ManageProduct
+    partial class MenuForm
     {
         /// <summary>
         /// Required designer variable.
@@ -44,13 +44,14 @@ namespace QuanLyNoir_BTL
             // 
             // btn_signout
             // 
+            btn_signout.Cursor = Cursors.Hand;
             btn_signout.Location = new Point(1246, 12);
             btn_signout.Name = "btn_signout";
             btn_signout.Size = new Size(106, 29);
             btn_signout.TabIndex = 0;
             btn_signout.Text = "Sign out";
             btn_signout.UseVisualStyleBackColor = true;
-            btn_signout.Click += button1_Click;
+            btn_signout.Click += btn_signout_Click;
             // 
             // panel1
             // 
@@ -69,6 +70,7 @@ namespace QuanLyNoir_BTL
             // btn_manageAccount
             // 
             btn_manageAccount.BackColor = Color.White;
+            btn_manageAccount.Cursor = Cursors.Hand;
             btn_manageAccount.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 163);
             btn_manageAccount.Location = new Point(273, 10);
             btn_manageAccount.Name = "btn_manageAccount";
@@ -80,6 +82,7 @@ namespace QuanLyNoir_BTL
             // 
             // btn_manageVoucher
             // 
+            btn_manageVoucher.Cursor = Cursors.Hand;
             btn_manageVoucher.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 163);
             btn_manageVoucher.Location = new Point(512, 10);
             btn_manageVoucher.Name = "btn_manageVoucher";
@@ -90,6 +93,7 @@ namespace QuanLyNoir_BTL
             // 
             // btn_analyseRevenue
             // 
+            btn_analyseRevenue.Cursor = Cursors.Hand;
             btn_analyseRevenue.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 163);
             btn_analyseRevenue.Location = new Point(1247, 10);
             btn_analyseRevenue.Name = "btn_analyseRevenue";
@@ -100,6 +104,7 @@ namespace QuanLyNoir_BTL
             // 
             // btn_manageOrder
             // 
+            btn_manageOrder.Cursor = Cursors.Hand;
             btn_manageOrder.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 163);
             btn_manageOrder.Location = new Point(998, 10);
             btn_manageOrder.Name = "btn_manageOrder";
@@ -111,6 +116,7 @@ namespace QuanLyNoir_BTL
             // btn_manageproduct
             // 
             btn_manageproduct.BackColor = Color.FromArgb(0, 64, 0);
+            btn_manageproduct.Cursor = Cursors.Hand;
             btn_manageproduct.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 163);
             btn_manageproduct.ForeColor = Color.FromArgb(255, 128, 255);
             btn_manageproduct.Location = new Point(754, 10);
@@ -145,20 +151,20 @@ namespace QuanLyNoir_BTL
             pnl_control.BackColor = Color.Transparent;
             pnl_control.Location = new Point(-2, 108);
             pnl_control.Name = "pnl_control";
-            pnl_control.Size = new Size(1521, 782);
+            pnl_control.Size = new Size(1530, 790);
             pnl_control.TabIndex = 19;
             // 
-            // ManageProduct
+            // MenuForm
             // 
-            AutoScaleDimensions = new SizeF(9F, 20F);
-            AutoScaleMode = AutoScaleMode.Font;
+            AutoScaleMode = AutoScaleMode.None;
+            BackColor = SystemColors.Info;
             ClientSize = new Size(1524, 895);
             Controls.Add(lbl_name);
             Controls.Add(panel1);
             Controls.Add(btn_signout);
             Controls.Add(pnl_control);
             Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 163);
-            Name = "ManageProduct";
+            Name = "MenuForm";
             Text = "ManageProduct";
             TransparencyKey = Color.FromArgb(255, 192, 192);
             FormClosing += ManageProduct_FormClosing;

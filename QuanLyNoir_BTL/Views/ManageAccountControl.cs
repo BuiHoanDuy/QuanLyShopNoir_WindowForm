@@ -1,17 +1,12 @@
-﻿using QuanLyNoir_BTL.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using QuanLyNoir_BTL.Models;
 using System.Data;
 using System.Linq.Dynamic.Core;
-using System.Security.Cryptography;
-using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace QuanLyNoir_BTL.Views
 {
     public partial class ManageAccountControl : UserControl
     {
-        private readonly ShopNoirTestContext _context = new ShopNoirTestContext();
         private int currentPage = 1; // Trang hiện tại
         private int pageSize = 10; // Số lượng bản ghi mỗi trang
         private int totalRecords; // Tổng số bản ghi
@@ -22,7 +17,6 @@ namespace QuanLyNoir_BTL.Views
             cbbx_cot.Items.Add("Id");
             cbbx_cot.Items.Add("Name");
             cbbx_cot.Items.Add("Username");
-            cbbx_cot.Items.Add("Email");
             cbbx_cot.Items.Add("Role");
             cbbx_cot.SelectedIndex = 0; // Chọn mặc định
 
@@ -48,52 +42,49 @@ namespace QuanLyNoir_BTL.Views
         }
         private void LoadDataIntoDataGridBox()
         {
-            try
+            using (var _context = new ShopNoirContext())
             {
-                // Tính tổng số bản ghi
-                totalRecords = _context.Accounts.Count();
-                lbl_trang.Text = $"Trang {currentPage} / {Math.Ceiling((double)totalRecords / pageSize)}";
-
-                var sortColumn = cbbx_cot.SelectedItem.ToString() switch
+                try
                 {
-                    "Name" => "name",
-                    "Username" => "username",
-                    "Email" => "email",
-                    "Role" => "role",
-                    _ => "username" // Giá trị mặc định
-                };
-                string sortOrder = (cbbx_sapxep.SelectedItem != null &&
-                    cbbx_sapxep.SelectedItem.ToString().Equals("ASC")) ? "asc" : "desc";
+                    // Tính tổng số bản ghi
+                    totalRecords = _context.Accounts.Count();
+                    lbl_trang.Text = $"Trang {currentPage} / {Math.Ceiling((double)totalRecords / pageSize)}";
+
+                    var sortColumn = cbbx_cot.SelectedItem.ToString() switch
+                    {
+                        "Name" => "name",
+                        "Username" => "username",
+                        "Role" => "role",
+                        _ => "username" // Giá trị mặc định
+                    };
+                    string sortOrder = (cbbx_sapxep.SelectedItem != null &&
+                        cbbx_sapxep.SelectedItem.ToString().Equals("ASC")) ? "asc" : "desc";
 
 
-                // Lấy từ khóa tìm kiếm từ TextBox
-                string keyword = tbx_timkiem.Text.Trim();
+                    // Lấy từ khóa tìm kiếm từ TextBox
+                    string keyword = tbx_timkiem.Text.Trim();
 
-                // Truy vấn dữ liệu cho trang hiện tại
-                var accounts = _context.Accounts
-                    .Where(ac => ac.Name.Contains(keyword)
-                    || ac.Username.Contains(keyword)
-                    || ac.Email.Contains(keyword))
-                    .OrderBy($"{sortColumn} {sortOrder}") // Đảm bảo sắp xếp trước khi phân trang
-                    .Skip((currentPage - 1) * pageSize) // Bỏ qua bản ghi trước đó
-                    .Take(pageSize) // Lấy số bản ghi theo pageSize
-                    .ToList();
+                    // Truy vấn dữ liệu cho trang hiện tại
+                    var accounts = _context.Accounts
+                        .Where(ac => (ac.Name.Contains(keyword)
+                        || ac.Username.Contains(keyword)) && ac.Status == true)
+                        .OrderBy($"{sortColumn} {sortOrder}") // Đảm bảo sắp xếp trước khi phân trang
+                        .Skip((currentPage - 1) * pageSize) // Bỏ qua bản ghi trước đó
+                        .Take(pageSize) // Lấy số bản ghi theo pageSize
+                        .ToList();
 
-                // Gán dữ liệu vào DataGridView
-                dtgv_accountList.DataSource = accounts;
+                    // Gán dữ liệu vào DataGridView
+                    dtgv_accountList.DataSource = accounts;
 
-                dtgv_accountList.Columns["Carts"].Visible = false;
-                dtgv_accountList.Columns["ContactHistories"].Visible = false;
-                dtgv_accountList.Columns["CustomerReviews"].Visible = false;
-                dtgv_accountList.Columns["Invoices"].Visible = false;
-                dtgv_accountList.Columns["UserAddresses"].Visible = false;
-                // Kích hoạt hoặc vô hiệu hóa nút điều hướng
-                btn_trangtruoc.Enabled = currentPage > 1;
-                btn_trangsau.Enabled = currentPage < Math.Ceiling((double)totalRecords / pageSize);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Lỗi khi tải dữ liệu: " + ex.Message);
+                    dtgv_accountList.Columns["Invoices"].Visible = false;
+                    // Kích hoạt hoặc vô hiệu hóa nút điều hướng
+                    btn_trangtruoc.Enabled = currentPage > 1;
+                    btn_trangsau.Enabled = currentPage < Math.Ceiling((double)totalRecords / pageSize);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Lỗi khi tải dữ liệu: " + ex.Message);
+                }
             }
         }
         private void btn_trangtruoc_Click(object sender, EventArgs e)
@@ -144,7 +135,6 @@ namespace QuanLyNoir_BTL.Views
             string name = tbx_name.Text.Trim();
             string username = tbx_username.Text.Trim();
             string password = tbx_password.Text.Trim();
-            string email = tbx_email.Text.Trim();
             string phone = tbx_phone.Text.Trim();
             string role = cbbx_role.Text.Trim();
 
@@ -161,26 +151,27 @@ namespace QuanLyNoir_BTL.Views
                 Name = name,
                 Username = username,
                 Password = password,
-                Email = email,
                 PhoneNumber = phone,
                 Role = role.Equals("Admin") ? true : false // true : admin, false: staff
             };
 
-            // Thêm khách hàng mới vào DbContext
-            _context.Accounts.Add(newAccount);
+            using (var _context = new ShopNoirContext())
+            {
+                // Thêm khách hàng mới vào DbContext
+                _context.Accounts.Add(newAccount);
 
-            // Lưu thay đổi vào cơ sở dữ liệu
-            _context.SaveChanges();
+                // Lưu thay đổi vào cơ sở dữ liệu
+                _context.SaveChanges();
 
-            MessageBox.Show("Create new account sucessfully!!");
+                MessageBox.Show("Create new account sucessfully!!");
 
-            // Xóa dữ liệu nhập trên form
-            resetInformation();
+                // Xóa dữ liệu nhập trên form
+                resetInformation();
 
-            // Tải lại dữ liệu hiển thị trên DataGridView
-            LoadDataIntoDataGridBox();
+                // Tải lại dữ liệu hiển thị trên DataGridView
+                LoadDataIntoDataGridBox();
+            }
         }
-
         private void dtgv_accountList_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             dtgv_accountList.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
@@ -197,7 +188,6 @@ namespace QuanLyNoir_BTL.Views
                 tbx_name.Text = row.Cells["Name"].Value.ToString();
                 tbx_username.Text = row.Cells["Username"].Value.ToString();
                 tbx_password.Text = row.Cells["Password"].Value.ToString();
-                tbx_email.Text = row.Cells["Email"].Value.ToString();
                 tbx_phone.Text = row.Cells["PhoneNumber"].Value.ToString();
                 cbbx_role.Text = row.Cells["Role"].Value.ToString();
 
@@ -213,7 +203,6 @@ namespace QuanLyNoir_BTL.Views
             string name = tbx_name.Text.Trim();
             string username = tbx_username.Text.Trim();
             string password = tbx_password.Text.Trim();
-            string email = tbx_email.Text.Trim();
             string phone = tbx_phone.Text.Trim();
             string role = cbbx_role.Text.Trim();
 
@@ -223,33 +212,34 @@ namespace QuanLyNoir_BTL.Views
                 MessageBox.Show("Username, password, role is required!!");
                 return;
             }
-
-            // Tìm Province cần cập nhật trong cơ sở dữ liệu
-            var Account = _context.Accounts.FirstOrDefault(p => p.Id.Equals(_Id));
-
-            if (Account != null)
+            using (var _context = new ShopNoirContext())
             {
+                // Tìm Province cần cập nhật trong cơ sở dữ liệu
+                var Account = _context.Accounts.FirstOrDefault(p => p.Id.Equals(_Id));
+
+                if (Account != null)
                 {
-                    Account.Name = name;
-                    Account.Username = username;
-                    Account.Password = password;
-                    Account.Email = email;
-                    Account.PhoneNumber = phone;
-                    Account.Role = role.Equals("Admin") ? true : false; // true : admin, false: staff
+                    {
+                        Account.Name = name;
+                        Account.Username = username;
+                        Account.Password = password;
+                        Account.PhoneNumber = phone;
+                        Account.Role = role.Equals("Admin") ? true : false; // true : admin, false: staff
 
-                    // Lưu thay đổi vào cơ sở dữ liệu
-                    _context.SaveChanges();
+                        // Lưu thay đổi vào cơ sở dữ liệu
+                        _context.SaveChanges();
 
-                    // Thông báo thành công
-                    MessageBox.Show("Update successfully!!");
+                        // Thông báo thành công
+                        MessageBox.Show("Update successfully!!");
 
-                    // Làm mới DataGridView
-                    LoadDataIntoDataGridBox();
+                        // Làm mới DataGridView
+                        LoadDataIntoDataGridBox();
+                    }
                 }
-            }
-            else
-            {
-                MessageBox.Show("Don't find account to update");
+                else
+                {
+                    MessageBox.Show("Don't find account to update");
+                }
             }
         }
         private void btn_reset_Click(object sender, EventArgs e)
@@ -265,7 +255,6 @@ namespace QuanLyNoir_BTL.Views
             tbx_name.Clear();
             tbx_username.Clear();
             tbx_password.Clear();
-            tbx_email.Clear();
             tbx_phone.Clear();
         }
 
@@ -275,45 +264,38 @@ namespace QuanLyNoir_BTL.Views
             if (dtgv_accountList.SelectedRows.Count > 0)
             {
                 // Xác nhận xóa
-                DialogResult result = MessageBox.Show("Do you want to delete this account?", "Delete account", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                DialogResult result = MessageBox.Show("Do you want to deactivate this account?", "Deactivate account", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
 
                 if (result == DialogResult.Yes)
                 {
                     var accountId = (Guid)dtgv_accountList.SelectedRows[0].Cells["Id"].Value;
-
-                    // Tìm tài khoản cần xóa
-                    var accountToDelete = _context.Accounts.FirstOrDefault(a => a.Id == accountId);
-
-                    if (accountToDelete != null)
+                    using (var _context = new ShopNoirContext())
                     {
-                        // Xóa các bản ghi liên quan trong bảng Contact_History trước
-                        var relatedContactHistories = _context.ContactHistories.Where(ch => ch.AccountId == accountId);
-                        _context.ContactHistories.RemoveRange(relatedContactHistories);
+                        // Chuyển Status thành 0 để đánh dấu tài khoản là "đã xóa"
+                        int rowsAffected = _context.Database.ExecuteSqlRaw("UPDATE Accounts SET Status = 0 WHERE Id = {0}", accountId);
 
-                        // Sau đó xóa tài khoản
-                        _context.Accounts.Remove(accountToDelete);
+                        if (rowsAffected > 0)
+                        {
+                            MessageBox.Show("Tài khoản đã được chuyển sang trạng thái không hoạt động!");
 
-                        // Lưu thay đổi vào cơ sở dữ liệu
-                        _context.SaveChanges();
-
-                        MessageBox.Show("Xóa tài khoản thành công!");
-
-                        LoadDataIntoDataGridBox();
-                        btn_update.Enabled = false;
-                        btn_delete.Enabled = false;
-                        btn_create.Enabled = true;
-                        resetInformation();
+                            LoadDataIntoDataGridBox();
+                            btn_update.Enabled = false;
+                            btn_delete.Enabled = false;
+                            btn_create.Enabled = true;
+                            resetInformation();
+                        }
+                        else
+                        {
+                            MessageBox.Show("Không tìm thấy tài khoản để cập nhật.");
+                        }
                     }
-                    else
-                    {
-                        MessageBox.Show("Không tìm thấy tài khoản để xóa.");
-                    }
+
                 }
             }
             else
             {
-                MessageBox.Show("Vui lòng chọn tài khoản để xóa.");
+                MessageBox.Show("Vui lòng chọn tài khoản để cập nhật.");
             }
         }
+        }
     }
-}

@@ -29,15 +29,10 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ManageProductControl));
-            btn_addnewproduct = new Button();
-            llbl_addnewproduct = new LinkLabel();
-            btn_reset = new Button();
-            lbl_page = new Label();
-            btn_next = new Button();
-            pnl_control = new Panel();
+            loadWorker = new System.ComponentModel.BackgroundWorker();
             progressBar1 = new ProgressBar();
-            btn_previous = new Button();
-            pnl_product = new Panel();
+            panel1 = new Panel();
+            btn_reset = new Button();
             groupBox3 = new GroupBox();
             lbl_priceFilter = new Label();
             label10 = new Label();
@@ -59,94 +54,30 @@
             btn_bag = new Button();
             btn_newcollection = new Button();
             label1 = new Label();
-            loadWorker = new System.ComponentModel.BackgroundWorker();
-            pnl_control.SuspendLayout();
+            pnl_control = new Panel();
+            btn_addnewproduct = new Button();
+            llbl_addnewproduct = new LinkLabel();
+            lbl_page = new Label();
+            btn_next = new Button();
+            btn_previous = new Button();
+            pnl_product = new Panel();
+            panel1.SuspendLayout();
             groupBox3.SuspendLayout();
             groupBox2.SuspendLayout();
             groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
             panel3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
+            pnl_control.SuspendLayout();
             SuspendLayout();
             // 
-            // btn_addnewproduct
+            // loadWorker
             // 
-            btn_addnewproduct.Image = (Image)resources.GetObject("btn_addnewproduct.Image");
-            btn_addnewproduct.Location = new Point(489, 19);
-            btn_addnewproduct.Name = "btn_addnewproduct";
-            btn_addnewproduct.Size = new Size(34, 28);
-            btn_addnewproduct.TabIndex = 35;
-            btn_addnewproduct.UseVisualStyleBackColor = true;
-            // 
-            // llbl_addnewproduct
-            // 
-            llbl_addnewproduct.AutoSize = true;
-            llbl_addnewproduct.DisabledLinkColor = Color.Black;
-            llbl_addnewproduct.LinkColor = Color.Black;
-            llbl_addnewproduct.Location = new Point(529, 23);
-            llbl_addnewproduct.Name = "llbl_addnewproduct";
-            llbl_addnewproduct.Size = new Size(124, 20);
-            llbl_addnewproduct.TabIndex = 20;
-            llbl_addnewproduct.TabStop = true;
-            llbl_addnewproduct.Text = "Add new product";
-            llbl_addnewproduct.VisitedLinkColor = Color.Black;
-            llbl_addnewproduct.Click += llbl_addnewproduct_LinkClicked;
-            // 
-            // btn_reset
-            // 
-            btn_reset.BackColor = Color.DarkSlateGray;
-            btn_reset.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 163);
-            btn_reset.ForeColor = Color.AliceBlue;
-            btn_reset.Location = new Point(24, 553);
-            btn_reset.Name = "btn_reset";
-            btn_reset.Size = new Size(318, 48);
-            btn_reset.TabIndex = 34;
-            btn_reset.Text = "RESET";
-            btn_reset.UseVisualStyleBackColor = false;
-            btn_reset.Click += btn_reset_Click;
-            // 
-            // lbl_page
-            // 
-            lbl_page.AutoSize = true;
-            lbl_page.Location = new Point(990, 744);
-            lbl_page.Name = "lbl_page";
-            lbl_page.Size = new Size(18, 20);
-            lbl_page.TabIndex = 33;
-            lbl_page.Text = "...";
-            // 
-            // btn_next
-            // 
-            btn_next.Location = new Point(1079, 740);
-            btn_next.Name = "btn_next";
-            btn_next.Size = new Size(106, 29);
-            btn_next.TabIndex = 32;
-            btn_next.Text = "Next";
-            btn_next.UseVisualStyleBackColor = true;
-            btn_next.Click += btn_next_Click;
-            // 
-            // pnl_control
-            // 
-            pnl_control.Controls.Add(progressBar1);
-            pnl_control.Controls.Add(btn_addnewproduct);
-            pnl_control.Controls.Add(llbl_addnewproduct);
-            pnl_control.Controls.Add(btn_reset);
-            pnl_control.Controls.Add(lbl_page);
-            pnl_control.Controls.Add(btn_next);
-            pnl_control.Controls.Add(btn_previous);
-            pnl_control.Controls.Add(pnl_product);
-            pnl_control.Controls.Add(groupBox3);
-            pnl_control.Controls.Add(groupBox2);
-            pnl_control.Controls.Add(groupBox1);
-            pnl_control.Controls.Add(panel3);
-            pnl_control.Controls.Add(btn_voucher);
-            pnl_control.Controls.Add(btn_jacket);
-            pnl_control.Controls.Add(btn_bag);
-            pnl_control.Controls.Add(btn_newcollection);
-            pnl_control.Controls.Add(label1);
-            pnl_control.Location = new Point(8, 8);
-            pnl_control.Name = "pnl_control";
-            pnl_control.Size = new Size(1528, 789);
-            pnl_control.TabIndex = 22;
+            loadWorker.WorkerReportsProgress = true;
+            loadWorker.WorkerSupportsCancellation = true;
+            loadWorker.DoWork += loadWorker_DoWork;
+            loadWorker.ProgressChanged += loadWorker_ProgressChanged;
+            loadWorker.RunWorkerCompleted += loadWorker_RunWorkerCompleted;
             // 
             // progressBar1
             // 
@@ -155,25 +86,42 @@
             progressBar1.Size = new Size(1528, 10);
             progressBar1.TabIndex = 36;
             // 
-            // btn_previous
+            // panel1
             // 
-            btn_previous.Location = new Point(878, 740);
-            btn_previous.Name = "btn_previous";
-            btn_previous.Size = new Size(106, 29);
-            btn_previous.TabIndex = 31;
-            btn_previous.Text = "Previous";
-            btn_previous.UseVisualStyleBackColor = true;
-            btn_previous.Click += btn_previous_Click;
+            panel1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            panel1.Controls.Add(btn_reset);
+            panel1.Controls.Add(groupBox3);
+            panel1.Controls.Add(groupBox2);
+            panel1.Controls.Add(groupBox1);
+            panel1.Controls.Add(panel3);
+            panel1.Controls.Add(btn_voucher);
+            panel1.Controls.Add(btn_jacket);
+            panel1.Controls.Add(btn_bag);
+            panel1.Controls.Add(btn_newcollection);
+            panel1.Controls.Add(label1);
+            panel1.Location = new Point(24, 42);
+            panel1.Name = "panel1";
+            panel1.Size = new Size(429, 673);
+            panel1.TabIndex = 37;
             // 
-            // pnl_product
+            // btn_reset
             // 
-            pnl_product.Location = new Point(471, 42);
-            pnl_product.Name = "pnl_product";
-            pnl_product.Size = new Size(1033, 675);
-            pnl_product.TabIndex = 30;
+            btn_reset.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            btn_reset.BackColor = Color.DarkSlateGray;
+            btn_reset.Cursor = Cursors.Hand;
+            btn_reset.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 163);
+            btn_reset.ForeColor = Color.AliceBlue;
+            btn_reset.Location = new Point(0, 509);
+            btn_reset.Name = "btn_reset";
+            btn_reset.Size = new Size(315, 46);
+            btn_reset.TabIndex = 44;
+            btn_reset.Text = "RESET";
+            btn_reset.UseVisualStyleBackColor = false;
+            btn_reset.Click += btn_reset_Click;
             // 
             // groupBox3
             // 
+            groupBox3.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             groupBox3.Controls.Add(lbl_priceFilter);
             groupBox3.Controls.Add(label10);
             groupBox3.Controls.Add(label9);
@@ -181,10 +129,10 @@
             groupBox3.Controls.Add(label8);
             groupBox3.Controls.Add(scrb_price);
             groupBox3.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 163);
-            groupBox3.Location = new Point(24, 398);
+            groupBox3.Location = new Point(1, 356);
             groupBox3.Name = "groupBox3";
-            groupBox3.Size = new Size(318, 125);
-            groupBox3.TabIndex = 29;
+            groupBox3.Size = new Size(325, 132);
+            groupBox3.TabIndex = 43;
             groupBox3.TabStop = false;
             groupBox3.Text = "Price";
             // 
@@ -246,18 +194,20 @@
             // 
             // groupBox2
             // 
+            groupBox2.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             groupBox2.Controls.Add(tbx_inventory);
             groupBox2.Controls.Add(label3);
             groupBox2.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 163);
-            groupBox2.Location = new Point(24, 305);
+            groupBox2.Location = new Point(1, 257);
             groupBox2.Name = "groupBox2";
-            groupBox2.Size = new Size(318, 74);
-            groupBox2.TabIndex = 28;
+            groupBox2.Size = new Size(319, 78);
+            groupBox2.TabIndex = 42;
             groupBox2.TabStop = false;
             groupBox2.Text = "Inventory";
             // 
             // tbx_inventory
             // 
+            tbx_inventory.Cursor = Cursors.IBeam;
             tbx_inventory.Location = new Point(104, 29);
             tbx_inventory.Name = "tbx_inventory";
             tbx_inventory.Size = new Size(173, 27);
@@ -278,10 +228,10 @@
             groupBox1.Controls.Add(pictureBox2);
             groupBox1.Controls.Add(tbx_search);
             groupBox1.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 163);
-            groupBox1.Location = new Point(24, 199);
+            groupBox1.Location = new Point(1, 139);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(318, 84);
-            groupBox1.TabIndex = 27;
+            groupBox1.Size = new Size(325, 102);
+            groupBox1.TabIndex = 41;
             groupBox1.TabStop = false;
             groupBox1.Text = "Search";
             // 
@@ -297,6 +247,7 @@
             // 
             // tbx_search
             // 
+            tbx_search.Cursor = Cursors.IBeam;
             tbx_search.Location = new Point(12, 34);
             tbx_search.Name = "tbx_search";
             tbx_search.Size = new Size(245, 27);
@@ -307,10 +258,10 @@
             // 
             panel3.Controls.Add(pictureBox1);
             panel3.Controls.Add(label2);
-            panel3.Location = new Point(26, 137);
+            panel3.Location = new Point(3, 95);
             panel3.Name = "panel3";
             panel3.Size = new Size(108, 38);
-            panel3.TabIndex = 26;
+            panel3.TabIndex = 40;
             // 
             // pictureBox1
             // 
@@ -335,49 +286,59 @@
             // 
             // btn_voucher
             // 
+            btn_voucher.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            btn_voucher.BackColor = SystemColors.ControlLightLight;
+            btn_voucher.Cursor = Cursors.Hand;
             btn_voucher.FlatStyle = FlatStyle.Flat;
-            btn_voucher.Location = new Point(353, 90);
+            btn_voucher.Location = new Point(328, 48);
             btn_voucher.Name = "btn_voucher";
-            btn_voucher.Size = new Size(101, 29);
-            btn_voucher.TabIndex = 25;
+            btn_voucher.Size = new Size(82, 33);
+            btn_voucher.TabIndex = 39;
             btn_voucher.Text = "Voucher";
-            btn_voucher.UseVisualStyleBackColor = true;
+            btn_voucher.UseVisualStyleBackColor = false;
             btn_voucher.Click += btn_voucher_Click;
             // 
             // btn_jacket
             // 
+            btn_jacket.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            btn_jacket.BackColor = SystemColors.ControlLightLight;
+            btn_jacket.Cursor = Cursors.Hand;
             btn_jacket.FlatStyle = FlatStyle.Flat;
-            btn_jacket.Location = new Point(265, 90);
+            btn_jacket.Location = new Point(240, 48);
             btn_jacket.Name = "btn_jacket";
-            btn_jacket.Size = new Size(81, 29);
-            btn_jacket.TabIndex = 24;
+            btn_jacket.Size = new Size(75, 33);
+            btn_jacket.TabIndex = 38;
             btn_jacket.Text = "Jacket";
-            btn_jacket.UseVisualStyleBackColor = true;
+            btn_jacket.UseVisualStyleBackColor = false;
             btn_jacket.Click += btn_jacket_Click;
             // 
             // btn_bag
             // 
-            btn_bag.BackColor = SystemColors.Control;
+            btn_bag.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            btn_bag.BackColor = SystemColors.ControlLightLight;
+            btn_bag.Cursor = Cursors.Hand;
             btn_bag.FlatStyle = FlatStyle.Flat;
             btn_bag.ForeColor = Color.Black;
-            btn_bag.Location = new Point(180, 90);
+            btn_bag.Location = new Point(157, 48);
             btn_bag.Name = "btn_bag";
-            btn_bag.Size = new Size(74, 29);
-            btn_bag.TabIndex = 23;
+            btn_bag.Size = new Size(63, 33);
+            btn_bag.TabIndex = 37;
             btn_bag.Text = "Bag";
             btn_bag.UseVisualStyleBackColor = false;
             btn_bag.Click += btn_bag_Click;
             // 
             // btn_newcollection
             // 
+            btn_newcollection.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             btn_newcollection.BackColor = Color.DarkSlateGray;
+            btn_newcollection.Cursor = Cursors.Hand;
             btn_newcollection.FlatStyle = FlatStyle.Flat;
             btn_newcollection.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 163);
             btn_newcollection.ForeColor = Color.Pink;
-            btn_newcollection.Location = new Point(26, 90);
+            btn_newcollection.Location = new Point(6, 48);
             btn_newcollection.Name = "btn_newcollection";
-            btn_newcollection.Size = new Size(147, 29);
-            btn_newcollection.TabIndex = 22;
+            btn_newcollection.Size = new Size(139, 33);
+            btn_newcollection.TabIndex = 36;
             btn_newcollection.Text = "New Collection";
             btn_newcollection.UseVisualStyleBackColor = false;
             btn_newcollection.Click += btn_newcollection_Click;
@@ -386,30 +347,99 @@
             // 
             label1.AutoSize = true;
             label1.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 163);
-            label1.Location = new Point(26, 42);
+            label1.Location = new Point(3, 0);
             label1.Name = "label1";
             label1.Size = new Size(227, 31);
-            label1.TabIndex = 21;
+            label1.TabIndex = 35;
             label1.Text = "MANAGE PRODUCT";
             // 
-            // loadWorker
+            // pnl_control
             // 
-            loadWorker.WorkerReportsProgress = true;
-            loadWorker.WorkerSupportsCancellation = true;
-            loadWorker.DoWork += loadWorker_DoWork;
-            loadWorker.ProgressChanged += loadWorker_ProgressChanged;
-            loadWorker.RunWorkerCompleted += loadWorker_RunWorkerCompleted;
+            pnl_control.BackColor = SystemColors.ButtonHighlight;
+            pnl_control.Controls.Add(panel1);
+            pnl_control.Controls.Add(progressBar1);
+            pnl_control.Controls.Add(btn_addnewproduct);
+            pnl_control.Controls.Add(llbl_addnewproduct);
+            pnl_control.Controls.Add(lbl_page);
+            pnl_control.Controls.Add(btn_next);
+            pnl_control.Controls.Add(btn_previous);
+            pnl_control.Controls.Add(pnl_product);
+            pnl_control.Location = new Point(3, 3);
+            pnl_control.Name = "pnl_control";
+            pnl_control.Size = new Size(1525, 780);
+            pnl_control.TabIndex = 22;
+            // 
+            // btn_addnewproduct
+            // 
+            btn_addnewproduct.Image = (Image)resources.GetObject("btn_addnewproduct.Image");
+            btn_addnewproduct.Location = new Point(489, 19);
+            btn_addnewproduct.Name = "btn_addnewproduct";
+            btn_addnewproduct.Size = new Size(34, 28);
+            btn_addnewproduct.TabIndex = 35;
+            btn_addnewproduct.UseVisualStyleBackColor = true;
+            // 
+            // llbl_addnewproduct
+            // 
+            llbl_addnewproduct.AutoSize = true;
+            llbl_addnewproduct.Cursor = Cursors.Hand;
+            llbl_addnewproduct.DisabledLinkColor = Color.Black;
+            llbl_addnewproduct.LinkColor = Color.Black;
+            llbl_addnewproduct.Location = new Point(529, 23);
+            llbl_addnewproduct.Name = "llbl_addnewproduct";
+            llbl_addnewproduct.Size = new Size(124, 20);
+            llbl_addnewproduct.TabIndex = 20;
+            llbl_addnewproduct.TabStop = true;
+            llbl_addnewproduct.Text = "Add new product";
+            llbl_addnewproduct.VisitedLinkColor = Color.Black;
+            llbl_addnewproduct.Click += llbl_addnewproduct_LinkClicked;
+            // 
+            // lbl_page
+            // 
+            lbl_page.AutoSize = true;
+            lbl_page.Location = new Point(990, 744);
+            lbl_page.Name = "lbl_page";
+            lbl_page.Size = new Size(18, 20);
+            lbl_page.TabIndex = 33;
+            lbl_page.Text = "...";
+            // 
+            // btn_next
+            // 
+            btn_next.Cursor = Cursors.Hand;
+            btn_next.Location = new Point(1079, 740);
+            btn_next.Name = "btn_next";
+            btn_next.Size = new Size(106, 29);
+            btn_next.TabIndex = 32;
+            btn_next.Text = "Next";
+            btn_next.UseVisualStyleBackColor = true;
+            btn_next.Click += btn_next_Click;
+            // 
+            // btn_previous
+            // 
+            btn_previous.Cursor = Cursors.Hand;
+            btn_previous.Location = new Point(878, 740);
+            btn_previous.Name = "btn_previous";
+            btn_previous.Size = new Size(106, 29);
+            btn_previous.TabIndex = 31;
+            btn_previous.Text = "Previous";
+            btn_previous.UseVisualStyleBackColor = true;
+            btn_previous.Click += btn_previous_Click;
+            // 
+            // pnl_product
+            // 
+            pnl_product.Location = new Point(469, 42);
+            pnl_product.Name = "pnl_product";
+            pnl_product.Size = new Size(1033, 675);
+            pnl_product.TabIndex = 30;
             // 
             // ManageProductControl
             // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
-            AutoScaleMode = AutoScaleMode.Font;
+            AutoScaleMode = AutoScaleMode.None;
             Controls.Add(pnl_control);
             Name = "ManageProductControl";
-            Size = new Size(1521, 778);
+            Size = new Size(1528, 789);
             Load += ManageProductControl_Load;
-            pnl_control.ResumeLayout(false);
-            pnl_control.PerformLayout();
+            panel1.ResumeLayout(false);
+            panel1.PerformLayout();
             groupBox3.ResumeLayout(false);
             groupBox3.PerformLayout();
             groupBox2.ResumeLayout(false);
@@ -420,19 +450,16 @@
             panel3.ResumeLayout(false);
             panel3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
+            pnl_control.ResumeLayout(false);
+            pnl_control.PerformLayout();
             ResumeLayout(false);
         }
 
         #endregion
-
-        private Button btn_addnewproduct;
-        private LinkLabel llbl_addnewproduct;
+        private System.ComponentModel.BackgroundWorker loadWorker;
+        private ProgressBar progressBar1;
+        private Panel panel1;
         private Button btn_reset;
-        private Label lbl_page;
-        private Button btn_next;
-        private Panel pnl_control;
-        private Button btn_previous;
-        private Panel pnl_product;
         private GroupBox groupBox3;
         private Label lbl_priceFilter;
         private Label label10;
@@ -454,7 +481,12 @@
         private Button btn_bag;
         private Button btn_newcollection;
         private Label label1;
-        private System.ComponentModel.BackgroundWorker loadWorker;
-        private ProgressBar progressBar1;
+        private Panel pnl_control;
+        private Button btn_addnewproduct;
+        private LinkLabel llbl_addnewproduct;
+        private Label lbl_page;
+        private Button btn_next;
+        private Button btn_previous;
+        private Panel pnl_product;
     }
 }

@@ -1,14 +1,14 @@
-﻿using QuanLyNoir_BTL.Enums;
-using QuanLyNoir_BTL.Models;
+﻿using QuanLyNoir_BTL.Models;
 using System.Data;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using Microsoft.EntityFrameworkCore;
+using System.Windows.Forms;
 
 namespace QuanLyNoir_BTL.Views
 {
     public partial class ManageProductControl : UserControl
     {
-        private readonly ShopNoirTestContext _dbContext = new ShopNoirTestContext();
+        //private readonly ShopNoirContext _dbContext = new ShopNoirContext();
         private int currentPage = 1;
         private const int PageSize = 8; // Giữ số lượng bản ghi trên mỗi trang là 6
         private int totalRecords;
@@ -20,6 +20,7 @@ namespace QuanLyNoir_BTL.Views
         public ManageProductControl()
         {
             InitializeComponent();
+            this.AutoSize = false;
             pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
             pictureBox2.SizeMode = PictureBoxSizeMode.StretchImage;
             scrb_price.Height = 20;
@@ -49,85 +50,88 @@ namespace QuanLyNoir_BTL.Views
         }
         private async Task LoadProductsAsync(Panel pnl_product)
         {
-            try
+            using (var _dbContext = new ShopNoirContext())
             {
-                // Lấy giá trị từ các trường
-                string searchTerm = tbx_search.Text.Trim().ToLower();
-                int inventoryThreshold = string.IsNullOrEmpty(tbx_inventory.Text) ? int.MaxValue : int.Parse(tbx_inventory.Text);
-                decimal priceLimit = scrb_price.Value;
-
-                totalRecords = await _dbContext.ProductColors.CountAsync();
-                lbl_page.Text = $"Page {currentPage} / {Math.Ceiling((double)totalRecords / PageSize)}";
-
-                pnl_product.Controls.Clear();
-
-                //Truy vấn lấy tất cả các product color và size 
-                var productColorQuery = _dbContext.ProductColors
-                    .Include(p => p.Product)
-                    .Where(pc => pc.Inventory < inventoryThreshold
-                    && pc.Product.ProdName.ToLower().Contains(searchTerm)
-                    && pc.Product.Price < priceLimit);
-
-                if (!string.IsNullOrEmpty(currentType))
+                try
                 {
-                    // Nếu currentType không rỗng, thêm điều kiện lọc theo loại sản phẩm
-                    //productQuery = productQuery.Where(p => p.Type == currentType);
-                    productColorQuery = productColorQuery.Where(pc => pc.Product.Type == currentType);
+                    // Lấy giá trị từ các trường
+                    string searchTerm = tbx_search.Text.Trim().ToLower();
+                    int inventoryThreshold = string.IsNullOrEmpty(tbx_inventory.Text) ? int.MaxValue : int.Parse(tbx_inventory.Text);
+                    decimal priceLimit = scrb_price.Value;
 
-                }
+                    totalRecords = await _dbContext.ProductColors.CountAsync();
+                    lbl_page.Text = $"Page {currentPage} / {Math.Ceiling((double)totalRecords / PageSize)}";
 
-                var productInformation = await productColorQuery
-                    .OrderByDescending(pc => pc.Product.ProdName) // Sắp xếp theo giá giảm dần
-                    .Select(pc => new
+                    pnl_product.Controls.Clear();
+
+                    //Truy vấn lấy tất cả các product color và size 
+                    var productColorQuery = _dbContext.ProductColors
+                        .Include(p => p.Product)
+                        .Where(pc => pc.Inventory < inventoryThreshold
+                        && pc.Product.ProdName.ToLower().Contains(searchTerm)
+                        && pc.Product.Price < priceLimit);
+
+                    if (!string.IsNullOrEmpty(currentType))
                     {
-                        pc.Id,
-                        pc.Inventory,
-                        pc.ColorName,
-                        pc.ImageUrl,
-                        pc.ColorCode,
-                        pc.ProductId,
-                        pc.Size,
-                        pc.Product.ProdName,
-                        pc.Product.Price,
-                        pc.Product.Wid,
-                        pc.Product.Hei,
-                        pc.Product.Type,
-                    })
-                    .AsNoTracking()
-                    .Skip((currentPage - 1) * PageSize)
-                    .Take(PageSize)
-                    .ToListAsync();
+                        // Nếu currentType không rỗng, thêm điều kiện lọc theo loại sản phẩm
+                        //productQuery = productQuery.Where(p => p.Type == currentType);
+                        productColorQuery = productColorQuery.Where(pc => pc.Product.Type == currentType);
 
-                int x = 10, y = 10;
-                const int padding = 20; // Tăng khoảng cách giữa các ô sản phẩm
-
-                foreach (var product in productInformation)
-                {
-                    var productPanel = CreateProductPanel(product, x, y);
-                    pnl_product.Controls.Add(productPanel);
-
-                    x += productPanel.Width + padding;
-                    if (x + productPanel.Width > pnl_product.Width)
-                    {
-                        x = 10;
-                        y += productPanel.Height + padding;
                     }
-                }
 
-                btn_previous.Enabled = currentPage > 1;
-                btn_next.Enabled = currentPage < Math.Ceiling((double)totalRecords / PageSize);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Lỗi khi tải dữ liệu: " + ex.Message);
-            }
+                    var productInformation = await productColorQuery
+                        .OrderByDescending(pc => pc.Product.ProdName) // Sắp xếp theo giá giảm dần
+                        .Select(pc => new
+                        {
+                            pc.Id,
+                            pc.Inventory,
+                            pc.ColorName,
+                            pc.ImageUrl,
+                            pc.ColorCode,
+                            pc.ProductId,
+                            pc.Size,
+                            pc.Product.ProdName,
+                            pc.Product.Price,
+                            pc.Product.Width,
+                            pc.Product.Height,
+                            pc.Product.Type,
+                        })
+                        .AsNoTracking()
+                        .Skip((currentPage - 1) * PageSize)
+                        .Take(PageSize)
+                        .ToListAsync();
+
+                    int x = 10, y = 10;
+                    const int padding = 20; // Tăng khoảng cách giữa các ô sản phẩm
+
+                    foreach (var product in productInformation)
+                    {
+                        var productPanel = CreateProductPanel(product, x, y);
+                        pnl_product.Controls.Add(productPanel);
+
+                        x += productPanel.Width + padding;
+                        if (x + productPanel.Width > pnl_product.Width)
+                        {
+                            x = 10;
+                            y += productPanel.Height + padding;
+                        }
+                    }
+
+                    btn_previous.Enabled = currentPage > 1;
+                    btn_next.Enabled = currentPage < Math.Ceiling((double)totalRecords / PageSize);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Lỗi khi tải dữ liệu: " + ex.Message);
+                }
+            }   
         }
         private Panel CreateProductPanel(dynamic product, int x, int y)
         {
             Panel productPanel = new Panel
             {
                 Width = 220,
-                Height = 320, // Tăng chiều cao để chứa thêm nút tùy chọn
+                Height = 320, 
                 BorderStyle = BorderStyle.FixedSingle,
                 Location = new Point(x, y),
                 Margin = new Padding(10)
@@ -165,7 +169,7 @@ namespace QuanLyNoir_BTL.Views
 
             Label lblSize = new Label
             {
-                Text = $"Size: {Enum.GetName(typeof(ProductSize), product.Size)} ({product.Wid} x {product.Hei})",
+                Text = $"Size: {(product.Size)} ({product.Wid} x {product.Hei})",
                 Location = new Point(10, 240),
                 AutoSize = true
             };
@@ -228,64 +232,17 @@ namespace QuanLyNoir_BTL.Views
 
         private void AddColorToProduct(Guid productId)
         {
-            // Tìm sản phẩm theo productColorId
-            var product = _dbContext.Products
+            using (var _dbContext = new ShopNoirContext())
+            {
+                // Tìm sản phẩm theo productColorId
+                var product = _dbContext.Products
                 .FirstOrDefault(p => p.Id == productId);
 
-            if (product != null)
-            {
-                // Tạo và hiển thị form AddNewProduct
-                AddNewProduct AddNewColorForm = new AddNewProduct(_dbContext, productId);
-                AddNewColorForm.ShowDialog(); // Hiển thị như một dialog để chờ người dùng đóng form này
-                if (!loadWorker.IsBusy)
+                if (product != null)
                 {
-                    loadWorker.RunWorkerAsync();
-                }
-            }
-            else
-            {
-                MessageBox.Show("Không tìm thấy sản phẩm để chỉnh sửa.", productId.ToString());
-            }
-        }
-        private void EditProduct(int productColorId)
-        {
-            // Tìm sản phẩm theo productColorId
-            var productColor = _dbContext.ProductColors
-                .Include(pc => pc.Product) // Bao gồm thông tin sản phẩm
-                .FirstOrDefault(pc => pc.Id == productColorId);
-
-            if (productColor != null)
-            {
-                // Tạo và hiển thị form AddNewProduct
-                AddNewProduct editForm = new AddNewProduct(_dbContext, false, productColor.Id);
-                editForm.ShowDialog(); // Hiển thị như một dialog để chờ người dùng đóng form này
-                if (!loadWorker.IsBusy)
-                {
-                    loadWorker.RunWorkerAsync();
-                }
-            }
-            else
-            {
-                MessageBox.Show("Không tìm thấy sản phẩm để chỉnh sửa.", productColorId.ToString());
-            }
-        }
-
-        private void DeleteProduct(int productColorId)
-        {
-            var result = MessageBox.Show("Bạn có chắc chắn muốn xóa sản phẩm này không?", "Xác nhận xóa", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-            if (result == DialogResult.Yes)
-            {
-                // Retrieve the ProductColor entry to delete
-                var productColor = _dbContext.ProductColors
-                    .FirstOrDefault(pc => pc.Id == productColorId);
-
-                if (productColor != null)
-                {
-                    // Remove the ProductColor entry only
-                    _dbContext.ProductColors.Remove(productColor);
-                    _dbContext.SaveChanges();
-
-                    // Refresh the product list in the UI
+                    // Tạo và hiển thị form AddNewProduct
+                    AddNewProduct AddNewColorForm = new AddNewProduct(_dbContext, productId);
+                    AddNewColorForm.ShowDialog(); // Hiển thị như một dialog để chờ người dùng đóng form này
                     if (!loadWorker.IsBusy)
                     {
                         loadWorker.RunWorkerAsync();
@@ -293,7 +250,63 @@ namespace QuanLyNoir_BTL.Views
                 }
                 else
                 {
-                    MessageBox.Show("Không tìm thấy sản phẩm để xóa.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Không tìm thấy sản phẩm để chỉnh sửa.", productId.ToString());
+                }
+            }
+        }
+        private void EditProduct(Guid productColorId)
+        {
+            using (var _dbContext = new ShopNoirContext())
+            {
+                // Tìm sản phẩm theo productColorId
+                var productColor = _dbContext.ProductColors
+                .Include(pc => pc.Product) // Bao gồm thông tin sản phẩm
+                .FirstOrDefault(pc => pc.Id == productColorId);
+
+                if (productColor != null)
+                {
+                    // Tạo và hiển thị form AddNewProduct
+                    AddNewProduct editForm = new AddNewProduct(_dbContext, false, productColor.Id);
+                    editForm.ShowDialog(); // Hiển thị như một dialog để chờ người dùng đóng form này
+                    if (!loadWorker.IsBusy)
+                    {
+                        loadWorker.RunWorkerAsync();
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Không tìm thấy sản phẩm để chỉnh sửa.", productColorId.ToString());
+                }
+            }
+        }
+
+        private void DeleteProduct(Guid productColorId)
+        {
+            using (var _dbContext = new ShopNoirContext())
+            {
+                var result = MessageBox.Show("Bạn có chắc chắn muốn xóa sản phẩm này không?", "Xác nhận xóa", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                if (result == DialogResult.Yes)
+                {
+                    // Retrieve the ProductColor entry to delete
+                    var productColor = _dbContext.ProductColors
+                        .FirstOrDefault(pc => pc.Id == productColorId);
+
+                    if (productColor != null)
+                    {
+                        // Remove the ProductColor entry only
+                        _dbContext.ProductColors.Remove(productColor);
+                        _dbContext.SaveChanges();
+
+                        // Refresh the product list in the UI
+                        if (!loadWorker.IsBusy)
+                        {
+                            loadWorker.RunWorkerAsync();
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("Không tìm thấy sản phẩm để xóa.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }
             }
         }
@@ -361,16 +374,16 @@ namespace QuanLyNoir_BTL.Views
         private void resetButtonTypeFilter()
         {
             btn_newcollection.ForeColor = Color.Black;
-            btn_newcollection.BackColor = SystemColors.Control;
+            btn_newcollection.BackColor = SystemColors.ControlLightLight;
 
             btn_bag.ForeColor = Color.Black;
-            btn_bag.BackColor = SystemColors.Control;
+            btn_bag.BackColor = SystemColors.ControlLightLight;
 
             btn_jacket.ForeColor = Color.Black;
-            btn_jacket.BackColor = SystemColors.Control;
+            btn_jacket.BackColor = SystemColors.ControlLightLight;
 
             btn_voucher.ForeColor = Color.Black;
-            btn_voucher.BackColor = SystemColors.Control;
+            btn_voucher.BackColor = SystemColors.ControlLightLight;
         }
         private async void btn_bag_Click(object sender, EventArgs e)
         {
@@ -428,74 +441,80 @@ namespace QuanLyNoir_BTL.Views
         }
         private void llbl_addnewproduct_LinkClicked(object sender, EventArgs e)
         {
-            AddNewProduct newForm = new AddNewProduct(_dbContext, true, 1);
-            newForm.ShowDialog(); // Hiển thị như một dialog để chờ người dùng đóng form này
-            if (!loadWorker.IsBusy)
+            using (var _dbContext = new ShopNoirContext())
             {
-                loadWorker.RunWorkerAsync();
+                AddNewProduct newForm = new AddNewProduct(_dbContext, true, Guid.NewGuid());
+                newForm.ShowDialog(); // Hiển thị như một dialog để chờ người dùng đóng form này
+                if (!loadWorker.IsBusy)
+                {
+                    loadWorker.RunWorkerAsync();
+                }
             }
         }
 
         private async Task<List<ProductInfomation>> FetchProducts()
         {
-            // Lấy giá trị từ các trường
-            string searchTerm = tbx_search.Text.Trim().ToLower();
-            int inventoryThreshold = string.IsNullOrEmpty(tbx_inventory.Text) ? int.MaxValue : int.Parse(tbx_inventory.Text);
-            decimal priceLimit = scrb_price.Value;
-
-            totalRecords = _dbContext.ProductColors.Count();
-            if (lbl_page.InvokeRequired)
+            using (var _dbContext = new ShopNoirContext())
             {
-                lbl_page.Invoke((MethodInvoker)delegate
+                // Lấy giá trị từ các trường
+                string searchTerm = tbx_search.Text.Trim().ToLower();
+                int inventoryThreshold = string.IsNullOrEmpty(tbx_inventory.Text) ? int.MaxValue : int.Parse(tbx_inventory.Text);
+                decimal priceLimit = scrb_price.Value;
+
+                totalRecords = _dbContext.ProductColors.Count();
+                if (lbl_page.InvokeRequired)
+                {
+                    lbl_page.Invoke((MethodInvoker)delegate
+                    {
+                        lbl_page.Text = $"Page {currentPage} / {Math.Ceiling((double)totalRecords / PageSize)}";
+                        btn_previous.Enabled = currentPage > 1;
+                        btn_next.Enabled = currentPage < Math.Ceiling((double)totalRecords / PageSize);
+                    });
+                }
+                else
                 {
                     lbl_page.Text = $"Page {currentPage} / {Math.Ceiling((double)totalRecords / PageSize)}";
                     btn_previous.Enabled = currentPage > 1;
                     btn_next.Enabled = currentPage < Math.Ceiling((double)totalRecords / PageSize);
-                });
-            }
-            else
-            {
-                lbl_page.Text = $"Page {currentPage} / {Math.Ceiling((double)totalRecords / PageSize)}";
-                btn_previous.Enabled = currentPage > 1;
-                btn_next.Enabled = currentPage < Math.Ceiling((double)totalRecords / PageSize);
-            }
+                }
 
-            //Truy vấn lấy tất cả các product color và size 
-            var productColorQuery = _dbContext.ProductColors
-                .Include(p => p.Product)
-                .Where(pc => pc.Inventory < inventoryThreshold
-                && pc.Product.ProdName.ToLower().Contains(searchTerm)
-                && pc.Product.Price < priceLimit);
+                //Truy vấn lấy tất cả các product color và size 
+                var productColorQuery = _dbContext.ProductColors
+                    .Include(p => p.Product)
+                    .Where(pc => pc.Inventory < inventoryThreshold
+                    && pc.Product.ProdName.ToLower().Contains(searchTerm)
+                    && pc.Product.Price < priceLimit);
 
-            if (!string.IsNullOrEmpty(currentType))
-            {
-                // Nếu currentType không rỗng, thêm điều kiện lọc theo loại sản phẩm
-                //productQuery = productQuery.Where(p => p.Type == currentType);
-                productColorQuery = productColorQuery.Where(pc => pc.Product.Type == currentType);
-
-            }
-
-            return await productColorQuery
-                .OrderByDescending(pc => pc.Product.ProdName) // Sắp xếp theo giá giảm dần
-                .Select(pc => new ProductInfomation
+                if (!string.IsNullOrEmpty(currentType))
                 {
-                    Id = pc.Id,
-                    Inventory = pc.Inventory,
-                    ColorName = pc.ColorName,
-                    ImageUrl = pc.ImageUrl,
-                    ColorCode = pc.ColorCode,
-                    ProductId = pc.ProductId,
-                    Size = pc.Size,
-                    ProdName = pc.Product.ProdName,
-                    Price = pc.Product.Price,
-                    Wid = pc.Product.Wid,
-                    Hei = pc.Product.Hei,
-                    Type = pc.Product.Type,
-                })
-                .AsNoTracking()
-                .Skip((currentPage - 1) * PageSize)
-                .Take(PageSize)
-                .ToListAsync();
+                    // Nếu currentType không rỗng, thêm điều kiện lọc theo loại sản phẩm
+                    //productQuery = productQuery.Where(p => p.Type == currentType);
+                    productColorQuery = productColorQuery.Where(pc => pc.Product.Type == currentType);
+
+                }
+
+                return await productColorQuery
+                    .OrderByDescending(pc => pc.Product.ProdName) // Sắp xếp theo giá giảm dần
+                    .Select(pc => new ProductInfomation
+                    {
+                        Id = pc.Id,
+                        Inventory = pc.Inventory,
+                        ColorName = pc.ColorName,
+                        ImageUrl = pc.ImageUrl,
+                        ColorCode = pc.ColorCode,
+                        ProductId = pc.ProductId,
+                        Size = pc.Size,
+                        ProdName = pc.Product.ProdName,
+                        Price = pc.Product.Price,
+                        Wid = (decimal)pc.Product.Width,
+                        Hei = (decimal)pc.Product.Height,
+                        Type = pc.Product.Type,
+                    })
+                    .AsNoTracking()
+                    .Skip((currentPage - 1) * PageSize)
+                    .Take(PageSize)
+                    .ToListAsync();
+            }
         }
 
         private void loadWorker_ProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e)

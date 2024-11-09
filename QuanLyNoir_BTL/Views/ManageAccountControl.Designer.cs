@@ -35,14 +35,12 @@
             btn_update = new Button();
             btn_create = new Button();
             tbx_phone = new TextBox();
-            tbx_email = new TextBox();
             tbx_password = new TextBox();
             tbx_username = new TextBox();
             tbx_name = new TextBox();
             lbl_role = new Label();
             cbbx_role = new ComboBox();
             lbl_phoneNumber = new Label();
-            lbl_email = new Label();
             lbl_password = new Label();
             lbl_username = new Label();
             lbl_name = new Label();
@@ -70,14 +68,12 @@
             pnl_accountInfomation.Controls.Add(btn_update);
             pnl_accountInfomation.Controls.Add(btn_create);
             pnl_accountInfomation.Controls.Add(tbx_phone);
-            pnl_accountInfomation.Controls.Add(tbx_email);
             pnl_accountInfomation.Controls.Add(tbx_password);
             pnl_accountInfomation.Controls.Add(tbx_username);
             pnl_accountInfomation.Controls.Add(tbx_name);
             pnl_accountInfomation.Controls.Add(lbl_role);
             pnl_accountInfomation.Controls.Add(cbbx_role);
             pnl_accountInfomation.Controls.Add(lbl_phoneNumber);
-            pnl_accountInfomation.Controls.Add(lbl_email);
             pnl_accountInfomation.Controls.Add(lbl_password);
             pnl_accountInfomation.Controls.Add(lbl_username);
             pnl_accountInfomation.Controls.Add(lbl_name);
@@ -88,7 +84,7 @@
             // 
             // btn_reset
             // 
-            btn_reset.Location = new Point(170, 590);
+            btn_reset.Location = new Point(174, 514);
             btn_reset.Name = "btn_reset";
             btn_reset.Size = new Size(94, 29);
             btn_reset.TabIndex = 16;
@@ -108,7 +104,7 @@
             // 
             // btn_delete
             // 
-            btn_delete.Location = new Point(326, 539);
+            btn_delete.Location = new Point(330, 463);
             btn_delete.Name = "btn_delete";
             btn_delete.Size = new Size(94, 29);
             btn_delete.TabIndex = 14;
@@ -118,7 +114,7 @@
             // 
             // btn_update
             // 
-            btn_update.Location = new Point(170, 539);
+            btn_update.Location = new Point(174, 463);
             btn_update.Name = "btn_update";
             btn_update.Size = new Size(94, 29);
             btn_update.TabIndex = 13;
@@ -128,7 +124,7 @@
             // 
             // btn_create
             // 
-            btn_create.Location = new Point(17, 539);
+            btn_create.Location = new Point(21, 463);
             btn_create.Name = "btn_create";
             btn_create.Size = new Size(94, 29);
             btn_create.TabIndex = 12;
@@ -138,17 +134,10 @@
             // 
             // tbx_phone
             // 
-            tbx_phone.Location = new Point(142, 369);
+            tbx_phone.Location = new Point(146, 293);
             tbx_phone.Name = "tbx_phone";
             tbx_phone.Size = new Size(257, 27);
             tbx_phone.TabIndex = 11;
-            // 
-            // tbx_email
-            // 
-            tbx_email.Location = new Point(142, 296);
-            tbx_email.Name = "tbx_email";
-            tbx_email.Size = new Size(257, 27);
-            tbx_email.TabIndex = 10;
             // 
             // tbx_password
             // 
@@ -175,7 +164,7 @@
             // 
             lbl_role.AutoSize = true;
             lbl_role.Font = new Font("Georgia", 12F, FontStyle.Bold);
-            lbl_role.Location = new Point(16, 446);
+            lbl_role.Location = new Point(20, 370);
             lbl_role.Name = "lbl_role";
             lbl_role.Size = new Size(64, 24);
             lbl_role.TabIndex = 6;
@@ -185,7 +174,7 @@
             // 
             cbbx_role.FormattingEnabled = true;
             cbbx_role.Items.AddRange(new object[] { "Staff", "Admin" });
-            cbbx_role.Location = new Point(142, 442);
+            cbbx_role.Location = new Point(146, 366);
             cbbx_role.Name = "cbbx_role";
             cbbx_role.Size = new Size(253, 28);
             cbbx_role.TabIndex = 5;
@@ -194,21 +183,11 @@
             // 
             lbl_phoneNumber.AutoSize = true;
             lbl_phoneNumber.Font = new Font("Georgia", 12F, FontStyle.Bold);
-            lbl_phoneNumber.Location = new Point(16, 372);
+            lbl_phoneNumber.Location = new Point(20, 296);
             lbl_phoneNumber.Name = "lbl_phoneNumber";
             lbl_phoneNumber.Size = new Size(83, 24);
             lbl_phoneNumber.TabIndex = 4;
             lbl_phoneNumber.Text = "Phone:";
-            // 
-            // lbl_email
-            // 
-            lbl_email.AutoSize = true;
-            lbl_email.Font = new Font("Georgia", 12F, FontStyle.Bold);
-            lbl_email.Location = new Point(16, 299);
-            lbl_email.Name = "lbl_email";
-            lbl_email.Size = new Size(77, 24);
-            lbl_email.TabIndex = 3;
-            lbl_email.Text = "Email:";
             // 
             // lbl_password
             // 
@@ -356,8 +335,8 @@
             // 
             // ManageAccountControl
             // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
-            AutoScaleMode = AutoScaleMode.Font;
+            AutoScaleMode = AutoScaleMode.None;
+            BackColor = SystemColors.ButtonHighlight;
             Controls.Add(cbbx_sodong);
             Controls.Add(lbl_trang);
             Controls.Add(btn_trangsau);
@@ -372,7 +351,7 @@
             Controls.Add(dtgv_accountList);
             Controls.Add(pnl_accountInfomation);
             Name = "ManageAccountControl";
-            Size = new Size(1521, 778);
+            Size = new Size(1528, 788);
             Load += ManageAccountControl_Load;
             pnl_accountInfomation.ResumeLayout(false);
             pnl_accountInfomation.PerformLayout();
@@ -401,14 +380,12 @@
         private Label label10;
         private Label lbl_thongtin;
         private TextBox tbx_phone;
-        private TextBox tbx_email;
         private TextBox tbx_password;
         private TextBox tbx_username;
         private TextBox tbx_name;
         private Label lbl_role;
         private ComboBox cbbx_role;
         private Label lbl_phoneNumber;
-        private Label lbl_email;
         private Label lbl_password;
         private Label lbl_username;
         private Label lbl_name;

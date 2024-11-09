@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using QuanLyNoir_BTL.Views;
+using System.Data.Entity;
 
 namespace QuanLyNoir_BTL
 {
@@ -17,7 +18,7 @@ namespace QuanLyNoir_BTL
             Application.Run(new SignIn());
             // Application.Run(new ManageProduct("Duy",true));
             //Application.Run(new AddNewProduct(true));
-            // Scaffold-DbContext "Server=LAPTOP-2L3R0R91\\MYCOMPUTER_DUY;Database=ShopNoir_Test.db;Trusted_Connection=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models
+            //Scaffold-DbContext "Server=LAPTOP-2L3R0R91\\MYCOMPUTER_DUY;Database=ShopNoir.db;Trusted_Connection=True;Encrypt=False;TrustServerCertificate=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models
         }
     }
 }

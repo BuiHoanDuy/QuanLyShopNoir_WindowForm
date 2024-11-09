@@ -1,20 +1,19 @@
-﻿using QuanLyNoir_BTL.Enums;
-using QuanLyNoir_BTL.Models;
+﻿using QuanLyNoir_BTL.Models;
 using System.ComponentModel;
 
 namespace QuanLyNoir_BTL.Views
 {
     public partial class AddNewProduct : Form
     {
-        private readonly ShopNoirTestContext _dbContext; // Reference to database context
-        private int currentProductColorId = -1; // Store product ID if updating an existing product
-        private Guid currentProductId;
-        private ProductSize? selectedSize = null;
+        private readonly ShopNoirContext _dbContext; // Reference to database context
+        private Guid currentProductColorId = Guid.Empty; // Store product ID if updating an existing product
+        private Guid currentProductId = Guid.Empty;
+        private string selectedSize = null;
 
         private string colorName = "Color name";
 
         //isNew: True -> Add New Item, False -> Update
-        public AddNewProduct(ShopNoirTestContext dbContext, bool isNew, int productColorId)
+        public AddNewProduct(ShopNoirContext dbContext, bool isNew, Guid productColorId) //Chinh sua hoac them moi
         {
             InitializeComponent();
             this.StartPosition = FormStartPosition.CenterScreen;
@@ -43,7 +42,7 @@ namespace QuanLyNoir_BTL.Views
                 LoadProductData(currentProductColorId);
             }
         }
-        public AddNewProduct(ShopNoirTestContext dbContext, Guid productId)
+        public AddNewProduct(ShopNoirContext dbContext, Guid productId) //Them mau sac
         {
             InitializeComponent();
             _dbContext = dbContext;
@@ -61,9 +60,9 @@ namespace QuanLyNoir_BTL.Views
             btn_addtostore.Visible = false;
             btn_addcolor.Visible = true;
 
-            LoadProductData(currentProductId);
+            LoadProductDataForAddColor(currentProductId);
         }
-        private void LoadProductData(int productColorId)
+        private void LoadProductData(Guid productColorId) //load data cho chuc nang cap nhat
         {
             var color = _dbContext.ProductColors.FirstOrDefault(c => c.Id == productColorId);
             if (color != null)
@@ -79,13 +78,13 @@ namespace QuanLyNoir_BTL.Views
                     tbx_name.Text = product.ProdName;
                     tbx_material.Text = product.ProdDesc;
                     tbx_price.Text = product.Price.ToString();
-                    tbx_width.Text = product.Wid.ToString();
-                    tbx_height.Text = product.Hei.ToString();
+                    tbx_width.Text = product.Width.ToString();
+                    tbx_height.Text = product.Height.ToString();
                     cbbx_type.Text = product.Type;
                 }
             }
         }
-        private void LoadProductData(Guid productId)
+        private void LoadProductDataForAddColor(Guid productId) //them mau moi
         {
             var product = _dbContext.Products.FirstOrDefault(p => p.Id == productId);
             if (product != null)
@@ -93,8 +92,8 @@ namespace QuanLyNoir_BTL.Views
                 tbx_name.Text = product.ProdName;
                 tbx_material.Text = product.ProdDesc;
                 tbx_price.Text = product.Price.ToString();
-                tbx_width.Text = product.Wid.ToString();
-                tbx_height.Text = product.Hei.ToString();
+                tbx_width.Text = product.Width.ToString();
+                tbx_height.Text = product.Height.ToString();
                 cbbx_type.Text = product.Type;
             }
         }
@@ -127,8 +126,7 @@ namespace QuanLyNoir_BTL.Views
                 ColorName = tbx_colorNote.Text,
                 ColorCode = lbl_colorCode.Text,
                 Inventory = inventory,
-                Total = inventory,
-                Size = (int)selectedSize.Value,
+                Size = selectedSize,
                 ImageUrl = ImageToByteArray(pictureBox1.Image)
             };
             _dbContext.ProductColors.Add(productColor);
@@ -154,8 +152,8 @@ namespace QuanLyNoir_BTL.Views
                         ProdName = tbx_name.Text,
                         ProdDesc = tbx_material.Text,
                         Price = price,
-                        Wid = width,
-                        Hei = height,
+                        Width = width,
+                        Height = height,
                         Type = cbbx_type.Text
                     };
                 });
@@ -168,8 +166,8 @@ namespace QuanLyNoir_BTL.Views
                     ProdName = tbx_name.Text,
                     ProdDesc = tbx_material.Text,
                     Price = price,
-                    Wid = width,
-                    Hei = height,
+                    Width = width,
+                    Height = height,
                     Type = cbbx_type.Text
                 };
             }
@@ -183,8 +181,7 @@ namespace QuanLyNoir_BTL.Views
                 ColorName = tbx_colorNote.Text,
                 ColorCode = lbl_colorCode.Text,
                 Inventory = inventory,
-                Total = inventory,
-                Size = (int)selectedSize.Value,
+                Size = selectedSize,
                 ImageUrl = ImageToByteArray(pictureBox1.Image)
             };
             _dbContext.ProductColors.Add(productColor);
@@ -205,8 +202,7 @@ namespace QuanLyNoir_BTL.Views
             productColor.ColorName = tbx_colorNote.Text;
             productColor.ColorCode = lbl_colorCode.Text;
             productColor.Inventory = inventory;
-            productColor.Total = inventory;
-            productColor.Size = (int)selectedSize.Value;
+            productColor.Size = selectedSize;
             productColor.ImageUrl = ImageToByteArray(pictureBox1.Image);
 
             var product = _dbContext.Products.FirstOrDefault(p => p.Id == productColor.ProductId);
@@ -219,8 +215,8 @@ namespace QuanLyNoir_BTL.Views
                         product.ProdName = tbx_name.Text;
                         product.ProdDesc = tbx_material.Text;
                         product.Price = price;
-                        product.Wid = width;
-                        product.Hei = height;
+                        product.Width = width;
+                        product.Height = height;
                         product.Type = cbbx_type.Text;
                     });
                 }
@@ -229,8 +225,8 @@ namespace QuanLyNoir_BTL.Views
                     product.ProdName = tbx_name.Text;
                     product.ProdDesc = tbx_material.Text;
                     product.Price = price;
-                    product.Wid = width;
-                    product.Hei = height;
+                    product.Width = width;
+                    product.Height = height;
                     product.Type = cbbx_type.Text;
                 }
             }
@@ -323,24 +319,6 @@ namespace QuanLyNoir_BTL.Views
                 return;
             }
 
-            if (string.IsNullOrWhiteSpace(tbx_width.Text) || !decimal.TryParse(tbx_width.Text, out decimal width) || width <= 0)
-            {
-                ShowValidationMark(lbl_width, "Vui lòng nhập chiều rộng hợp lệ (phải là số dương)!");
-                return;
-            }
-
-            if (string.IsNullOrWhiteSpace(tbx_height.Text) || !decimal.TryParse(tbx_height.Text, out decimal height) || height <= 0)
-            {
-                ShowValidationMark(lbl_height, "Vui lòng nhập chiều cao hợp lệ (phải là số dương)!");
-                return;
-            }
-
-            if (selectedSize == null)
-            {
-                ShowValidationMark(lbl_size, "Vui lòng chọn kích thước cho sản phẩm!");
-                return;
-            }
-
             if (string.IsNullOrWhiteSpace(lbl_colorCode.Text))
             {
                 ShowValidationMark(lbl_color, "Vui lòng chọn màu sắc!");
@@ -356,12 +334,6 @@ namespace QuanLyNoir_BTL.Views
             if (string.IsNullOrWhiteSpace(tbx_price.Text) || !decimal.TryParse(tbx_price.Text, out decimal price) || price < 0)
             {
                 ShowValidationMark(lbl_price, "Vui lòng nhập giá sản phẩm hợp lệ (phải là số không âm)!");
-                return;
-            }
-
-            if (string.IsNullOrWhiteSpace(tbx_material.Text))
-            {
-                ShowValidationMark(lbl_material, "Vui lòng nhập thông tin về vật liệu sản phẩm!");
                 return;
             }
             progressBar1.Style = ProgressBarStyle.Marquee; // Show indeterminate progress
@@ -488,10 +460,7 @@ namespace QuanLyNoir_BTL.Views
             sizeButton.BackColor = Color.DarkSeaGreen;
 
             // Gán giá trị của enum dựa trên nút đã chọn
-            if (Enum.TryParse(sizeButton.Text, out ProductSize size))
-            {
-                selectedSize = size;
-            }
+            selectedSize = sizeButton.Text;
         }
 
         private void btn_xs_Click(object sender, EventArgs e)

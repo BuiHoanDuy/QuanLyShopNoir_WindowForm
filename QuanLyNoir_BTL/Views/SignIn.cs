@@ -7,7 +7,7 @@ namespace QuanLyNoir_BTL
 {
     public partial class SignIn : Form
     {
-        private readonly ShopNoirTestContext _dbContext = new ShopNoirTestContext();
+       // private readonly ShopNoirContext _dbContext = new ShopNoirContext();
         public SignIn()
         {
             InitializeComponent();
@@ -25,36 +25,39 @@ namespace QuanLyNoir_BTL
             string username = tbx_username.Text;
             string password = tbx_password.Text;
 
-            // Kiểm tra thông tin đăng nhập từ cơ sở dữ liệu
-            var user = _dbContext.Accounts.FirstOrDefault(u => u.Username == username && u.Password == password);
+            using (var _dbContext = new ShopNoirContext())
+            {
+                // Kiểm tra thông tin đăng nhập từ cơ sở dữ liệu
+                var user = _dbContext.Accounts.FirstOrDefault(u => u.Username == username && u.Password == password);
 
-            if (user != null)
-            {        
-                // Đăng nhập thành công
-                ManageProduct manageProductForm = new ManageProduct(user.Name);
-                this.Hide(); // Ẩn form đăng nhập
-                manageProductForm.Show();
-
-                // Xử lý Remember Me
-                if (chbx_rememberme.Checked)
+                if (user != null && user.Status == true)
                 {
-                    // Lưu thông tin đăng nhập vào cài đặt của ứng dụng (hoặc file config)
-                    Settings.Default.username = username;
-                    Settings.Default.password = password;
-                    Settings.Default.Save();
+                    // Đăng nhập thành công
+                    MenuForm manageProductForm = new MenuForm(user.Name);
+                    this.Hide(); // Ẩn form đăng nhập
+                    manageProductForm.Show();
+
+                    // Xử lý Remember Me
+                    if (chbx_rememberme.Checked)
+                    {
+                        // Lưu thông tin đăng nhập vào cài đặt của ứng dụng (hoặc file config)
+                        Settings.Default.username = username;
+                        Settings.Default.password = password;
+                        Settings.Default.Save();
+                    }
+                    else
+                    {
+                        // Xóa thông tin lưu nếu không chọn Remember Me
+                        Settings.Default.username = "";
+                        Settings.Default.password = "";
+                        Settings.Default.Save();
+                    }
                 }
                 else
                 {
-                    // Xóa thông tin lưu nếu không chọn Remember Me
-                    Settings.Default.username = "";
-                    Settings.Default.password = "";
-                    Settings.Default.Save();
+                    // Đăng nhập thất bại
+                    MessageBox.Show("Tên đăng nhập hoặc mật khẩu không đúng!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
-            }
-            else
-            {
-                // Đăng nhập thất bại
-                MessageBox.Show("Tên đăng nhập hoặc mật khẩu không đúng!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
