@@ -338,7 +338,7 @@ namespace QuanLyNoir_BTL.Views
 
         private async void scrb_price_Scroll(object sender, ScrollEventArgs e)
         {
-            lbl_priceFilter.Text = $"Giá: ${scrb_price.Value}";
+            lbl_priceFilter.Text = $"Price: ${scrb_price.Value}";
             _timer.Stop();
             await Task.Delay(TimerInterval); // Delay before restarting to avoid rapid calls
             currentPage = 1;
@@ -390,8 +390,7 @@ namespace QuanLyNoir_BTL.Views
             resetButtonTypeFilter();
             btn_bag.ForeColor = Color.Pink;
             btn_bag.BackColor = Color.DarkSlateGray;
-            //currentType = "bag"; // Đặt loại sản phẩm là 'bag'
-            currentType = "Type B"; // Đặt loại sản phẩm là 'bag'
+            currentType = "Bag"; // Đặt loại sản phẩm là 'bag'
             currentPage = 1; // Quay lại trang đầu
             if (!loadWorker.IsBusy)
             {
@@ -404,8 +403,7 @@ namespace QuanLyNoir_BTL.Views
             resetButtonTypeFilter();
             btn_jacket.ForeColor = Color.Pink;
             btn_jacket.BackColor = Color.DarkSlateGray;
-            //currentType = "jacket"; // Đặt loại sản phẩm là 'jacket'
-            currentType = "Type A"; // Đặt loại sản phẩm là 'jacket'
+            currentType = "Jacket"; // Đặt loại sản phẩm là 'jacket'
             currentPage = 1; // Quay lại trang đầu
             if (!loadWorker.IsBusy)
             {
@@ -432,7 +430,7 @@ namespace QuanLyNoir_BTL.Views
             btn_voucher.ForeColor = Color.Pink;
             btn_voucher.BackColor = Color.DarkSlateGray;
             //  currentType = "voucher"; // Đặt loại sản phẩm là 'voucher'
-            currentType = "Type C"; // Đặt loại sản phẩm là 'voucher'
+            currentType = "Voucher"; // Đặt loại sản phẩm là 'voucher'
             currentPage = 1; // Quay lại trang đầu
             if (!loadWorker.IsBusy)
             {

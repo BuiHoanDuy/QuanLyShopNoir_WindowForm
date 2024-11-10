@@ -165,7 +165,7 @@
             // cbbx_type
             // 
             cbbx_type.FormattingEnabled = true;
-            cbbx_type.Items.AddRange(new object[] { "Type A", "Type B", "Type C" });
+            cbbx_type.Items.AddRange(new object[] { "New Collection", "Bag", "Jacket" });
             cbbx_type.Location = new Point(14, 42);
             cbbx_type.Name = "cbbx_type";
             cbbx_type.Size = new Size(279, 28);

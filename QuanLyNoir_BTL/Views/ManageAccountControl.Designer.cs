@@ -141,16 +141,16 @@
             // 
             // tbx_password
             // 
-            tbx_password.Location = new Point(142, 216);
+            tbx_password.Location = new Point(146, 220);
             tbx_password.Name = "tbx_password";
             tbx_password.Size = new Size(257, 27);
             tbx_password.TabIndex = 9;
             // 
             // tbx_username
             // 
-            tbx_username.Location = new Point(137, 144);
+            tbx_username.Location = new Point(146, 144);
             tbx_username.Name = "tbx_username";
-            tbx_username.Size = new Size(258, 27);
+            tbx_username.Size = new Size(257, 27);
             tbx_username.TabIndex = 8;
             // 
             // tbx_name
@@ -176,7 +176,7 @@
             cbbx_role.Items.AddRange(new object[] { "Staff", "Admin" });
             cbbx_role.Location = new Point(146, 366);
             cbbx_role.Name = "cbbx_role";
-            cbbx_role.Size = new Size(253, 28);
+            cbbx_role.Size = new Size(258, 28);
             cbbx_role.TabIndex = 5;
             // 
             // lbl_phoneNumber

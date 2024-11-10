@@ -2,6 +2,7 @@
 using QuanLyNoir_BTL.Models;
 using System.Data;
 using System.Linq.Dynamic.Core;
+using System.Windows.Forms;
 
 namespace QuanLyNoir_BTL.Views
 {
@@ -34,6 +35,12 @@ namespace QuanLyNoir_BTL.Views
 
             btn_update.Enabled = false;
             btn_delete.Enabled = false;
+
+            dtgv_accountList.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            foreach (DataGridViewColumn column in dtgv_accountList.Columns)
+            {
+                column.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            }
         }
 
         private void ManageAccountControl_Load(object sender, EventArgs e)
@@ -189,7 +196,8 @@ namespace QuanLyNoir_BTL.Views
                 tbx_username.Text = row.Cells["Username"].Value.ToString();
                 tbx_password.Text = row.Cells["Password"].Value.ToString();
                 tbx_phone.Text = row.Cells["PhoneNumber"].Value.ToString();
-                cbbx_role.Text = row.Cells["Role"].Value.ToString();
+                cbbx_role.Text = ((bool)row.Cells["Role"].Value == true) ? "Admin" : "Staff";
+                //cbbx_role.Text = row.Cells["Role"].Value.ToString();
 
                 btn_update.Enabled = true;
                 btn_delete.Enabled = true;
