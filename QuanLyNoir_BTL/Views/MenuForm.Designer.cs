@@ -39,6 +39,7 @@ namespace QuanLyNoir_BTL
             label6 = new Label();
             lbl_name = new Label();
             pnl_control = new Panel();
+            backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             panel1.SuspendLayout();
             SuspendLayout();
             // 
@@ -90,6 +91,7 @@ namespace QuanLyNoir_BTL
             btn_manageVoucher.TabIndex = 7;
             btn_manageVoucher.Text = "Manage Voucher";
             btn_manageVoucher.UseVisualStyleBackColor = true;
+            btn_manageVoucher.Click += btn_manageVoucher_Click;
             // 
             // btn_analyseRevenue
             // 
@@ -154,6 +156,11 @@ namespace QuanLyNoir_BTL
             pnl_control.Size = new Size(1530, 790);
             pnl_control.TabIndex = 19;
             // 
+            // backgroundWorker1
+            // 
+            backgroundWorker1.DoWork += BgWorker_DoWork;
+            backgroundWorker1.RunWorkerCompleted += BgWorker_RunWorkerCompleted;
+            // 
             // MenuForm
             // 
             AutoScaleMode = AutoScaleMode.None;
@@ -190,5 +197,6 @@ namespace QuanLyNoir_BTL
         private Button btn_manageAccount;
         private Button btn_manageVoucher;
         private Panel pnl_control;
+        private System.ComponentModel.BackgroundWorker backgroundWorker1;
     }
 }

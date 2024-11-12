@@ -5,7 +5,6 @@ namespace QuanLyNoir_BTL.Views
 {
     public partial class AddNewProduct : Form
     {
-        private readonly ShopNoirContext _dbContext; // Reference to database context
         private Guid currentProductColorId = Guid.Empty; // Store product ID if updating an existing product
         private Guid currentProductId = Guid.Empty;
         private string selectedSize = null;
@@ -13,15 +12,14 @@ namespace QuanLyNoir_BTL.Views
         private string colorName = "Color name";
 
         //isNew: True -> Add New Item, False -> Update
-        public AddNewProduct(ShopNoirContext dbContext, bool isNew, Guid productColorId) //Chinh sua hoac them moi
+        public AddNewProduct(bool isNew, Guid productColorId) //Chinh sua hoac them moi
         {
             InitializeComponent();
             this.StartPosition = FormStartPosition.CenterScreen;
-            _dbContext = dbContext;
             currentProductColorId = productColorId;
 
             btn_addcolor.Visible = false;
-
+            this.Focus();
             SetupBackgroundWorker();
             SetupPlaceholder();
             if (isNew)
@@ -45,9 +43,10 @@ namespace QuanLyNoir_BTL.Views
         public AddNewProduct(ShopNoirContext dbContext, Guid productId) //Them mau sac
         {
             InitializeComponent();
-            _dbContext = dbContext;
             currentProductId = productId;
 
+            this.StartPosition = FormStartPosition.CenterScreen;
+            this.Focus();
             SetupBackgroundWorker();
             SetupPlaceholder();
 
@@ -64,15 +63,34 @@ namespace QuanLyNoir_BTL.Views
         }
         private void LoadProductData(Guid productColorId) //load data cho chuc nang cap nhat
         {
-            var color = _dbContext.ProductColors.FirstOrDefault(c => c.Id == productColorId);
-            if (color != null)
+            using (var _dbContext = new ShopNoirContext())
             {
-                tbx_colorNote.Text = color.ColorName;
-                lbl_colorCode.Text = color.ColorCode;
-                pnl_colorBox.BackColor = ColorTranslator.FromHtml(color.ColorCode);
-                tbx_inventory.Text = color.Inventory.ToString();
-                pictureBox1.Image = ByteArrayToImage(color.ImageUrl);
-                var product = _dbContext.Products.FirstOrDefault(p => p.Id == color.ProductId);
+                var color = _dbContext.ProductColors.FirstOrDefault(c => c.Id == productColorId);
+                if (color != null)
+                {
+                    tbx_colorNote.Text = color.ColorName;
+                    lbl_colorCode.Text = color.ColorCode;
+                    pnl_colorBox.BackColor = ColorTranslator.FromHtml(color.ColorCode);
+                    tbx_inventory.Text = color.Inventory.ToString();
+                    pictureBox1.Image = ByteArrayToImage(color.ImageUrl);
+                    var product = _dbContext.Products.FirstOrDefault(p => p.Id == color.ProductId);
+                    if (product != null)
+                    {
+                        tbx_name.Text = product.ProdName;
+                        tbx_material.Text = product.ProdDesc;
+                        tbx_price.Text = product.Price.ToString();
+                        tbx_width.Text = product.Width.ToString();
+                        tbx_height.Text = product.Height.ToString();
+                        cbbx_type.Text = product.Type;
+                    }
+                }
+            }
+        }
+        private void LoadProductDataForAddColor(Guid productId) //them mau moi
+        {
+            using (var _dbContext = new ShopNoirContext())
+            {
+                var product = _dbContext.Products.FirstOrDefault(p => p.Id == productId);
                 if (product != null)
                 {
                     tbx_name.Text = product.ProdName;
@@ -82,19 +100,6 @@ namespace QuanLyNoir_BTL.Views
                     tbx_height.Text = product.Height.ToString();
                     cbbx_type.Text = product.Type;
                 }
-            }
-        }
-        private void LoadProductDataForAddColor(Guid productId) //them mau moi
-        {
-            var product = _dbContext.Products.FirstOrDefault(p => p.Id == productId);
-            if (product != null)
-            {
-                tbx_name.Text = product.ProdName;
-                tbx_material.Text = product.ProdDesc;
-                tbx_price.Text = product.Price.ToString();
-                tbx_width.Text = product.Width.ToString();
-                tbx_height.Text = product.Height.ToString();
-                cbbx_type.Text = product.Type;
             }
         }
         private async Task ValidateAndSaveProductAsync(bool isNew, bool isAddColor)
@@ -129,9 +134,12 @@ namespace QuanLyNoir_BTL.Views
                 Size = selectedSize,
                 ImageUrl = ImageToByteArray(pictureBox1.Image)
             };
-            _dbContext.ProductColors.Add(productColor);
+            using (var _dbContext = new ShopNoirContext())
+            {
+                _dbContext.ProductColors.Add(productColor);
 
-            await _dbContext.SaveChangesAsync();
+                await _dbContext.SaveChangesAsync();
+            }
         }
         private async Task AddNewProductAndColorAsync()
         {
@@ -171,9 +179,10 @@ namespace QuanLyNoir_BTL.Views
                     Type = cbbx_type.Text
                 };
             }
-
-            _dbContext.Products.Add(product);
-
+            using (var _dbContext = new ShopNoirContext())
+            {
+                _dbContext.Products.Add(product);
+            
 
             var productColor = new ProductColor
             {
@@ -184,33 +193,47 @@ namespace QuanLyNoir_BTL.Views
                 Size = selectedSize,
                 ImageUrl = ImageToByteArray(pictureBox1.Image)
             };
-            _dbContext.ProductColors.Add(productColor);
 
-            await _dbContext.SaveChangesAsync();
+                _dbContext.ProductColors.Add(productColor);
+
+                await _dbContext.SaveChangesAsync();
+            }
         }
 
         private async Task UpdateProductAndColorAsync()
         {
-            var productColor = _dbContext.ProductColors.FirstOrDefault(c => c.Id == currentProductColorId);
-            if (productColor == null) return;
-
-            decimal.TryParse(tbx_width.Text, out decimal width);
-            decimal.TryParse(tbx_height.Text, out decimal height);
-            int.TryParse(tbx_inventory.Text, out int inventory);
-            decimal.TryParse(tbx_price.Text, out decimal price);
-
-            productColor.ColorName = tbx_colorNote.Text;
-            productColor.ColorCode = lbl_colorCode.Text;
-            productColor.Inventory = inventory;
-            productColor.Size = selectedSize;
-            productColor.ImageUrl = ImageToByteArray(pictureBox1.Image);
-
-            var product = _dbContext.Products.FirstOrDefault(p => p.Id == productColor.ProductId);
-            if (product != null)
+            using (var _dbContext = new ShopNoirContext())
             {
-                if (this.InvokeRequired)
+                var productColor = _dbContext.ProductColors.FirstOrDefault(c => c.Id == currentProductColorId);
+                if (productColor == null) return;
+
+                decimal.TryParse(tbx_width.Text, out decimal width);
+                decimal.TryParse(tbx_height.Text, out decimal height);
+                int.TryParse(tbx_inventory.Text, out int inventory);
+                decimal.TryParse(tbx_price.Text, out decimal price);
+
+                productColor.ColorName = tbx_colorNote.Text;
+                productColor.ColorCode = lbl_colorCode.Text;
+                productColor.Inventory = inventory;
+                productColor.Size = selectedSize;
+                productColor.ImageUrl = ImageToByteArray(pictureBox1.Image);
+
+                var product = _dbContext.Products.FirstOrDefault(p => p.Id == productColor.ProductId);
+                if (product != null)
                 {
-                    this.Invoke((MethodInvoker)delegate
+                    if (this.InvokeRequired)
+                    {
+                        this.Invoke((MethodInvoker)delegate
+                        {
+                            product.ProdName = tbx_name.Text;
+                            product.ProdDesc = tbx_material.Text;
+                            product.Price = price;
+                            product.Width = width;
+                            product.Height = height;
+                            product.Type = cbbx_type.Text;
+                        });
+                    }
+                    else
                     {
                         product.ProdName = tbx_name.Text;
                         product.ProdDesc = tbx_material.Text;
@@ -218,20 +241,11 @@ namespace QuanLyNoir_BTL.Views
                         product.Width = width;
                         product.Height = height;
                         product.Type = cbbx_type.Text;
-                    });
+                    }
                 }
-                else
-                {
-                    product.ProdName = tbx_name.Text;
-                    product.ProdDesc = tbx_material.Text;
-                    product.Price = price;
-                    product.Width = width;
-                    product.Height = height;
-                    product.Type = cbbx_type.Text;
-                }
-            }
 
-            await _dbContext.SaveChangesAsync();
+                await _dbContext.SaveChangesAsync();
+            }
         }
 
 

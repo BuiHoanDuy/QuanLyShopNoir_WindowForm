@@ -169,10 +169,21 @@ namespace QuanLyNoir_BTL.Views
 
             Label lblSize = new Label
             {
-                Text = $"Size: {(product.Size)} ({product.Wid} x {product.Hei})",
                 Location = new Point(10, 240),
                 AutoSize = true
             };
+
+            if (product.Wid == 0 && product.Hei == 0 && product.Size != null)
+            {
+                lblSize.Text = $"Size: {product.Size}";
+            } else if ((product.Wid != 0 || product.Hei != 0) && product.Size == null)
+            {
+                lblSize.Text = $"Size: {product.Wid} x {product.Hei}";
+            }
+            else
+            {
+                lblSize.Text = $"Size: {product.Size} ({product.Wid} x {product.Hei})";
+            }
 
             Panel colorPanel = new Panel
             {
@@ -266,7 +277,7 @@ namespace QuanLyNoir_BTL.Views
                 if (productColor != null)
                 {
                     // Tạo và hiển thị form AddNewProduct
-                    AddNewProduct editForm = new AddNewProduct(_dbContext, false, productColor.Id);
+                    AddNewProduct editForm = new AddNewProduct(false, productColor.Id);
                     editForm.ShowDialog(); // Hiển thị như một dialog để chờ người dùng đóng form này
                     if (!loadWorker.IsBusy)
                     {
@@ -441,7 +452,7 @@ namespace QuanLyNoir_BTL.Views
         {
             using (var _dbContext = new ShopNoirContext())
             {
-                AddNewProduct newForm = new AddNewProduct(_dbContext, true, Guid.NewGuid());
+                AddNewProduct newForm = new AddNewProduct(true, Guid.NewGuid());
                 newForm.ShowDialog(); // Hiển thị như một dialog để chờ người dùng đóng form này
                 if (!loadWorker.IsBusy)
                 {

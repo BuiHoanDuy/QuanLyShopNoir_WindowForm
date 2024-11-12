@@ -4,7 +4,13 @@
     <Compile Update="Views\AddNewProduct.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="Views\AddNewVoucher.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="Views\ManageAccountControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Views\ManageVoucherControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Update="Views\MenuForm.cs">

@@ -55,7 +55,7 @@ namespace QuanLyNoir_BTL.Views
                 {
                     // Tính tổng số bản ghi
                     totalRecords = _context.Accounts.Count();
-                    lbl_trang.Text = $"Trang {currentPage} / {Math.Ceiling((double)totalRecords / pageSize)}";
+                    lbl_trang.Text = $"Page {currentPage} / {Math.Ceiling((double)totalRecords / pageSize)}";
 
                     var sortColumn = cbbx_cot.SelectedItem.ToString() switch
                     {

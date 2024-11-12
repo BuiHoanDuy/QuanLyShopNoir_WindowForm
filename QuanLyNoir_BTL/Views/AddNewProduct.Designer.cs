@@ -170,6 +170,7 @@
             cbbx_type.Name = "cbbx_type";
             cbbx_type.Size = new Size(279, 28);
             cbbx_type.TabIndex = 0;
+            cbbx_type.SelectedIndex = 0;
             // 
             // groupBox3
             // 
@@ -577,7 +578,7 @@
             // 
             // btn_addcolor
             // 
-            btn_addcolor.Location = new Point(481, 659);
+            btn_addcolor.Location = new Point(481, 604);
             btn_addcolor.Name = "btn_addcolor";
             btn_addcolor.Size = new Size(394, 45);
             btn_addcolor.TabIndex = 22;
