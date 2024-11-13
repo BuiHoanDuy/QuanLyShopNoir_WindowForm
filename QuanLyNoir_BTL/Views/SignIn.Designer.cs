@@ -89,6 +89,7 @@
             // 
             // panel2
             // 
+            panel2.BackColor = Color.White;
             panel2.Controls.Add(splitter1);
             panel2.Controls.Add(btn_signin);
             panel2.Controls.Add(btn_forgotpassword);
@@ -115,6 +116,7 @@
             // btn_signin
             // 
             btn_signin.BackColor = Color.DarkOliveGreen;
+            btn_signin.Cursor = Cursors.Hand;
             btn_signin.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 163);
             btn_signin.ForeColor = SystemColors.ButtonFace;
             btn_signin.Location = new Point(126, 513);
@@ -127,6 +129,7 @@
             // 
             // btn_forgotpassword
             // 
+            btn_forgotpassword.Cursor = Cursors.Hand;
             btn_forgotpassword.Location = new Point(393, 432);
             btn_forgotpassword.Name = "btn_forgotpassword";
             btn_forgotpassword.Size = new Size(169, 29);
@@ -138,6 +141,7 @@
             // chbx_rememberme
             // 
             chbx_rememberme.AutoSize = true;
+            chbx_rememberme.Cursor = Cursors.Hand;
             chbx_rememberme.Location = new Point(105, 438);
             chbx_rememberme.Name = "chbx_rememberme";
             chbx_rememberme.Size = new Size(129, 24);
@@ -204,7 +208,7 @@
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             AutoSize = true;
-            BackColor = SystemColors.ControlLightLight;
+            BackColor = Color.White;
             ClientSize = new Size(1307, 748);
             Controls.Add(label6);
             Controls.Add(panel2);

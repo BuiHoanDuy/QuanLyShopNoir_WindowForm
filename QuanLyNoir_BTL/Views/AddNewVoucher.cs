@@ -1,4 +1,5 @@
-﻿using QuanLyNoir_BTL.Models;
+﻿using Microsoft.Identity.Client.NativeInterop;
+using QuanLyNoir_BTL.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -8,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace QuanLyNoir_BTL.Views
 {
@@ -17,7 +19,9 @@ namespace QuanLyNoir_BTL.Views
         public AddNewVoucher()
         {
             InitializeComponent();
+            this.Text = "Add New Voucher";
             this.StartPosition = FormStartPosition.CenterScreen;
+            this.Focus();
 
             dtpk_startday.Format = DateTimePickerFormat.Custom;
             dtpk_startday.CustomFormat = "dd/MM/yyyy"; // Or any other format you prefer
@@ -27,13 +31,18 @@ namespace QuanLyNoir_BTL.Views
 
             dtpk_endday.Enabled = false;
             dtpk_startday.Value = DateTime.Now;
+
+            btn_update.Visible = false;
+            btn_save.Visible = true;
         }
 
-        public AddNewVoucher(Guid Id, string voucherCode,bool discountType, string discountValue, bool status,
+        public AddNewVoucher(Guid Id, string voucherCode, bool discountType, string discountValue, bool status,
             string minimumOrderValue, string maxUsage, DateTime startDay, DateTime endDay)
         {
             InitializeComponent();
+            this.Text = "Edit Voucher";
             this.StartPosition = FormStartPosition.CenterScreen;
+            this.Focus();
 
             dtpk_startday.Format = DateTimePickerFormat.Custom;
             dtpk_startday.CustomFormat = "dd/MM/yyyy"; // Or any other format you prefer
@@ -47,7 +56,7 @@ namespace QuanLyNoir_BTL.Views
 
             _Id = Id;
             tbx_voucherCode.Text = voucherCode;
-            if (discountType)rdbtn_percentage.Checked = true;
+            if (discountType) rdbtn_percentage.Checked = true;
             else rdbtn_fixed.Checked = true;
             tbx_discountValue.Text = discountValue;
             if (status) rdbtn_activated.Checked = true;
@@ -56,6 +65,9 @@ namespace QuanLyNoir_BTL.Views
             ntbx_maxUsage.Text = maxUsage;
             dtpk_startday.Value = startDay; // Use TimeOnly.MinValue to set the time part to 00:00:00
             dtpk_endday.Value = endDay;     // Same for endDay
+
+            btn_save.Visible = false;
+            btn_update.Visible = true;
         }
 
         private void btn_random_Click(object sender, EventArgs e)
@@ -96,7 +108,7 @@ namespace QuanLyNoir_BTL.Views
 
         private void btn_save_Click(object sender, EventArgs e)
         {
-            Validate();
+            if (!Validate()) return;
             try
             {
                 // Tạo đối tượng voucher mới
@@ -152,49 +164,85 @@ namespace QuanLyNoir_BTL.Views
             }
         }
 
-        public void Validate()
+        public bool Validate()
         {
             // Validate dữ liệu
             if (string.IsNullOrWhiteSpace(tbx_voucherCode.Text))
             {
                 MessageBox.Show("Vui lòng nhập mã voucher.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 tbx_voucherCode.Focus();
-                return;
+                return false;
             }
 
             if (string.IsNullOrWhiteSpace(tbx_discountValue.Text) || !decimal.TryParse(tbx_discountValue.Text, out decimal discountValue) || discountValue <= 0)
             {
                 MessageBox.Show("Vui lòng nhập giá trị giảm giá hợp lệ.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 tbx_discountValue.Focus();
-                return;
+                return false;
             }
 
             if (rdbtn_fixedDay.Checked && dtpk_endday.Value <= dtpk_startday.Value)
             {
                 MessageBox.Show("Ngày kết thúc (Fixed day) phải lớn hơn ngày bắt đầu.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 dtpk_endday.Focus();
-                return;
+                return false;
             }
 
             if (rdbtn_validityPeriod.Checked && ntbx_validityPeriod.Value <= 0)
             {
                 MessageBox.Show("Thời gian hiệu lực phải lớn hơn 0.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 ntbx_validityPeriod.Focus();
-                return;
+                return false;
             }
 
             if (!string.IsNullOrEmpty(tbx_minOrderValue.Text) && (!decimal.TryParse(tbx_minOrderValue.Text, out decimal minOrderValue) || minOrderValue < 0))
             {
                 MessageBox.Show("Vui lòng nhập giá trị đơn hàng tối thiểu hợp lệ.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 tbx_minOrderValue.Focus();
-                return;
+                return false;
             }
 
             if (ntbx_maxUsage.Value <= 0)
             {
                 MessageBox.Show("Số lần sử dụng tối đa phải lớn hơn 0.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 ntbx_maxUsage.Focus();
-                return;
+                return false;
+            }
+            return true;
+        }
+
+        private void btn_update_Click(object sender, EventArgs e)
+        {
+            if (!Validate()) return;
+            using (var _context = new ShopNoirContext())
+            {
+                // Tìm Province cần cập nhật trong cơ sở dữ liệu
+                var voucher = _context.Vouchers.FirstOrDefault(p => p.Id.Equals(_Id));
+
+                if (voucher != null)
+                {
+                    {
+                        voucher.Code = tbx_voucherCode.Text;
+                        voucher.DiscountType = rdbtn_percentage.Checked ? "P" : "F";
+                        voucher.DiscountValue = decimal.Parse(tbx_discountValue.Text);
+                        voucher.StartDate = DateOnly.FromDateTime(dtpk_startday.Value);
+                        voucher.MaxUsage = Convert.ToInt32(ntbx_maxUsage.Value);
+                        voucher.UsedCount = 0;
+                        voucher.MinOrderValue = string.IsNullOrEmpty(tbx_minOrderValue.Text) ? null : (decimal?)decimal.Parse(tbx_minOrderValue.Text);
+                        voucher.Status = rdbtn_activated.Checked;
+
+                        // Lưu thay đổi vào cơ sở dữ liệu
+                        _context.SaveChanges();
+
+                        // Thông báo thành công
+                        MessageBox.Show("Update successfully!!");
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Don't find account to update");
+                }
+                this.Close();
             }
         }
     }

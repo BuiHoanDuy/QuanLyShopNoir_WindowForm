@@ -62,6 +62,7 @@ namespace QuanLyNoir_BTL
         }
         private void btn_manageproduct_Click(object sender, EventArgs e)
         {
+            this.Text = "Manage Product";
             updateEffectClickedButton(btn_manageproduct);
             pnl_control.Controls.Clear();  // Xóa các UserControl hiện tại
             pnl_control.Controls.Add(manageProductControl);
@@ -69,12 +70,14 @@ namespace QuanLyNoir_BTL
 
         private void btn_manageAccount_Click(object sender, EventArgs e)
         {
+            this.Text = "Manage Account";
             updateEffectClickedButton(btn_manageAccount);
             pnl_control.Controls.Clear();  // Xóa các UserControl hiện tại
             pnl_control.Controls.Add(manageAccountControl);
         }
         private void btn_manageVoucher_Click(object sender, EventArgs e)
         {
+            this.Text = "Manage Voucher";
             updateEffectClickedButton(btn_manageVoucher);
             pnl_control.Controls.Clear();
             pnl_control.Controls.Add(voucherControl);
@@ -93,6 +96,18 @@ namespace QuanLyNoir_BTL
             // Hiển thị control quản lý sản phẩm sau khi hoàn tất khởi tạo
             pnl_control.Controls.Clear();
             pnl_control.Controls.Add(manageProductControl);
+        }
+
+        private void btn_manageOrder_Click(object sender, EventArgs e)
+        {
+            this.Text = "Manage Order";
+            updateEffectClickedButton(btn_manageOrder);
+        }
+
+        private void btn_analyseRevenue_Click(object sender, EventArgs e)
+        {
+            this.Text = "Analyse Revenue";
+            updateEffectClickedButton(btn_analyseRevenue);
         }
     }
 }

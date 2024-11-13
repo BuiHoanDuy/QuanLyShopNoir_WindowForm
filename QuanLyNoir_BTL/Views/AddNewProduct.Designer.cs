@@ -101,6 +101,7 @@
             // pictureBox1
             // 
             pictureBox1.AllowDrop = true;
+            pictureBox1.BackColor = Color.FromArgb(254, 249, 242);
             pictureBox1.BorderStyle = BorderStyle.FixedSingle;
             pictureBox1.Location = new Point(91, 75);
             pictureBox1.Name = "pictureBox1";
@@ -170,7 +171,6 @@
             cbbx_type.Name = "cbbx_type";
             cbbx_type.Size = new Size(279, 28);
             cbbx_type.TabIndex = 0;
-            cbbx_type.SelectedIndex = 0;
             // 
             // groupBox3
             // 
@@ -591,6 +591,7 @@
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
+            BackColor = SystemColors.ControlLightLight;
             ClientSize = new Size(987, 715);
             Controls.Add(btn_addcolor);
             Controls.Add(progressBar1);

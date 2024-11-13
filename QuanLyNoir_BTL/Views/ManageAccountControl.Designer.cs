@@ -84,6 +84,7 @@
             // 
             // btn_reset
             // 
+            btn_reset.Cursor = Cursors.Hand;
             btn_reset.Location = new Point(174, 514);
             btn_reset.Name = "btn_reset";
             btn_reset.Size = new Size(94, 29);
@@ -104,6 +105,7 @@
             // 
             // btn_delete
             // 
+            btn_delete.Cursor = Cursors.Hand;
             btn_delete.Location = new Point(330, 463);
             btn_delete.Name = "btn_delete";
             btn_delete.Size = new Size(94, 29);
@@ -114,6 +116,7 @@
             // 
             // btn_update
             // 
+            btn_update.Cursor = Cursors.Hand;
             btn_update.Location = new Point(174, 463);
             btn_update.Name = "btn_update";
             btn_update.Size = new Size(94, 29);
@@ -124,6 +127,7 @@
             // 
             // btn_create
             // 
+            btn_create.Cursor = Cursors.Hand;
             btn_create.Location = new Point(21, 463);
             btn_create.Name = "btn_create";
             btn_create.Size = new Size(94, 29);
@@ -306,6 +310,7 @@
             // 
             // btn_trangsau
             // 
+            btn_trangsau.Cursor = Cursors.Hand;
             btn_trangsau.Location = new Point(1052, 722);
             btn_trangsau.Name = "btn_trangsau";
             btn_trangsau.Size = new Size(94, 29);
@@ -316,6 +321,7 @@
             // 
             // btn_trangtruoc
             // 
+            btn_trangtruoc.Cursor = Cursors.Hand;
             btn_trangtruoc.Location = new Point(838, 722);
             btn_trangtruoc.Name = "btn_trangtruoc";
             btn_trangtruoc.Size = new Size(94, 29);

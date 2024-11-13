@@ -16,6 +16,7 @@ namespace QuanLyNoir_BTL.Views
         public ManageVoucherControl()
         {
             InitializeComponent();
+            dtgv_voucherlist.MultiSelect = false;
             cbbx_cot.Items.Add("Code");
             cbbx_cot.Items.Add("Discount Type");
             cbbx_cot.Items.Add("Discount Value");
@@ -285,7 +286,6 @@ namespace QuanLyNoir_BTL.Views
 
         private void btn_edit_Click(object sender, EventArgs e)
         {
-            dtgv_voucherlist.MultiSelect = false;
             if (dtgv_voucherlist.SelectedRows.Count > 0) // Kiểm tra xem có dòng nào được chọn không
             {
                 // Lấy dòng đã chọn
@@ -303,9 +303,10 @@ namespace QuanLyNoir_BTL.Views
                 string minimumOrderValue = row.Cells["MinOrderValue"].Value?.ToString() ?? string.Empty; // Minimum order value (nullable string)
                 bool status =(bool)row.Cells["Status"].Value == true ? true : false;
 
-                AddNewVoucher addNewVoucher = new AddNewVoucher(_Id, voucherCode, discountType, discountValue, status, minimumOrderValue, startDay, endDay);
-                addNewVoucher.Show();
+                AddNewVoucher addNewVoucher = new AddNewVoucher(_Id, voucherCode,discountType, discountValue, status, minimumOrderValue, maxUsage, startDay, endDay);
+                addNewVoucher.ShowDialog();
             }
+            LoadDataIntoDataGridBox();
         }
     }
 }

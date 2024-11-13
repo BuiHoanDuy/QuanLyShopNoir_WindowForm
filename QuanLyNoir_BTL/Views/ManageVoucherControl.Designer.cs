@@ -102,6 +102,7 @@
             // rdbtn_status_inactive
             // 
             rdbtn_status_inactive.AutoSize = true;
+            rdbtn_status_inactive.Cursor = Cursors.Hand;
             rdbtn_status_inactive.Location = new Point(46, 121);
             rdbtn_status_inactive.Name = "rdbtn_status_inactive";
             rdbtn_status_inactive.Size = new Size(81, 24);
@@ -113,6 +114,7 @@
             // rdbtn_status_activated
             // 
             rdbtn_status_activated.AutoSize = true;
+            rdbtn_status_activated.Cursor = Cursors.Hand;
             rdbtn_status_activated.Location = new Point(46, 78);
             rdbtn_status_activated.Name = "rdbtn_status_activated";
             rdbtn_status_activated.Size = new Size(93, 24);
@@ -125,6 +127,7 @@
             // 
             rdbtn_status_all.AutoSize = true;
             rdbtn_status_all.Checked = true;
+            rdbtn_status_all.Cursor = Cursors.Hand;
             rdbtn_status_all.Location = new Point(46, 38);
             rdbtn_status_all.Name = "rdbtn_status_all";
             rdbtn_status_all.Size = new Size(48, 24);
@@ -151,6 +154,7 @@
             // 
             // btn_today_startday
             // 
+            btn_today_startday.Cursor = Cursors.Hand;
             btn_today_startday.Font = new Font("Segoe UI", 7.8F, FontStyle.Regular, GraphicsUnit.Point, 163);
             btn_today_startday.Location = new Point(208, 35);
             btn_today_startday.Name = "btn_today_startday";
@@ -162,6 +166,7 @@
             // 
             // btn_today_endday
             // 
+            btn_today_endday.Cursor = Cursors.Hand;
             btn_today_endday.Font = new Font("Segoe UI", 7.8F, FontStyle.Regular, GraphicsUnit.Point, 163);
             btn_today_endday.Location = new Point(208, 109);
             btn_today_endday.Name = "btn_today_endday";
@@ -224,6 +229,7 @@
             // rdbtn_type_fixed
             // 
             rdbtn_type_fixed.AutoSize = true;
+            rdbtn_type_fixed.Cursor = Cursors.Hand;
             rdbtn_type_fixed.Location = new Point(46, 109);
             rdbtn_type_fixed.Name = "rdbtn_type_fixed";
             rdbtn_type_fixed.Size = new Size(65, 24);
@@ -235,6 +241,7 @@
             // rdbtn_type_percentage
             // 
             rdbtn_type_percentage.AutoSize = true;
+            rdbtn_type_percentage.Cursor = Cursors.Hand;
             rdbtn_type_percentage.Location = new Point(46, 66);
             rdbtn_type_percentage.Name = "rdbtn_type_percentage";
             rdbtn_type_percentage.Size = new Size(103, 24);
@@ -247,6 +254,7 @@
             // 
             rdbtn_type_all.AutoSize = true;
             rdbtn_type_all.Checked = true;
+            rdbtn_type_all.Cursor = Cursors.Hand;
             rdbtn_type_all.Location = new Point(46, 26);
             rdbtn_type_all.Name = "rdbtn_type_all";
             rdbtn_type_all.Size = new Size(48, 24);
@@ -258,7 +266,7 @@
             // 
             // dtgv_voucherlist
             // 
-            dtgv_voucherlist.BackgroundColor = SystemColors.ControlLightLight;
+            dtgv_voucherlist.BackgroundColor = Color.White;
             dtgv_voucherlist.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dtgv_voucherlist.Location = new Point(381, 100);
             dtgv_voucherlist.Name = "dtgv_voucherlist";
@@ -281,6 +289,7 @@
             // 
             // btn_addNewVoucher
             // 
+            btn_addNewVoucher.Cursor = Cursors.Hand;
             btn_addNewVoucher.Location = new Point(1298, 54);
             btn_addNewVoucher.Name = "btn_addNewVoucher";
             btn_addNewVoucher.Size = new Size(167, 40);
@@ -310,6 +319,7 @@
             // 
             // btn_trangsau
             // 
+            btn_trangsau.Cursor = Cursors.Hand;
             btn_trangsau.Location = new Point(1053, 689);
             btn_trangsau.Name = "btn_trangsau";
             btn_trangsau.Size = new Size(94, 29);
@@ -320,6 +330,7 @@
             // 
             // btn_trangtruoc
             // 
+            btn_trangtruoc.Cursor = Cursors.Hand;
             btn_trangtruoc.Location = new Point(839, 689);
             btn_trangtruoc.Name = "btn_trangtruoc";
             btn_trangtruoc.Size = new Size(94, 29);
@@ -377,6 +388,7 @@
             // 
             // btn_reset
             // 
+            btn_reset.Cursor = Cursors.Hand;
             btn_reset.Location = new Point(138, 671);
             btn_reset.Name = "btn_reset";
             btn_reset.Size = new Size(94, 29);
@@ -387,6 +399,7 @@
             // 
             // btn_edit
             // 
+            btn_edit.Cursor = Cursors.Hand;
             btn_edit.Enabled = false;
             btn_edit.Location = new Point(1163, 65);
             btn_edit.Name = "btn_edit";
@@ -398,6 +411,7 @@
             // 
             // btn_delete
             // 
+            btn_delete.Cursor = Cursors.Hand;
             btn_delete.Enabled = false;
             btn_delete.Location = new Point(1063, 65);
             btn_delete.Name = "btn_delete";
@@ -410,7 +424,7 @@
             // ManageVoucherControl
             // 
             AutoScaleMode = AutoScaleMode.None;
-            BackColor = SystemColors.ControlLightLight;
+            BackColor = Color.White;
             Controls.Add(btn_delete);
             Controls.Add(btn_edit);
             Controls.Add(btn_reset);

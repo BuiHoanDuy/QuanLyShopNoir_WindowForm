@@ -24,19 +24,16 @@ namespace QuanLyNoir_BTL.Views
             SetupPlaceholder();
             if (isNew)
             {
+                this.Text = "Add New Product";
                 btn_update.Visible = false;
                 btn_addtostore.Visible = true;
             }
             else
             {
+                this.Text = "Edit Product";
                 btn_update.Visible = true;
                 btn_addtostore.Visible = false;
-            }
 
-            //       SetupPlaceholder();
-
-            if (!isNew)
-            {
                 LoadProductData(currentProductColorId);
             }
         }
@@ -46,6 +43,7 @@ namespace QuanLyNoir_BTL.Views
             currentProductId = productId;
 
             this.StartPosition = FormStartPosition.CenterScreen;
+            this.Text = "Add New Color";
             this.Focus();
             SetupBackgroundWorker();
             SetupPlaceholder();

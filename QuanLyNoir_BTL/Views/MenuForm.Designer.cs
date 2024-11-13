@@ -103,6 +103,7 @@ namespace QuanLyNoir_BTL
             btn_analyseRevenue.TabIndex = 6;
             btn_analyseRevenue.Text = "Analyse Revenue";
             btn_analyseRevenue.UseVisualStyleBackColor = true;
+            btn_analyseRevenue.Click += btn_analyseRevenue_Click;
             // 
             // btn_manageOrder
             // 
@@ -114,6 +115,7 @@ namespace QuanLyNoir_BTL
             btn_manageOrder.TabIndex = 5;
             btn_manageOrder.Text = "Manage Order";
             btn_manageOrder.UseVisualStyleBackColor = true;
+            btn_manageOrder.Click += btn_manageOrder_Click;
             // 
             // btn_manageproduct
             // 

@@ -40,7 +40,6 @@
             label2 = new Label();
             tbx_discountValue = new TextBox();
             ntbx_maxUsage = new NumericUpDown();
-            backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             groupBox4 = new GroupBox();
             label3 = new Label();
             groupBox5 = new GroupBox();
@@ -59,6 +58,7 @@
             rdbtn_activated = new RadioButton();
             btn_save = new Button();
             btn_reset = new Button();
+            btn_update = new Button();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
             groupBox3.SuspendLayout();
@@ -83,8 +83,10 @@
             // 
             // groupBox1
             // 
+            groupBox1.BackColor = Color.Transparent;
             groupBox1.Controls.Add(btn_random);
             groupBox1.Controls.Add(tbx_voucherCode);
+            groupBox1.FlatStyle = FlatStyle.Flat;
             groupBox1.Location = new Point(81, 79);
             groupBox1.Name = "groupBox1";
             groupBox1.Size = new Size(338, 90);
@@ -111,6 +113,7 @@
             // 
             // groupBox2
             // 
+            groupBox2.BackColor = Color.Transparent;
             groupBox2.Controls.Add(rdbtn_fixed);
             groupBox2.Controls.Add(rdbtn_percentage);
             groupBox2.Location = new Point(81, 196);
@@ -123,6 +126,7 @@
             // rdbtn_fixed
             // 
             rdbtn_fixed.AutoSize = true;
+            rdbtn_fixed.Cursor = Cursors.Hand;
             rdbtn_fixed.Location = new Point(185, 39);
             rdbtn_fixed.Name = "rdbtn_fixed";
             rdbtn_fixed.Size = new Size(65, 24);
@@ -134,6 +138,7 @@
             // 
             rdbtn_percentage.AutoSize = true;
             rdbtn_percentage.Checked = true;
+            rdbtn_percentage.Cursor = Cursors.Hand;
             rdbtn_percentage.Location = new Point(30, 39);
             rdbtn_percentage.Name = "rdbtn_percentage";
             rdbtn_percentage.Size = new Size(103, 24);
@@ -144,6 +149,7 @@
             // 
             // groupBox3
             // 
+            groupBox3.BackColor = Color.Transparent;
             groupBox3.Controls.Add(label9);
             groupBox3.Controls.Add(label2);
             groupBox3.Controls.Add(tbx_discountValue);
@@ -186,6 +192,7 @@
             // 
             ntbx_maxUsage.Increment = new decimal(new int[] { 5, 0, 0, 0 });
             ntbx_maxUsage.Location = new Point(30, 38);
+            ntbx_maxUsage.Maximum = new decimal(new int[] { 999999, 0, 0, 0 });
             ntbx_maxUsage.Name = "ntbx_maxUsage";
             ntbx_maxUsage.Size = new Size(159, 27);
             ntbx_maxUsage.TabIndex = 0;
@@ -194,6 +201,7 @@
             // 
             // groupBox4
             // 
+            groupBox4.BackColor = Color.Transparent;
             groupBox4.Controls.Add(label3);
             groupBox4.Controls.Add(ntbx_maxUsage);
             groupBox4.Location = new Point(81, 447);
@@ -215,6 +223,7 @@
             // 
             // groupBox5
             // 
+            groupBox5.BackColor = Color.Transparent;
             groupBox5.Controls.Add(label4);
             groupBox5.Controls.Add(tbx_minOrderValue);
             groupBox5.Location = new Point(506, 79);
@@ -245,6 +254,7 @@
             // 
             // groupBox6
             // 
+            groupBox6.BackColor = Color.Transparent;
             groupBox6.Controls.Add(dtpk_startday);
             groupBox6.Location = new Point(506, 196);
             groupBox6.Name = "groupBox6";
@@ -263,6 +273,7 @@
             // 
             // groupBox7
             // 
+            groupBox7.BackColor = Color.Transparent;
             groupBox7.Controls.Add(cbbx_dayOrMonth);
             groupBox7.Controls.Add(ntbx_validityPeriod);
             groupBox7.Controls.Add(rdbtn_validityPeriod);
@@ -287,6 +298,7 @@
             // ntbx_validityPeriod
             // 
             ntbx_validityPeriod.Location = new Point(66, 162);
+            ntbx_validityPeriod.Maximum = new decimal(new int[] { 999999, 0, 0, 0 });
             ntbx_validityPeriod.Name = "ntbx_validityPeriod";
             ntbx_validityPeriod.Size = new Size(110, 27);
             ntbx_validityPeriod.TabIndex = 3;
@@ -296,6 +308,7 @@
             // 
             rdbtn_validityPeriod.AutoSize = true;
             rdbtn_validityPeriod.Checked = true;
+            rdbtn_validityPeriod.Cursor = Cursors.Hand;
             rdbtn_validityPeriod.Location = new Point(37, 124);
             rdbtn_validityPeriod.Name = "rdbtn_validityPeriod";
             rdbtn_validityPeriod.Size = new Size(127, 24);
@@ -308,6 +321,7 @@
             // rdbtn_fixedDay
             // 
             rdbtn_fixedDay.AutoSize = true;
+            rdbtn_fixedDay.Cursor = Cursors.Hand;
             rdbtn_fixedDay.Location = new Point(37, 38);
             rdbtn_fixedDay.Name = "rdbtn_fixedDay";
             rdbtn_fixedDay.Size = new Size(93, 24);
@@ -325,6 +339,7 @@
             // 
             // groupBox8
             // 
+            groupBox8.BackColor = Color.Transparent;
             groupBox8.Controls.Add(rdbtn_unactivated);
             groupBox8.Controls.Add(rdbtn_activated);
             groupBox8.Location = new Point(81, 573);
@@ -337,6 +352,7 @@
             // rdbtn_unactivated
             // 
             rdbtn_unactivated.AutoSize = true;
+            rdbtn_unactivated.Cursor = Cursors.Hand;
             rdbtn_unactivated.Location = new Point(185, 39);
             rdbtn_unactivated.Name = "rdbtn_unactivated";
             rdbtn_unactivated.Size = new Size(109, 24);
@@ -348,6 +364,7 @@
             // 
             rdbtn_activated.AutoSize = true;
             rdbtn_activated.Checked = true;
+            rdbtn_activated.Cursor = Cursors.Hand;
             rdbtn_activated.Location = new Point(30, 39);
             rdbtn_activated.Name = "rdbtn_activated";
             rdbtn_activated.Size = new Size(93, 24);
@@ -358,29 +375,52 @@
             // 
             // btn_save
             // 
+            btn_save.BackColor = Color.FromArgb(190, 210, 180);
+            btn_save.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 163);
+            btn_save.ForeColor = Color.FromArgb(51, 51, 51);
             btn_save.Location = new Point(506, 573);
             btn_save.Name = "btn_save";
-            btn_save.Size = new Size(338, 40);
+            btn_save.Size = new Size(338, 55);
             btn_save.TabIndex = 16;
             btn_save.Text = "Save";
-            btn_save.UseVisualStyleBackColor = true;
+            btn_save.UseVisualStyleBackColor = false;
             btn_save.Click += btn_save_Click;
             // 
             // btn_reset
             // 
+            btn_reset.BackColor = Color.FromArgb(190, 198, 160);
+            btn_reset.Cursor = Cursors.Hand;
+            btn_reset.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 163);
+            btn_reset.ForeColor = Color.FromArgb(51, 51, 51);
             btn_reset.Location = new Point(750, 634);
             btn_reset.Name = "btn_reset";
             btn_reset.Size = new Size(94, 29);
             btn_reset.TabIndex = 17;
             btn_reset.Text = "Reset";
-            btn_reset.UseVisualStyleBackColor = true;
+            btn_reset.UseVisualStyleBackColor = false;
             btn_reset.Click += btn_reset_Click;
+            // 
+            // btn_update
+            // 
+            btn_update.BackColor = Color.FromArgb(190, 210, 180);
+            btn_update.Cursor = Cursors.Hand;
+            btn_update.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 163);
+            btn_update.ForeColor = Color.FromArgb(51, 51, 51);
+            btn_update.Location = new Point(506, 573);
+            btn_update.Name = "btn_update";
+            btn_update.Size = new Size(338, 55);
+            btn_update.TabIndex = 18;
+            btn_update.Text = "Update";
+            btn_update.UseVisualStyleBackColor = false;
+            btn_update.Click += btn_update_Click;
             // 
             // AddNewVoucher
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
+            BackColor = SystemColors.ControlLightLight;
             ClientSize = new Size(987, 715);
+            Controls.Add(btn_update);
             Controls.Add(btn_reset);
             Controls.Add(btn_save);
             Controls.Add(groupBox8);
@@ -429,7 +469,6 @@
         private Label label9;
         private Label label2;
         private TextBox tbx_discountValue;
-        private System.ComponentModel.BackgroundWorker backgroundWorker1;
         private GroupBox groupBox4;
         private GroupBox groupBox5;
         private TextBox tbx_minOrderValue;
@@ -448,5 +487,6 @@
         private RadioButton rdbtn_validityPeriod;
         private RadioButton rdbtn_fixedDay;
         private Button btn_reset;
+        private Button btn_update;
     }
 }
