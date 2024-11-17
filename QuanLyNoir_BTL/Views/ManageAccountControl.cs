@@ -54,7 +54,7 @@ namespace QuanLyNoir_BTL.Views
                 try
                 {
                     // Tính tổng số bản ghi
-                    totalRecords = _context.Accounts.Count();
+                    totalRecords = _context.Accounts.Where(ac => ac.Status == true).Count();
                     lbl_trang.Text = $"Page {currentPage} / {Math.Ceiling((double)totalRecords / pageSize)}";
 
                     var sortColumn = cbbx_cot.SelectedItem.ToString() switch
@@ -84,6 +84,7 @@ namespace QuanLyNoir_BTL.Views
                     dtgv_accountList.DataSource = accounts;
 
                     dtgv_accountList.Columns["Invoices"].Visible = false;
+                    dtgv_accountList.Columns["Status"].Visible = false;
                     // Kích hoạt hoặc vô hiệu hóa nút điều hướng
                     btn_trangtruoc.Enabled = currentPage > 1;
                     btn_trangsau.Enabled = currentPage < Math.Ceiling((double)totalRecords / pageSize);
@@ -146,9 +147,35 @@ namespace QuanLyNoir_BTL.Views
             string role = cbbx_role.Text.Trim();
 
             // Kiểm tra dữ liệu nhập vào
-            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password) || string.IsNullOrEmpty(role))
+
+            // Kiểm tra dữ liệu nhập vào
+            if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(username) ||
+                string.IsNullOrEmpty(password) || string.IsNullOrEmpty(phone) || string.IsNullOrEmpty(role))
             {
-                MessageBox.Show("Username, password, role is required!!");
+                MessageBox.Show("All fields are required!");
+                return;
+            }
+
+            // Kiểm tra username đã tồn tại
+            using (var _dbContext = new ShopNoirContext())
+            {
+                if (_dbContext.Accounts.Any(u => u.Username == username))
+                {
+                    MessageBox.Show("Username already exists!");
+                    return;
+                }
+            }
+            // Kiểm tra mật khẩu không chứa khoảng trắng
+            if (password.Contains(" "))
+            {
+                MessageBox.Show("Password cannot contain spaces!");
+                return;
+            }
+
+            // Kiểm tra số điện thoại Việt Nam
+            if (!System.Text.RegularExpressions.Regex.IsMatch(phone, @"^0\d{9}$"))
+            {
+                MessageBox.Show("Phone number must start with 0 and be 10 digits long!");
                 return;
             }
 
@@ -159,7 +186,8 @@ namespace QuanLyNoir_BTL.Views
                 Username = username,
                 Password = password,
                 PhoneNumber = phone,
-                Role = role.Equals("Admin") ? true : false // true : admin, false: staff
+                Role = role.Equals("Admin") ? true : false, // true : admin, false: staff
+                Status = true
             };
 
             using (var _context = new ShopNoirContext())
@@ -168,7 +196,7 @@ namespace QuanLyNoir_BTL.Views
                 _context.Accounts.Add(newAccount);
 
                 // Lưu thay đổi vào cơ sở dữ liệu
-                _context.SaveChanges();
+                _context.SaveChangesAsync();
 
                 MessageBox.Show("Create new account sucessfully!!");
 

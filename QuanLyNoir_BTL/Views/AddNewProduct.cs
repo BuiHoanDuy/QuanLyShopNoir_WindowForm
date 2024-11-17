@@ -27,6 +27,7 @@ namespace QuanLyNoir_BTL.Views
                 this.Text = "Add New Product";
                 btn_update.Visible = false;
                 btn_addtostore.Visible = true;
+                cbbx_type.SelectedIndex = 0;
             }
             else
             {
@@ -37,7 +38,7 @@ namespace QuanLyNoir_BTL.Views
                 LoadProductData(currentProductColorId);
             }
         }
-        public AddNewProduct(ShopNoirContext dbContext, Guid productId) //Them mau sac
+        public AddNewProduct(Guid productId, char Choice) //C: color, S: size, D: detail
         {
             InitializeComponent();
             currentProductId = productId;
@@ -52,12 +53,36 @@ namespace QuanLyNoir_BTL.Views
             cbbx_type.Enabled = false;
             tbx_width.Enabled = false;
             tbx_height.Enabled = false;
+            tbx_material.Enabled = false;
 
             btn_update.Visible = false;
             btn_addtostore.Visible = false;
             btn_addcolor.Visible = true;
 
-            LoadProductDataForAddColor(currentProductId);
+            if (Choice == 'C') LoadProductDataForAddColor(currentProductId);
+            if (Choice == 'S')
+            {
+                this.Text = "Add New Size";
+                pictureBox1.Enabled = false;
+                LoadProductData(currentProductId);
+                using (var _dbContext = new ShopNoirContext())
+                {
+                    var color = _dbContext.ProductColors.FirstOrDefault(c => c.Id == productId);
+                    tbx_inventory.Clear();
+                    tbx_height.Enabled = true;
+                    tbx_width.Enabled = true;
+                    if (color != null)
+                    {
+                        var product = _dbContext.Products.FirstOrDefault(p => p.Id == color.ProductId);
+                        if (product != null)
+                        {
+                            currentProductId = product.Id;
+                        }
+                    }
+                }
+                }
+            if (Choice == 'D') LoadProductDataForDetail(currentProductId);
+            
         }
         private void LoadProductData(Guid productColorId) //load data cho chuc nang cap nhat
         {
@@ -99,6 +124,10 @@ namespace QuanLyNoir_BTL.Views
                     cbbx_type.Text = product.Type;
                 }
             }
+        }
+        private void LoadProductDataForDetail(Guid productId) //chi tiet san pham
+        {
+            
         }
         private async Task ValidateAndSaveProductAsync(bool isNew, bool isAddColor)
         {
@@ -191,7 +220,6 @@ namespace QuanLyNoir_BTL.Views
                 Size = selectedSize,
                 ImageUrl = ImageToByteArray(pictureBox1.Image)
             };
-
                 _dbContext.ProductColors.Add(productColor);
 
                 await _dbContext.SaveChangesAsync();

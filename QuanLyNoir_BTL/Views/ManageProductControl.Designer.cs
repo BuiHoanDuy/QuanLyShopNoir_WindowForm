@@ -32,6 +32,16 @@
             loadWorker = new System.ComponentModel.BackgroundWorker();
             progressBar1 = new ProgressBar();
             panel1 = new Panel();
+            groupBox4 = new GroupBox();
+            btn_allSize = new Button();
+            lbl_size = new Label();
+            btn_xxxl = new Button();
+            btn_xxl = new Button();
+            btn_xl = new Button();
+            btn_l = new Button();
+            btn_m = new Button();
+            btn_s = new Button();
+            btn_xs = new Button();
             btn_reset = new Button();
             groupBox3 = new GroupBox();
             lbl_priceFilter = new Label();
@@ -46,10 +56,7 @@
             groupBox1 = new GroupBox();
             pictureBox2 = new PictureBox();
             tbx_search = new TextBox();
-            panel3 = new Panel();
-            pictureBox1 = new PictureBox();
-            label2 = new Label();
-            btn_voucher = new Button();
+            btn_all = new Button();
             btn_jacket = new Button();
             btn_bag = new Button();
             btn_newcollection = new Button();
@@ -62,12 +69,11 @@
             btn_previous = new Button();
             pnl_product = new Panel();
             panel1.SuspendLayout();
+            groupBox4.SuspendLayout();
             groupBox3.SuspendLayout();
             groupBox2.SuspendLayout();
             groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
-            panel3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             pnl_control.SuspendLayout();
             SuspendLayout();
             // 
@@ -89,12 +95,12 @@
             // panel1
             // 
             panel1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            panel1.Controls.Add(groupBox4);
             panel1.Controls.Add(btn_reset);
             panel1.Controls.Add(groupBox3);
             panel1.Controls.Add(groupBox2);
             panel1.Controls.Add(groupBox1);
-            panel1.Controls.Add(panel3);
-            panel1.Controls.Add(btn_voucher);
+            panel1.Controls.Add(btn_all);
             panel1.Controls.Add(btn_jacket);
             panel1.Controls.Add(btn_bag);
             panel1.Controls.Add(btn_newcollection);
@@ -104,6 +110,117 @@
             panel1.Size = new Size(429, 673);
             panel1.TabIndex = 37;
             // 
+            // groupBox4
+            // 
+            groupBox4.Controls.Add(btn_allSize);
+            groupBox4.Controls.Add(lbl_size);
+            groupBox4.Controls.Add(btn_xxxl);
+            groupBox4.Controls.Add(btn_xxl);
+            groupBox4.Controls.Add(btn_xl);
+            groupBox4.Controls.Add(btn_l);
+            groupBox4.Controls.Add(btn_m);
+            groupBox4.Controls.Add(btn_s);
+            groupBox4.Controls.Add(btn_xs);
+            groupBox4.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+            groupBox4.Location = new Point(10, 90);
+            groupBox4.Name = "groupBox4";
+            groupBox4.Size = new Size(242, 116);
+            groupBox4.TabIndex = 45;
+            groupBox4.TabStop = false;
+            groupBox4.Text = "Size of product";
+            // 
+            // btn_allSize
+            // 
+            btn_allSize.BackColor = Color.DarkSeaGreen;
+            btn_allSize.ForeColor = Color.AliceBlue;
+            btn_allSize.Location = new Point(6, 26);
+            btn_allSize.Name = "btn_allSize";
+            btn_allSize.Size = new Size(48, 35);
+            btn_allSize.TabIndex = 20;
+            btn_allSize.Text = "All";
+            btn_allSize.UseVisualStyleBackColor = false;
+            btn_allSize.Click += btn_allSize_Click;
+            // 
+            // lbl_size
+            // 
+            lbl_size.AutoSize = true;
+            lbl_size.ForeColor = Color.Red;
+            lbl_size.Location = new Point(118, -2);
+            lbl_size.Name = "lbl_size";
+            lbl_size.Size = new Size(13, 20);
+            lbl_size.TabIndex = 19;
+            lbl_size.Text = " ";
+            // 
+            // btn_xxxl
+            // 
+            btn_xxxl.Location = new Point(168, 67);
+            btn_xxxl.Name = "btn_xxxl";
+            btn_xxxl.Size = new Size(51, 35);
+            btn_xxxl.TabIndex = 6;
+            btn_xxxl.Text = "XXXL";
+            btn_xxxl.UseVisualStyleBackColor = true;
+            btn_xxxl.Click += btn_3xl_Click;
+            // 
+            // btn_xxl
+            // 
+            btn_xxl.Location = new Point(114, 67);
+            btn_xxl.Name = "btn_xxl";
+            btn_xxl.Size = new Size(48, 35);
+            btn_xxl.TabIndex = 5;
+            btn_xxl.Text = "XXL";
+            btn_xxl.UseVisualStyleBackColor = true;
+            btn_xxl.Click += btn_xxl_Click;
+            // 
+            // btn_xl
+            // 
+            btn_xl.Location = new Point(60, 67);
+            btn_xl.Name = "btn_xl";
+            btn_xl.Size = new Size(48, 35);
+            btn_xl.TabIndex = 4;
+            btn_xl.Text = "XL";
+            btn_xl.UseVisualStyleBackColor = true;
+            btn_xl.Click += btn_xl_Click;
+            // 
+            // btn_l
+            // 
+            btn_l.Location = new Point(6, 67);
+            btn_l.Name = "btn_l";
+            btn_l.Size = new Size(48, 35);
+            btn_l.TabIndex = 3;
+            btn_l.Text = "L";
+            btn_l.UseVisualStyleBackColor = true;
+            btn_l.Click += btn_l_Click;
+            // 
+            // btn_m
+            // 
+            btn_m.Location = new Point(168, 26);
+            btn_m.Name = "btn_m";
+            btn_m.Size = new Size(48, 35);
+            btn_m.TabIndex = 2;
+            btn_m.Text = "M";
+            btn_m.UseVisualStyleBackColor = true;
+            btn_m.Click += btn_m_Click;
+            // 
+            // btn_s
+            // 
+            btn_s.Location = new Point(114, 26);
+            btn_s.Name = "btn_s";
+            btn_s.Size = new Size(48, 35);
+            btn_s.TabIndex = 1;
+            btn_s.Text = "S";
+            btn_s.UseVisualStyleBackColor = true;
+            btn_s.Click += btn_s_Click;
+            // 
+            // btn_xs
+            // 
+            btn_xs.Location = new Point(60, 26);
+            btn_xs.Name = "btn_xs";
+            btn_xs.Size = new Size(48, 35);
+            btn_xs.TabIndex = 0;
+            btn_xs.Text = "XS";
+            btn_xs.UseVisualStyleBackColor = true;
+            btn_xs.Click += btn_xs_Click;
+            // 
             // btn_reset
             // 
             btn_reset.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
@@ -111,9 +228,9 @@
             btn_reset.Cursor = Cursors.Hand;
             btn_reset.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 163);
             btn_reset.ForeColor = Color.AliceBlue;
-            btn_reset.Location = new Point(0, 509);
+            btn_reset.Location = new Point(8, 590);
             btn_reset.Name = "btn_reset";
-            btn_reset.Size = new Size(315, 46);
+            btn_reset.Size = new Size(325, 46);
             btn_reset.TabIndex = 44;
             btn_reset.Text = "RESET";
             btn_reset.UseVisualStyleBackColor = false;
@@ -129,12 +246,12 @@
             groupBox3.Controls.Add(label8);
             groupBox3.Controls.Add(scrb_price);
             groupBox3.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 163);
-            groupBox3.Location = new Point(1, 356);
+            groupBox3.Location = new Point(8, 437);
             groupBox3.Name = "groupBox3";
             groupBox3.Size = new Size(325, 132);
             groupBox3.TabIndex = 43;
             groupBox3.TabStop = false;
-            groupBox3.Text = "Price";
+            groupBox3.Text = "Price limit";
             // 
             // lbl_priceFilter
             // 
@@ -198,12 +315,12 @@
             groupBox2.Controls.Add(tbx_inventory);
             groupBox2.Controls.Add(label3);
             groupBox2.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 163);
-            groupBox2.Location = new Point(1, 257);
+            groupBox2.Location = new Point(8, 338);
             groupBox2.Name = "groupBox2";
-            groupBox2.Size = new Size(319, 78);
+            groupBox2.Size = new Size(325, 78);
             groupBox2.TabIndex = 42;
             groupBox2.TabStop = false;
-            groupBox2.Text = "Inventory";
+            groupBox2.Text = "Inventory limit";
             // 
             // tbx_inventory
             // 
@@ -228,7 +345,7 @@
             groupBox1.Controls.Add(pictureBox2);
             groupBox1.Controls.Add(tbx_search);
             groupBox1.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 163);
-            groupBox1.Location = new Point(1, 139);
+            groupBox1.Location = new Point(8, 218);
             groupBox1.Name = "groupBox1";
             groupBox1.Size = new Size(325, 102);
             groupBox1.TabIndex = 41;
@@ -254,49 +371,21 @@
             tbx_search.TabIndex = 0;
             tbx_search.TextChanged += tbx_search_TextChanged;
             // 
-            // panel3
+            // btn_all
             // 
-            panel3.Controls.Add(pictureBox1);
-            panel3.Controls.Add(label2);
-            panel3.Location = new Point(3, 95);
-            panel3.Name = "panel3";
-            panel3.Size = new Size(108, 38);
-            panel3.TabIndex = 40;
-            // 
-            // pictureBox1
-            // 
-            pictureBox1.Image = Properties.Resources.filter;
-            pictureBox1.InitialImage = (Image)resources.GetObject("pictureBox1.InitialImage");
-            pictureBox1.Location = new Point(3, 0);
-            pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(42, 37);
-            pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
-            pictureBox1.TabIndex = 0;
-            pictureBox1.TabStop = false;
-            // 
-            // label2
-            // 
-            label2.AutoSize = true;
-            label2.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 163);
-            label2.Location = new Point(52, 9);
-            label2.Name = "label2";
-            label2.Size = new Size(44, 20);
-            label2.TabIndex = 7;
-            label2.Text = "Filter";
-            // 
-            // btn_voucher
-            // 
-            btn_voucher.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            btn_voucher.BackColor = SystemColors.ControlLightLight;
-            btn_voucher.Cursor = Cursors.Hand;
-            btn_voucher.FlatStyle = FlatStyle.Flat;
-            btn_voucher.Location = new Point(328, 48);
-            btn_voucher.Name = "btn_voucher";
-            btn_voucher.Size = new Size(82, 33);
-            btn_voucher.TabIndex = 39;
-            btn_voucher.Text = "Voucher";
-            btn_voucher.UseVisualStyleBackColor = false;
-            btn_voucher.Click += btn_voucher_Click;
+            btn_all.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            btn_all.BackColor = Color.DarkSlateGray;
+            btn_all.Cursor = Cursors.Hand;
+            btn_all.FlatStyle = FlatStyle.Flat;
+            btn_all.Font = new Font("Microsoft Sans Serif", 7.8F, FontStyle.Bold);
+            btn_all.ForeColor = Color.Pink;
+            btn_all.Location = new Point(8, 48);
+            btn_all.Name = "btn_all";
+            btn_all.Size = new Size(82, 33);
+            btn_all.TabIndex = 39;
+            btn_all.Text = "All";
+            btn_all.UseVisualStyleBackColor = false;
+            btn_all.Click += btn_all_Click;
             // 
             // btn_jacket
             // 
@@ -304,7 +393,8 @@
             btn_jacket.BackColor = SystemColors.ControlLightLight;
             btn_jacket.Cursor = Cursors.Hand;
             btn_jacket.FlatStyle = FlatStyle.Flat;
-            btn_jacket.Location = new Point(240, 48);
+            btn_jacket.Font = new Font("Microsoft Sans Serif", 7.8F, FontStyle.Bold);
+            btn_jacket.Location = new Point(331, 48);
             btn_jacket.Name = "btn_jacket";
             btn_jacket.Size = new Size(75, 33);
             btn_jacket.TabIndex = 38;
@@ -318,8 +408,9 @@
             btn_bag.BackColor = SystemColors.ControlLightLight;
             btn_bag.Cursor = Cursors.Hand;
             btn_bag.FlatStyle = FlatStyle.Flat;
+            btn_bag.Font = new Font("Microsoft Sans Serif", 7.8F, FontStyle.Bold);
             btn_bag.ForeColor = Color.Black;
-            btn_bag.Location = new Point(157, 48);
+            btn_bag.Location = new Point(252, 48);
             btn_bag.Name = "btn_bag";
             btn_bag.Size = new Size(63, 33);
             btn_bag.TabIndex = 37;
@@ -330,12 +421,12 @@
             // btn_newcollection
             // 
             btn_newcollection.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            btn_newcollection.BackColor = Color.DarkSlateGray;
+            btn_newcollection.BackColor = SystemColors.ControlLightLight;
             btn_newcollection.Cursor = Cursors.Hand;
             btn_newcollection.FlatStyle = FlatStyle.Flat;
-            btn_newcollection.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 163);
-            btn_newcollection.ForeColor = Color.Pink;
-            btn_newcollection.Location = new Point(6, 48);
+            btn_newcollection.Font = new Font("Microsoft Sans Serif", 7.8F, FontStyle.Bold);
+            btn_newcollection.ForeColor = SystemColors.ActiveCaptionText;
+            btn_newcollection.Location = new Point(100, 48);
             btn_newcollection.Name = "btn_newcollection";
             btn_newcollection.Size = new Size(139, 33);
             btn_newcollection.TabIndex = 36;
@@ -377,6 +468,7 @@
             btn_addnewproduct.Size = new Size(34, 28);
             btn_addnewproduct.TabIndex = 35;
             btn_addnewproduct.UseVisualStyleBackColor = true;
+            btn_addnewproduct.Click += llbl_addnewproduct_LinkClicked;
             // 
             // llbl_addnewproduct
             // 
@@ -440,6 +532,8 @@
             Load += ManageProductControl_Load;
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
+            groupBox4.ResumeLayout(false);
+            groupBox4.PerformLayout();
             groupBox3.ResumeLayout(false);
             groupBox3.PerformLayout();
             groupBox2.ResumeLayout(false);
@@ -447,9 +541,6 @@
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox2).EndInit();
-            panel3.ResumeLayout(false);
-            panel3.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             pnl_control.ResumeLayout(false);
             pnl_control.PerformLayout();
             ResumeLayout(false);
@@ -473,10 +564,7 @@
         private GroupBox groupBox1;
         private PictureBox pictureBox2;
         private TextBox tbx_search;
-        private Panel panel3;
-        private PictureBox pictureBox1;
-        private Label label2;
-        private Button btn_voucher;
+        private Button btn_all;
         private Button btn_jacket;
         private Button btn_bag;
         private Button btn_newcollection;
@@ -488,5 +576,15 @@
         private Button btn_next;
         private Button btn_previous;
         private Panel pnl_product;
+        private GroupBox groupBox4;
+        private Label lbl_size;
+        private Button btn_xxxl;
+        private Button btn_xxl;
+        private Button btn_xl;
+        private Button btn_l;
+        private Button btn_m;
+        private Button btn_s;
+        private Button btn_xs;
+        private Button btn_allSize;
     }
 }

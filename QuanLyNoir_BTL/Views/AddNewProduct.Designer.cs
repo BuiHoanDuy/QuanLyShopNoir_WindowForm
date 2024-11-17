@@ -582,7 +582,7 @@
             btn_addcolor.Name = "btn_addcolor";
             btn_addcolor.Size = new Size(394, 45);
             btn_addcolor.TabIndex = 22;
-            btn_addcolor.Text = "Add Color";
+            btn_addcolor.Text = "Add";
             btn_addcolor.UseVisualStyleBackColor = true;
             btn_addcolor.Visible = false;
             btn_addcolor.Click += btn_addcolor_Click;

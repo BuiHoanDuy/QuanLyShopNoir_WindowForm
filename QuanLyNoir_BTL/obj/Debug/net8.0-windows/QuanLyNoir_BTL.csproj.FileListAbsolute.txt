@@ -135,6 +135,7 @@ C:\Users\Aus\Documents\Subjects\LapTrinhTrucQuan\BTL\QuanLyNoir_BTL\QuanLyNoir_B
 C:\Users\Aus\Documents\Subjects\LapTrinhTrucQuan\BTL\QuanLyNoir_BTL\QuanLyNoir_BTL\obj\Debug\net8.0-windows\QuanLyNoir_BTL.csproj.AssemblyReference.cache
 C:\Users\Aus\Documents\Subjects\LapTrinhTrucQuan\BTL\QuanLyNoir_BTL\QuanLyNoir_BTL\obj\Debug\net8.0-windows\QuanLyNoir_BTL.Properties.Resources.resources
 C:\Users\Aus\Documents\Subjects\LapTrinhTrucQuan\BTL\QuanLyNoir_BTL\QuanLyNoir_BTL\obj\Debug\net8.0-windows\QuanLyNoir_BTL.Views.AddNewProduct.resources
+C:\Users\Aus\Documents\Subjects\LapTrinhTrucQuan\BTL\QuanLyNoir_BTL\QuanLyNoir_BTL\obj\Debug\net8.0-windows\QuanLyNoir_BTL.Views.AddNewVoucher.resources
 C:\Users\Aus\Documents\Subjects\LapTrinhTrucQuan\BTL\QuanLyNoir_BTL\QuanLyNoir_BTL\obj\Debug\net8.0-windows\QuanLyNoir_BTL.Views.ManageAccountControl.resources
 C:\Users\Aus\Documents\Subjects\LapTrinhTrucQuan\BTL\QuanLyNoir_BTL\QuanLyNoir_BTL\obj\Debug\net8.0-windows\QuanLyNoir_BTL.Views.ManageProductControl.resources
 C:\Users\Aus\Documents\Subjects\LapTrinhTrucQuan\BTL\QuanLyNoir_BTL\QuanLyNoir_BTL\obj\Debug\net8.0-windows\QuanLyNoir_BTL.Views.ManageVoucherControl.resources
@@ -152,4 +153,3 @@ C:\Users\Aus\Documents\Subjects\LapTrinhTrucQuan\BTL\QuanLyNoir_BTL\QuanLyNoir_B
 C:\Users\Aus\Documents\Subjects\LapTrinhTrucQuan\BTL\QuanLyNoir_BTL\QuanLyNoir_BTL\obj\Debug\net8.0-windows\QuanLyNoir_BTL.pdb
 C:\Users\Aus\Documents\Subjects\LapTrinhTrucQuan\BTL\QuanLyNoir_BTL\QuanLyNoir_BTL\obj\Debug\net8.0-windows\QuanLyNoir_BTL.genruntimeconfig.cache
 C:\Users\Aus\Documents\Subjects\LapTrinhTrucQuan\BTL\QuanLyNoir_BTL\QuanLyNoir_BTL\obj\Debug\net8.0-windows\ref\QuanLyNoir_BTL.dll
-C:\Users\Aus\Documents\Subjects\LapTrinhTrucQuan\BTL\QuanLyNoir_BTL\QuanLyNoir_BTL\obj\Debug\net8.0-windows\QuanLyNoir_BTL.Views.AddNewVoucher.resources
