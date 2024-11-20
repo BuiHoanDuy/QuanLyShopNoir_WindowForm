@@ -9,9 +9,9 @@ namespace QuanLyNoir_BTL.Models
     public partial class ProductInfomation
     {
         public Guid Id { get; set; }
-        public int Inventory { get; set; }
+        public int TotalInventory { get; set; }
         public string ColorName { get; set; }
-        public byte[]? ImageUrl { get; set; }
+        public string? ImageUrl { get; set; }
         public string ColorCode { get; set; }
         public Guid? ProductId { get; set; }
         public string Size { get; set; }

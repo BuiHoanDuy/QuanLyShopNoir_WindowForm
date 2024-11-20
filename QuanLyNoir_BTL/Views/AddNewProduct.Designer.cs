@@ -38,13 +38,11 @@
             cbbx_type = new ComboBox();
             groupBox3 = new GroupBox();
             lbl_size = new Label();
-            btn_xxxl = new Button();
-            btn_xxl = new Button();
             btn_xl = new Button();
             btn_l = new Button();
             btn_m = new Button();
             btn_s = new Button();
-            btn_xs = new Button();
+            btn_none = new Button();
             groupBox4 = new GroupBox();
             lbl_inventory = new Label();
             label2 = new Label();
@@ -175,13 +173,11 @@
             // groupBox3
             // 
             groupBox3.Controls.Add(lbl_size);
-            groupBox3.Controls.Add(btn_xxxl);
-            groupBox3.Controls.Add(btn_xxl);
             groupBox3.Controls.Add(btn_xl);
             groupBox3.Controls.Add(btn_l);
             groupBox3.Controls.Add(btn_m);
             groupBox3.Controls.Add(btn_s);
-            groupBox3.Controls.Add(btn_xs);
+            groupBox3.Controls.Add(btn_none);
             groupBox3.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
             groupBox3.Location = new Point(481, 75);
             groupBox3.Name = "groupBox3";
@@ -200,29 +196,9 @@
             lbl_size.TabIndex = 19;
             lbl_size.Text = " ";
             // 
-            // btn_xxxl
-            // 
-            btn_xxxl.Location = new Point(330, 26);
-            btn_xxxl.Name = "btn_xxxl";
-            btn_xxxl.Size = new Size(51, 35);
-            btn_xxxl.TabIndex = 6;
-            btn_xxxl.Text = "XXXL";
-            btn_xxxl.UseVisualStyleBackColor = true;
-            btn_xxxl.Click += btn_3xl_Click;
-            // 
-            // btn_xxl
-            // 
-            btn_xxl.Location = new Point(276, 26);
-            btn_xxl.Name = "btn_xxl";
-            btn_xxl.Size = new Size(48, 35);
-            btn_xxl.TabIndex = 5;
-            btn_xxl.Text = "XXL";
-            btn_xxl.UseVisualStyleBackColor = true;
-            btn_xxl.Click += btn_xxl_Click;
-            // 
             // btn_xl
             // 
-            btn_xl.Location = new Point(222, 26);
+            btn_xl.Location = new Point(263, 35);
             btn_xl.Name = "btn_xl";
             btn_xl.Size = new Size(48, 35);
             btn_xl.TabIndex = 4;
@@ -232,7 +208,7 @@
             // 
             // btn_l
             // 
-            btn_l.Location = new Point(168, 26);
+            btn_l.Location = new Point(209, 35);
             btn_l.Name = "btn_l";
             btn_l.Size = new Size(48, 35);
             btn_l.TabIndex = 3;
@@ -242,7 +218,7 @@
             // 
             // btn_m
             // 
-            btn_m.Location = new Point(114, 26);
+            btn_m.Location = new Point(155, 35);
             btn_m.Name = "btn_m";
             btn_m.Size = new Size(48, 35);
             btn_m.TabIndex = 2;
@@ -252,7 +228,7 @@
             // 
             // btn_s
             // 
-            btn_s.Location = new Point(60, 26);
+            btn_s.Location = new Point(101, 35);
             btn_s.Name = "btn_s";
             btn_s.Size = new Size(48, 35);
             btn_s.TabIndex = 1;
@@ -260,15 +236,17 @@
             btn_s.UseVisualStyleBackColor = true;
             btn_s.Click += btn_s_Click;
             // 
-            // btn_xs
+            // btn_none
             // 
-            btn_xs.Location = new Point(6, 26);
-            btn_xs.Name = "btn_xs";
-            btn_xs.Size = new Size(48, 35);
-            btn_xs.TabIndex = 0;
-            btn_xs.Text = "XS";
-            btn_xs.UseVisualStyleBackColor = true;
-            btn_xs.Click += btn_xs_Click;
+            btn_none.Location = new Point(6, 35);
+            btn_none.Name = "btn_none";
+            btn_none.Size = new Size(71, 35);
+            btn_none.TabIndex = 0;
+            btn_none.Text = "None";
+            btn_none.UseVisualStyleBackColor = true;
+            btn_none.Click += btn_none_Click;
+            btn_none.ForeColor = Color.AliceBlue;
+            btn_none.BackColor = Color.DarkSeaGreen;
             // 
             // groupBox4
             // 
@@ -645,13 +623,11 @@
         private GroupBox groupBox2;
         private ComboBox cbbx_type;
         private GroupBox groupBox3;
-        private Button btn_xxxl;
-        private Button btn_xxl;
         private Button btn_xl;
         private Button btn_l;
         private Button btn_m;
         private Button btn_s;
-        private Button btn_xs;
+        private Button btn_none;
         private GroupBox groupBox4;
         private Label label2;
         private TextBox tbx_inventory;

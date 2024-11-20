@@ -7,20 +7,10 @@ namespace QuanLyNoir_BTL
 {
     public partial class MenuForm : Form
     {
-        private readonly ShopNoirContext _dbContext = new ShopNoirContext();
-        private int currentPage = 1;
-        private const int PageSize = 8; // Giữ số lượng bản ghi trên mỗi trang là 6
-        private int totalRecords;
-
-        private string currentType = null; // Loại sản phẩm hiện tại (null nghĩa là không lọc theo loại)
-
         // Khai báo các đối tượng nhưng chưa khởi tạo
-        private ManageProductControl manageProductControl;
-        private ManageAccountControl manageAccountControl;
-        private ManageVoucherControl voucherControl;
-
-        private System.Windows.Forms.Timer _timer = new System.Windows.Forms.Timer();
-        private const int TimerInterval = 500; // Thời gian chờ 500ms
+        private Lazy<ManageProductControl> manageProductControl = new Lazy<ManageProductControl>(() => new ManageProductControl());
+        private Lazy<ManageAccountControl> manageAccountControl = new Lazy<ManageAccountControl>(() => new ManageAccountControl());
+        private Lazy<ManageVoucherControl> manageVoucherControl = new Lazy<ManageVoucherControl>(() => new ManageVoucherControl());
         public MenuForm(string username)
         {
             InitializeComponent();
@@ -28,12 +18,19 @@ namespace QuanLyNoir_BTL
             this.MaximizeBox = false;
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
             lbl_name.Text = username;
-
-            backgroundWorker1.RunWorkerAsync();
         }
         private void ManageProduct_FormClosing(object sender, FormClosingEventArgs e)
         {
             Application.Exit(); // Đóng toàn bộ ứng dụng nếu người dùng chọn "Yes"
+        }
+        private void ShowControl(UserControl control)
+        {
+            foreach (Control c in pnl_control.Controls)
+            {
+                c.Visible = false; // Ẩn tất cả các UserControl
+            }
+            control.Visible = true; // Hiển thị UserControl cần thiết
+            control.BringToFront();
         }
 
         private void updateEffectClickedButton(Button btn)
@@ -64,38 +61,35 @@ namespace QuanLyNoir_BTL
         {
             this.Text = "Manage Product";
             updateEffectClickedButton(btn_manageproduct);
-            pnl_control.Controls.Clear();  // Xóa các UserControl hiện tại
-            pnl_control.Controls.Add(manageProductControl);
+            if (!pnl_control.Controls.Contains(manageProductControl.Value))
+            {
+                pnl_control.Controls.Add(manageProductControl.Value);
+            }
+
+            ShowControl(manageProductControl.Value);
         }
 
         private void btn_manageAccount_Click(object sender, EventArgs e)
         {
             this.Text = "Manage Account";
             updateEffectClickedButton(btn_manageAccount);
-            pnl_control.Controls.Clear();  // Xóa các UserControl hiện tại
-            pnl_control.Controls.Add(manageAccountControl);
+            if (!pnl_control.Controls.Contains(manageAccountControl.Value))
+            {
+                pnl_control.Controls.Add(manageAccountControl.Value);
+            }
+
+            ShowControl(manageAccountControl.Value);
         }
         private void btn_manageVoucher_Click(object sender, EventArgs e)
         {
             this.Text = "Manage Voucher";
             updateEffectClickedButton(btn_manageVoucher);
-            pnl_control.Controls.Clear();
-            pnl_control.Controls.Add(voucherControl);
-        }
+            if (!pnl_control.Controls.Contains(manageVoucherControl.Value))
+            {
+                pnl_control.Controls.Add(manageVoucherControl.Value);
+            }
 
-        private void BgWorker_DoWork(object sender, DoWorkEventArgs e)
-        {
-            // Khởi tạo các đối tượng trong BackgroundWorker
-            manageProductControl = new ManageProductControl();
-            manageAccountControl = new ManageAccountControl();
-            voucherControl = new ManageVoucherControl();
-        }
-
-        private void BgWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            // Hiển thị control quản lý sản phẩm sau khi hoàn tất khởi tạo
-            pnl_control.Controls.Clear();
-            pnl_control.Controls.Add(manageProductControl);
+            ShowControl(manageVoucherControl.Value);
         }
 
         private void btn_manageOrder_Click(object sender, EventArgs e)
@@ -108,6 +102,16 @@ namespace QuanLyNoir_BTL
         {
             this.Text = "Analyse Revenue";
             updateEffectClickedButton(btn_analyseRevenue);
+        }
+
+        private void MenuForm_Load(object sender, EventArgs e)
+        {
+            if (!pnl_control.Controls.Contains(manageProductControl.Value))
+            {
+                pnl_control.Controls.Add(manageProductControl.Value);
+            }
+
+            ShowControl(manageProductControl.Value);
         }
     }
 }

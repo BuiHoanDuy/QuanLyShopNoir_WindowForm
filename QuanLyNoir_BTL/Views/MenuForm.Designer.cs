@@ -40,6 +40,7 @@ namespace QuanLyNoir_BTL
             lbl_name = new Label();
             pnl_control = new Panel();
             backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
+            backgroundWorker2 = new System.ComponentModel.BackgroundWorker();
             panel1.SuspendLayout();
             SuspendLayout();
             // 
@@ -158,11 +159,6 @@ namespace QuanLyNoir_BTL
             pnl_control.Size = new Size(1530, 790);
             pnl_control.TabIndex = 19;
             // 
-            // backgroundWorker1
-            // 
-            backgroundWorker1.DoWork += BgWorker_DoWork;
-            backgroundWorker1.RunWorkerCompleted += BgWorker_RunWorkerCompleted;
-            // 
             // MenuForm
             // 
             AutoScaleMode = AutoScaleMode.None;
@@ -177,6 +173,7 @@ namespace QuanLyNoir_BTL
             Text = "ManageProduct";
             TransparencyKey = Color.FromArgb(255, 192, 192);
             FormClosing += ManageProduct_FormClosing;
+            Load += MenuForm_Load;
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
             ResumeLayout(false);
@@ -192,13 +189,10 @@ namespace QuanLyNoir_BTL
         private Button btn_manageproduct;
         private Label label6;
         private Label lbl_name;
-        private System.ComponentModel.BackgroundWorker loadWorker;
-        private System.ComponentModel.BackgroundWorker deleteWorker;
-        private System.ComponentModel.BackgroundWorker createWorker;
-        private ProgressBar progressBar1;
         private Button btn_manageAccount;
         private Button btn_manageVoucher;
         private Panel pnl_control;
         private System.ComponentModel.BackgroundWorker backgroundWorker1;
+        private System.ComponentModel.BackgroundWorker backgroundWorker2;
     }
 }

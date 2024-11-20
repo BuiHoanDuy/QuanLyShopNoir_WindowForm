@@ -3,6 +3,7 @@ using System.Data;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using Microsoft.EntityFrameworkCore;
 using System.Windows.Forms;
+using System.Linq.Dynamic.Core;
 
 namespace QuanLyNoir_BTL.Views
 {
@@ -16,7 +17,6 @@ namespace QuanLyNoir_BTL.Views
         private string currentType = null; // Loại sản phẩm hiện tại (null nghĩa là không lọc theo loại)
 
         private System.Windows.Forms.Timer _timer = new System.Windows.Forms.Timer();
-        private string selectedSize = null;
         private const int TimerInterval = 500; // Thời gian chờ 500ms
         public ManageProductControl()
         {
@@ -48,100 +48,6 @@ namespace QuanLyNoir_BTL.Views
                 loadWorker.RunWorkerAsync();
             }
         }
-        private async Task LoadProductsAsync(Panel pnl_product)
-        {
-            using (var _dbContext = new ShopNoirContext())
-            {
-                try
-                {
-                    // Lấy giá trị từ các trường
-                    string searchTerm = tbx_search.Text.Trim().ToLower();
-                    int inventoryThreshold = string.IsNullOrEmpty(tbx_inventory.Text) ? int.MaxValue : int.Parse(tbx_inventory.Text);
-                    decimal priceLimit = scrb_price.Value;
-
-                    totalRecords = await _dbContext.ProductColors.CountAsync();
-                    lbl_page.Text = $"Page {currentPage} / {Math.Ceiling((double)totalRecords / PageSize)}";
-
-                    pnl_product.Controls.Clear();
-
-                    //Truy vấn lấy tất cả các product color và size 
-                    var productColorQuery = _dbContext.ProductColors
-                        .Include(p => p.Product)
-                        .Where(pc => pc.Inventory < inventoryThreshold
-                        && pc.Product.ProdName.ToLower().Contains(searchTerm)
-                        && pc.Product.Price < priceLimit);
-
-                    if (!string.IsNullOrEmpty(currentType))
-                    {
-                        // Nếu currentType không rỗng, thêm điều kiện lọc theo loại sản phẩm
-                        //productQuery = productQuery.Where(p => p.Type == currentType);
-                        productColorQuery = productColorQuery.Where(pc => pc.Product.Type == currentType);
-                    }
-
-                    var productInformation = await productColorQuery
-                        .OrderByDescending(pc => pc.Product.ProdName) // Sắp xếp theo giá giảm dần
-                        .Select(pc => new
-                        {
-                            pc.Id,
-                            pc.Inventory,
-                            pc.ColorName,
-                            pc.ImageUrl,
-                            pc.ColorCode,
-                            pc.ProductId,
-                            pc.Size,
-                            pc.Product.ProdName,
-                            pc.Product.Price,
-                            pc.Product.Width,
-                            pc.Product.Height,
-                            pc.Product.Type,
-                        })
-                        .AsNoTracking()
-                        .Skip((currentPage - 1) * PageSize)
-                        .Take(PageSize)
-                        .ToListAsync();
-
-                    int x = 10, y = 10;
-                    const int padding = 20; // Tăng khoảng cách giữa các ô sản phẩm
-
-
-                    if (productInformation.Count <= 0)
-                    {
-                        MessageBox.Show("Hi");
-                        Label lbl_empty = new Label
-                        {
-                            Text = "Empty",
-                            Font = new Font("Arial", 30, FontStyle.Bold),
-                            ForeColor = Color.Red,
-                            Location = new Point(40, 40),
-                            AutoSize = true
-                        };
-                        pnl_product.Controls.Add(lbl_empty);
-                    }
-                    else
-                    {
-                        foreach (var product in productInformation)
-                        {
-                            var productPanel = CreateProductPanel(product, x, y);
-                            pnl_product.Controls.Add(productPanel);
-
-                            x += productPanel.Width + padding;
-                            if (x + productPanel.Width > pnl_product.Width)
-                            {
-                                x = 10;
-                                y += productPanel.Height + padding;
-                            }
-                        }
-                    }
-
-                    btn_previous.Enabled = currentPage > 1;
-                    btn_next.Enabled = currentPage < Math.Ceiling((double)totalRecords / PageSize);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Lỗi khi tải dữ liệu: " + ex.Message);
-                }
-            }
-        }
         private Panel CreateProductPanel(dynamic product, int x, int y)
         {
             Panel productPanel = new Panel
@@ -163,18 +69,40 @@ namespace QuanLyNoir_BTL.Views
 
             PictureBox picImage = new PictureBox
             {
-                Size = new Size(160, 160),
+                Size = new System.Drawing.Size(160, 160),
                 Location = new Point(30, 40),
                 SizeMode = PictureBoxSizeMode.StretchImage
             };
 
-            if (product.ImageUrl != null)
+            if (!string.IsNullOrEmpty(product.ImageUrl) && File.Exists(product.ImageUrl))
             {
-                using (MemoryStream ms = new MemoryStream(product.ImageUrl))
+                // Load the image in the background
+                Task.Run(() =>
                 {
-                    picImage.Image = Image.FromStream(ms);
-                }
+                    try
+                    {
+                        // Load the image from the file path
+                        var image = Image.FromFile(product.ImageUrl);
+
+                        // Safely update the PictureBox on the UI thread
+                        this.Invoke((MethodInvoker)(() =>
+                        {
+                            picImage.Image = image;
+                        }));
+                    }
+                    catch (Exception ex)
+                    {
+                        // Log or handle the error as needed
+                        MessageBox.Show($"Error loading image: {ex.Message}");
+                    }
+                });
             }
+            else
+            {
+                // Handle cases where the file path is invalid or empty
+                MessageBox.Show("Image file does not exist or path is empty.");
+            }
+
 
             Label lblPrice = new Label
             {
@@ -204,8 +132,8 @@ namespace QuanLyNoir_BTL.Views
 
             Panel colorPanel = new Panel
             {
-                Size = new Size(20, 20),
-                Location = new Point(120, 270),
+                Size = new System.Drawing.Size(20, 20),
+                Location = new Point(15, 270),
                 BorderStyle = BorderStyle.FixedSingle
             };
 
@@ -217,13 +145,13 @@ namespace QuanLyNoir_BTL.Views
             Label lblColor = new Label
             {
                 Text = $"Color: {product.ColorName}",
-                Location = new Point(10, 270),
+                Location = new Point(40, 270),
                 AutoSize = true
             };
 
             Label lblInventory = new Label
             {
-                Text = $"Inventory: {product.Inventory} items",
+                Text = $"Inventory: {product.TotalInventory} items",
                 Location = new Point(10, 300),
                 AutoSize = true
             };
@@ -238,15 +166,35 @@ namespace QuanLyNoir_BTL.Views
 
             // Tạo context menu
             ContextMenuStrip optionsMenu = new ContextMenuStrip();
-            optionsMenu.Items.Add("Edit").Click += (s, e) => EditProduct(product.Id);
+            optionsMenu.Items.Add("Edit/Add Size").Click += (s, e) => EditProduct(product.Id);
             optionsMenu.Items.Add("Delete").Click += (s, e) => DeleteProduct(product.Id);
             optionsMenu.Items.Add("Add Color").Click += (s, e) => AddColorToProduct(product.ProductId);
-            optionsMenu.Items.Add("Add Size").Click += (s, e) => AddSizeToProduct(product.Id);
-            optionsMenu.Items.Add("Find").Click += (s, e) => FindWithProductName(product.ProdName);
-
 
             // Gán context menu cho nút
             btnOptions.Click += (s, e) => optionsMenu.Show(btnOptions, new Point(0, btnOptions.Height));
+
+            // Gán sự kiện chuột phải cho panel
+            productPanel.MouseDown += (s, e) =>
+            {
+                if (e.Button == MouseButtons.Right)
+                {
+                    optionsMenu.Show(productPanel, e.Location);
+                }
+            };
+
+            // Đảm bảo rằng các điều khiển con không chặn sự kiện chuột phải
+            foreach (Control ctrl in productPanel.Controls)
+            {
+                // Đảm bảo mỗi control con xử lý sự kiện chuột phải
+                ctrl.MouseDown += (s, e) =>
+                {
+                    if (e.Button == MouseButtons.Right)
+                    {
+                        // Hiển thị menu tại vị trí chuột
+                        optionsMenu.Show(productPanel, e.Location);
+                    }
+                };
+            }
 
             productPanel.Controls.Add(lblName);
             productPanel.Controls.Add(picImage);
@@ -258,11 +206,6 @@ namespace QuanLyNoir_BTL.Views
             productPanel.Controls.Add(btnOptions);
 
             return productPanel;
-        }
-
-        private void FindWithProductName(dynamic prodName)
-        {
-            tbx_search.Text = prodName;
         }
 
         private void AddColorToProduct(Guid productId)
@@ -286,31 +229,6 @@ namespace QuanLyNoir_BTL.Views
                 else
                 {
                     MessageBox.Show("Don't find product.", productId.ToString());
-                }
-            }
-        }
-        private void AddSizeToProduct(Guid productColorId)
-        {
-            using (var _dbContext = new ShopNoirContext())
-            {
-                // Tìm sản phẩm theo productColorId
-                var productColor = _dbContext.ProductColors
-                .Include(pc => pc.Product) // Bao gồm thông tin sản phẩm
-                .FirstOrDefault(pc => pc.Id == productColorId);
-
-                if (productColor != null)
-                {
-                    // Tạo và hiển thị form AddNewProduct
-                    AddNewProduct AddNewColorForm = new AddNewProduct(productColor.Id, 'S');
-                    AddNewColorForm.ShowDialog(); // Hiển thị như một dialog để chờ người dùng đóng form này
-                    if (!loadWorker.IsBusy)
-                    {
-                        loadWorker.RunWorkerAsync();
-                    }
-                }
-                else
-                {
-                    MessageBox.Show("Không tìm thấy sản phẩm để chỉnh sửa.", productColorId.ToString());
                 }
             }
         }
@@ -372,7 +290,7 @@ namespace QuanLyNoir_BTL.Views
         }
 
 
-        private async void btn_previous_Click(object sender, EventArgs e)
+        private void btn_previous_Click(object sender, EventArgs e)
         {
             if (currentPage > 1)
             {
@@ -384,7 +302,7 @@ namespace QuanLyNoir_BTL.Views
             }
         }
 
-        private async void btn_next_Click(object sender, EventArgs e)
+        private void btn_next_Click(object sender, EventArgs e)
         {
             if (currentPage < Math.Ceiling((double)totalRecords / PageSize))
             {
@@ -406,7 +324,7 @@ namespace QuanLyNoir_BTL.Views
         }
 
 
-        private async void tbx_search_TextChanged(object sender, EventArgs e)
+        private void tbx_search_TextChanged(object sender, EventArgs e)
         {
             _timer.Stop();
             currentPage = 1;
@@ -414,7 +332,7 @@ namespace QuanLyNoir_BTL.Views
             _timer.Start();
         }
 
-        private async void tbx_inventory_TextChanged(object sender, EventArgs e)
+        private void tbx_inventory_TextChanged(object sender, EventArgs e)
         {
             _timer.Stop();
             currentPage = 1;
@@ -428,12 +346,10 @@ namespace QuanLyNoir_BTL.Views
             tbx_inventory.Clear();
             tbx_search.Clear();
             scrb_price.Value = 1000;
-            resetSizeOfProductColor(btn_all);
-            selectedSize = null;
             currentType = null;
             resetButtonTypeFilter();
-            btn_allSize.ForeColor = Color.Pink;
-            btn_allSize.BackColor = Color.DarkSlateGray;
+            btn_all.ForeColor = Color.Pink;
+            btn_all.BackColor = Color.DarkSlateGray;
             _timer.Start();
         }
 
@@ -451,7 +367,7 @@ namespace QuanLyNoir_BTL.Views
             btn_all.ForeColor = Color.Black;
             btn_all.BackColor = SystemColors.ControlLightLight;
         }
-        private async void btn_bag_Click(object sender, EventArgs e)
+        private void btn_bag_Click(object sender, EventArgs e)
         {
             resetButtonTypeFilter();
             btn_bag.ForeColor = Color.Pink;
@@ -464,7 +380,7 @@ namespace QuanLyNoir_BTL.Views
             }
         }
 
-        private async void btn_jacket_Click(object sender, EventArgs e)
+        private void btn_jacket_Click(object sender, EventArgs e)
         {
             resetButtonTypeFilter();
             btn_jacket.ForeColor = Color.Pink;
@@ -477,7 +393,7 @@ namespace QuanLyNoir_BTL.Views
             }
         }
 
-        private async void btn_newcollection_Click(object sender, EventArgs e)
+        private void btn_newcollection_Click(object sender, EventArgs e)
         {
             resetButtonTypeFilter();
             btn_newcollection.ForeColor = Color.Pink;
@@ -490,7 +406,7 @@ namespace QuanLyNoir_BTL.Views
             }
         }
 
-        private async void btn_all_Click(object sender, EventArgs e)
+        private void btn_all_Click(object sender, EventArgs e)
         {
             resetButtonTypeFilter();
             btn_all.ForeColor = Color.Pink;
@@ -514,6 +430,18 @@ namespace QuanLyNoir_BTL.Views
                 }
             }
         }
+        private async Task UpdatePaginationAsync(IQueryable<ProductColor> productColorQuery)
+        {
+            totalRecords = await productColorQuery.CountAsync(); // Đếm số lượng bản ghi
+
+            // Cập nhật giao diện trên luồng giao diện chính (UI thread)
+            Invoke((MethodInvoker)delegate
+            {
+                lbl_page.Text = $"Page {currentPage} / {Math.Ceiling((double)totalRecords / PageSize)}";
+                btn_previous.Enabled = currentPage > 1;
+                btn_next.Enabled = currentPage < Math.Ceiling((double)totalRecords / PageSize);
+            });
+        }
 
         private async Task<List<ProductInfomation>> FetchProducts()
         {
@@ -523,54 +451,44 @@ namespace QuanLyNoir_BTL.Views
                 string searchTerm = tbx_search.Text.Trim().ToLower();
                 int inventoryThreshold = string.IsNullOrEmpty(tbx_inventory.Text) ? int.MaxValue : int.Parse(tbx_inventory.Text);
                 decimal priceLimit = scrb_price.Value;
-
                 //Truy vấn lấy tất cả các product color và size 
-                var productColorQuery = _dbContext.ProductColors
-                    .Include(p => p.Product)
-                    .Where(pc => pc.Inventory < inventoryThreshold
-                    && pc.Product.ProdName.ToLower().Contains(searchTerm)
-                    && pc.Product.Price < priceLimit);
+                IQueryable<ProductColor> productColorQuery = _dbContext.ProductColors;
+
+                if (searchTerm != "")
+                {
+                    productColorQuery = productColorQuery
+                    .Where(pc => EF.Functions.Like(pc.Product.ProdName, $"%{searchTerm}%"));
+                }
+
+                if (priceLimit < 999)
+                {
+                    productColorQuery = productColorQuery
+                    .Where(pc => pc.Product.Price < priceLimit);
+                }
 
                 if (!string.IsNullOrEmpty(currentType))
                 {
                     // Nếu currentType không rỗng, thêm điều kiện lọc theo loại sản phẩm
-                    //productQuery = productQuery.Where(p => p.Type == currentType);
                     productColorQuery = productColorQuery.Where(pc => pc.Product.Type == currentType);
                 }
-                if (!string.IsNullOrEmpty(selectedSize))
+                if (!string.IsNullOrEmpty(tbx_inventory.Text))
                 {
-                    // Nếu currentType không rỗng, thêm điều kiện lọc theo loại sản phẩm
-                    //productQuery = productQuery.Where(p => p.Type == currentType);
-                    productColorQuery = productColorQuery.Where(pc => pc.Size == selectedSize);
+                    productColorQuery = productColorQuery.Where(pc => pc.ProductColorSizes.Sum(pcs => pcs.Inventory) < inventoryThreshold);
                 }
+                // Cập nhật phân trang trong luồng khác
+                await UpdatePaginationAsync(productColorQuery);
 
-                totalRecords = productColorQuery.Count();
-                if (lbl_page.InvokeRequired)
-                {
-                    lbl_page.Invoke((MethodInvoker)delegate
-                    {
-                        lbl_page.Text = $"Page {currentPage} / {Math.Ceiling((double)totalRecords / PageSize)}";
-                        btn_previous.Enabled = currentPage > 1;
-                        btn_next.Enabled = currentPage < Math.Ceiling((double)totalRecords / PageSize);
-                    });
-                }
-                else
-                {
-                    lbl_page.Text = $"Page {currentPage} / {Math.Ceiling((double)totalRecords / PageSize)}";
-                    btn_previous.Enabled = currentPage > 1;
-                    btn_next.Enabled = currentPage < Math.Ceiling((double)totalRecords / PageSize);
-                }
                 return await productColorQuery
-                    .OrderByDescending(pc => pc.Product.ProdName) // Sắp xếp theo giá giảm dần
+                    .OrderBy(p => p.Product.ProdName)
                     .Select(pc => new ProductInfomation
                     {
                         Id = pc.Id,
-                        Inventory = pc.Inventory,
+                        TotalInventory = pc.ProductColorSizes.Sum(pcs => pcs.Inventory),
                         ColorName = pc.ColorName,
                         ImageUrl = pc.ImageUrl,
                         ColorCode = pc.ColorCode,
                         ProductId = pc.ProductId,
-                        Size = pc.Size,
+                        Size = string.Join(", ", pc.ProductColorSizes.Select(pcs => pcs.SizeId)),
                         ProdName = pc.Product.ProdName,
                         Price = pc.Product.Price,
                         Wid = (decimal)pc.Product.Width,
@@ -623,134 +541,51 @@ namespace QuanLyNoir_BTL.Views
                 // Fetch products asynchronously
                 var productInformation = FetchProducts().Result; // Await FetchProducts method
                 int progress = 0;
-
                 int x = 10, y = 10;
                 const int padding = 20;
 
-                foreach (var product in productInformation)
+                if (productInformation.Count <= 0)
                 {
-                    var productPanel = CreateProductPanel(product, x, y);
+                    Label lbl_empty = new Label
+                    {
+                        Text = "Empty",
+                        Font = new Font("Arial", 20, FontStyle.Bold),
+                        ForeColor = Color.Gray,
+                        Location = new Point(450, 280),
+                        AutoSize = true
+                    };
                     this.Invoke((MethodInvoker)delegate
                     {
-                        pnl_product.Controls.Add(productPanel);
+                        pnl_product.Controls.Add(lbl_empty);
                     });
-
-                    x += productPanel.Width + padding;
-                    if (x + productPanel.Width > pnl_product.Width)
+                }
+                else
+                {
+                    foreach (var product in productInformation)
                     {
-                        x = 10;
-                        y += productPanel.Height + padding;
-                    }
-                    progress++;
+                        var productPanel = CreateProductPanel(product, x, y);
+                        this.Invoke((MethodInvoker)delegate
+                        {
+                            pnl_product.Controls.Add(productPanel);
+                        });
 
-                    // Báo cáo tiến độ
-                    int percentComplete = (int)((double)progress / productInformation.Count * 100);
-                    loadWorker.ReportProgress(percentComplete);
+                        x += productPanel.Width + padding;
+                        if (x + productPanel.Width > pnl_product.Width)
+                        {
+                            x = 10;
+                            y += productPanel.Height + padding;
+                        }
+                        progress++;
+
+                        // Báo cáo tiến độ
+                        int percentComplete = (int)((double)progress / productInformation.Count * 100);
+                        loadWorker.ReportProgress(percentComplete);
+                    }
                 }
             }
             catch (Exception ex)
             {
-                //Do nothing =))
-            }
-        }
-
-        private void resetSizeOfProductColor(System.Windows.Forms.Button sizeButton)
-        {
-            btn_allSize.BackColor = Color.White;
-            btn_xs.BackColor = Color.White;
-            btn_s.BackColor = Color.White;
-            btn_m.BackColor = Color.White;
-            btn_l.BackColor = Color.White;
-            btn_xl.BackColor = Color.White;
-            btn_xxl.BackColor = Color.White;
-            btn_xxxl.BackColor = Color.White;
-
-            btn_allSize.ForeColor = Color.Black;
-            btn_xs.ForeColor = Color.Black;
-            btn_s.ForeColor = Color.Black;
-            btn_m.ForeColor = Color.Black;
-            btn_l.ForeColor = Color.Black;
-            btn_xl.ForeColor = Color.Black;
-            btn_xxl.ForeColor = Color.Black;
-            btn_xxxl.ForeColor = Color.Black;
-
-            sizeButton.ForeColor = Color.AliceBlue;
-            sizeButton.BackColor = Color.DarkSeaGreen;
-
-            // Gán giá trị của enum dựa trên nút đã chọn
-            selectedSize = sizeButton.Text;
-        }
-
-        private void btn_xs_Click(object sender, EventArgs e)
-        {
-            resetSizeOfProductColor(btn_xs);
-            if (!loadWorker.IsBusy)
-            {
-                loadWorker.RunWorkerAsync();
-            }
-        }
-
-        private void btn_s_Click(object sender, EventArgs e)
-        {
-            resetSizeOfProductColor(btn_s);
-            if (!loadWorker.IsBusy)
-            {
-                loadWorker.RunWorkerAsync();
-            }
-        }
-
-        private void btn_m_Click(object sender, EventArgs e)
-        {
-            resetSizeOfProductColor(btn_m);
-            if (!loadWorker.IsBusy)
-            {
-                loadWorker.RunWorkerAsync();
-            }
-        }
-
-        private void btn_l_Click(object sender, EventArgs e)
-        {
-            resetSizeOfProductColor(btn_l);
-            if (!loadWorker.IsBusy)
-            {
-                loadWorker.RunWorkerAsync();
-            }
-        }
-
-        private void btn_xl_Click(object sender, EventArgs e)
-        {
-            resetSizeOfProductColor(btn_xl);
-            if (!loadWorker.IsBusy)
-            {
-                loadWorker.RunWorkerAsync();
-            }
-        }
-
-        private void btn_xxl_Click(object sender, EventArgs e)
-        {
-            resetSizeOfProductColor(btn_xxl);
-            if (!loadWorker.IsBusy)
-            {
-                loadWorker.RunWorkerAsync();
-            }
-        }
-
-        private void btn_3xl_Click(object sender, EventArgs e)
-        {
-            resetSizeOfProductColor(btn_xxxl);
-            if (!loadWorker.IsBusy)
-            {
-                loadWorker.RunWorkerAsync();
-            }
-        }
-
-        private void btn_allSize_Click(object sender, EventArgs e)
-        {
-            resetSizeOfProductColor(btn_all);
-            selectedSize = null;
-            if (!loadWorker.IsBusy)
-            {
-                loadWorker.RunWorkerAsync();
+                MessageBox.Show(ex.Message);
             }
         }
     }

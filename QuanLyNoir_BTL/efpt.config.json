@@ -31,7 +31,15 @@
          "ObjectType": 0
       },
       {
+         "Name": "[dbo].[ProductColorSizes]",
+         "ObjectType": 0
+      },
+      {
          "Name": "[dbo].[Products]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Sizes]",
          "ObjectType": 0
       },
       {

@@ -19,7 +19,7 @@ public partial class Account
 
     public string PhoneNumber { get; set; }
 
-    public bool Status { get; set; }
+    public bool? Status { get; set; }
 
     public virtual ICollection<Invoice> Invoices { get; set; } = new List<Invoice>();
 }

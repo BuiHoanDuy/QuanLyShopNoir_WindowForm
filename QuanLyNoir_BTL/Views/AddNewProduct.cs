@@ -1,5 +1,7 @@
-﻿using QuanLyNoir_BTL.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using QuanLyNoir_BTL.Models;
 using System.ComponentModel;
+using System.Drawing;
 
 namespace QuanLyNoir_BTL.Views
 {
@@ -7,10 +9,12 @@ namespace QuanLyNoir_BTL.Views
     {
         private Guid currentProductColorId = Guid.Empty; // Store product ID if updating an existing product
         private Guid currentProductId = Guid.Empty;
-        private string selectedSize = null;
+        private string currentSize = null;
 
         private string colorName = "Color name";
+        private string imageURL;
 
+        private bool reload;
         //isNew: True -> Add New Item, False -> Update
         public AddNewProduct(bool isNew, Guid productColorId) //Chinh sua hoac them moi
         {
@@ -22,6 +26,7 @@ namespace QuanLyNoir_BTL.Views
             this.Focus();
             SetupBackgroundWorker();
             SetupPlaceholder();
+            reload = !isNew;
             if (isNew)
             {
                 this.Text = "Add New Product";
@@ -80,35 +85,68 @@ namespace QuanLyNoir_BTL.Views
                         }
                     }
                 }
-                }
-            if (Choice == 'D') LoadProductDataForDetail(currentProductId);
-            
-        }
-        private void LoadProductData(Guid productColorId) //load data cho chuc nang cap nhat
-        {
-            using (var _dbContext = new ShopNoirContext())
-            {
-                var color = _dbContext.ProductColors.FirstOrDefault(c => c.Id == productColorId);
-                if (color != null)
-                {
-                    tbx_colorNote.Text = color.ColorName;
-                    lbl_colorCode.Text = color.ColorCode;
-                    pnl_colorBox.BackColor = ColorTranslator.FromHtml(color.ColorCode);
-                    tbx_inventory.Text = color.Inventory.ToString();
-                    pictureBox1.Image = ByteArrayToImage(color.ImageUrl);
-                    var product = _dbContext.Products.FirstOrDefault(p => p.Id == color.ProductId);
-                    if (product != null)
-                    {
-                        tbx_name.Text = product.ProdName;
-                        tbx_material.Text = product.ProdDesc;
-                        tbx_price.Text = product.Price.ToString();
-                        tbx_width.Text = product.Width.ToString();
-                        tbx_height.Text = product.Height.ToString();
-                        cbbx_type.Text = product.Type;
-                    }
-                }
             }
         }
+        private async Task LoadProductData(Guid productColorId) // load data cho edit
+        {
+            ProductColor color;
+            Product product;
+            ProductColorSize productColorSize;
+            string imageUrl = null;
+
+            // Tải dữ liệu trên luồng khác
+            using (var _dbContext = new ShopNoirContext())
+            {
+                color = await _dbContext.ProductColors.FindAsync(productColorId);
+                if (color == null) return;
+
+                productColorSize = await _dbContext.ProductColorSizes
+                    .FirstOrDefaultAsync(pcs => pcs.ProductColorId == color.Id && pcs.SizeId == currentSize);
+
+                product = await _dbContext.Products.FindAsync(color.ProductId);
+
+                // Kiểm tra đường dẫn hình ảnh (không cần truy cập UI thread)
+                if (!string.IsNullOrEmpty(color.ImageUrl) && File.Exists(color.ImageUrl))
+                {
+                    imageUrl = color.ImageUrl;
+                }
+            }
+
+            // Cập nhật giao diện trên UI thread
+            Invoke((MethodInvoker)(() =>
+            {
+                // Cập nhật thông tin ProductColor
+                tbx_colorNote.Text = color.ColorName;
+                lbl_colorCode.Text = color.ColorCode;
+                pnl_colorBox.BackColor = ColorTranslator.FromHtml(color.ColorCode);
+
+                // Cập nhật thông tin ProductColorSize
+                tbx_inventory.Text = productColorSize != null ? productColorSize.Inventory.ToString() : "0";
+
+                // Cập nhật hình ảnh
+                if (imageUrl != null)
+                {
+                    imageURL = imageUrl;
+                    pictureBox1.Image = Image.FromFile(imageURL);
+                }
+                else
+                {
+                    pictureBox1.Image = null; // Hoặc hình ảnh mặc định
+                }
+
+                // Cập nhật thông tin Product
+                if (product != null)
+                {
+                    tbx_name.Text = product.ProdName;
+                    tbx_material.Text = product.ProdDesc;
+                    tbx_price.Text = product.Price.ToString();
+                    tbx_width.Text = product.Width.ToString();
+                    tbx_height.Text = product.Height.ToString();
+                    cbbx_type.Text = product.Type;
+                }
+            }));
+        }
+
         private void LoadProductDataForAddColor(Guid productId) //them mau moi
         {
             using (var _dbContext = new ShopNoirContext())
@@ -124,10 +162,6 @@ namespace QuanLyNoir_BTL.Views
                     cbbx_type.Text = product.Type;
                 }
             }
-        }
-        private void LoadProductDataForDetail(Guid productId) //chi tiet san pham
-        {
-            
         }
         private async Task ValidateAndSaveProductAsync(bool isNew, bool isAddColor)
         {
@@ -149,88 +183,168 @@ namespace QuanLyNoir_BTL.Views
 
         private async Task AddNewColorAsync()
         {
+            // Chuyển giá trị từ textbox sang kiểu dữ liệu phù hợp
             int.TryParse(tbx_inventory.Text, out int inventory);
             decimal.TryParse(tbx_price.Text, out decimal price);
 
-            var productColor = new ProductColor
-            {
-                ProductId = currentProductId,
-                ColorName = tbx_colorNote.Text,
-                ColorCode = lbl_colorCode.Text,
-                Inventory = inventory,
-                Size = selectedSize,
-                ImageUrl = ImageToByteArray(pictureBox1.Image)
-            };
             using (var _dbContext = new ShopNoirContext())
             {
-                _dbContext.ProductColors.Add(productColor);
+                // Kiểm tra xem sản phẩm cùng màu và kích thước đã tồn tại chưa
+                var existingProductColorSize = _dbContext.ProductColorSizes
+                    .Include(pcs => pcs.ProductColor)
+                    .FirstOrDefault(pcs =>
+                        pcs.ProductColor.ProductId == currentProductId && // currentProductId là Id của sản phẩm hiện tại
+                        pcs.ProductColor.ColorCode == lbl_colorCode.Text &&
+                        pcs.SizeId == currentSize);
 
+                if (existingProductColorSize != null)
+                {
+                    // Nếu đã tồn tại, cộng thêm inventory
+                    existingProductColorSize.Inventory += inventory;
+                }
+                else
+                {
+                    // Kiểm tra sản phẩm có tồn tại chưa trước khi tạo ProductColor mới
+                    var product = await _dbContext.Products.FirstOrDefaultAsync(p => p.Id == currentProductId);
+                    if (product == null)
+                    {
+                        MessageBox.Show("Sản phẩm không tồn tại.");
+                        return; // Dừng nếu sản phẩm không tồn tại
+                    }
+
+                    // Thêm sản phẩm mới nếu chưa có
+                    var productColor = new ProductColor
+                    {
+                        ProductId = currentProductId, // Lấy Id sản phẩm hiện tại
+                        ColorName = tbx_colorNote.Text,
+                        ColorCode = lbl_colorCode.Text,
+                        ImageUrl = imageURL,
+                    };
+
+                    _dbContext.ProductColors.Add(productColor);
+                    await _dbContext.SaveChangesAsync(); // Lưu để lấy Id cho ProductColor
+
+                    // Thêm thông tin ProductColorSize với kích thước và tồn kho
+                    var productColorSize = new ProductColorSize
+                    {
+                        ProductColorId = productColor.Id,
+                        SizeId = currentSize,
+                        Inventory = inventory,
+                    };
+
+                    _dbContext.ProductColorSizes.Add(productColorSize);
+                }
+
+                // Lưu tất cả thay đổi vào database
                 await _dbContext.SaveChangesAsync();
             }
         }
-        private async Task AddNewProductAndColorAsync()
+
+        private async Task AddNewProductAndColorAsync() // thêm sản phẩm mới
         {
             decimal.TryParse(tbx_width.Text, out decimal width);
             decimal.TryParse(tbx_height.Text, out decimal height);
             int.TryParse(tbx_inventory.Text, out int inventory);
             decimal.TryParse(tbx_price.Text, out decimal price);
 
-            Models.Product product = null;
-
+            Product product = new Product();
             if (this.InvokeRequired)
             {
                 this.Invoke((MethodInvoker)delegate
                 {
-                    product = new Models.Product
-                    {
-                        Id = Guid.NewGuid(),
-                        ProdName = tbx_name.Text,
-                        ProdDesc = tbx_material.Text,
-                        Price = price,
-                        Width = width,
-                        Height = height,
-                        Type = cbbx_type.Text
-                    };
+                    product.ProdName = tbx_name.Text;
+                    product.ProdDesc = tbx_material.Text;
+                    product.Price = price;
+                    product.Width = width;
+                    product.Height = height;
+                    product.Type = cbbx_type.Text;
                 });
             }
             else
             {
-                product = new Models.Product
-                {
-                    Id = Guid.NewGuid(),
-                    ProdName = tbx_name.Text,
-                    ProdDesc = tbx_material.Text,
-                    Price = price,
-                    Width = width,
-                    Height = height,
-                    Type = cbbx_type.Text
-                };
+                product.ProdName = tbx_name.Text;
+                product.ProdDesc = tbx_material.Text;
+                product.Price = price;
+                product.Width = width;
+                product.Height = height;
+                product.Type = cbbx_type.Text;
             }
+
             using (var _dbContext = new ShopNoirContext())
             {
-                _dbContext.Products.Add(product);
-            
+                // Kiểm tra sản phẩm có tồn tại chưa (dựa trên ProdName và Type)
+                var existingProduct = await _dbContext.Products
+                    .FirstOrDefaultAsync(p => p.ProdName == product.ProdName && p.Type == product.Type);
 
-            var productColor = new ProductColor
-            {
-                ProductId = product.Id,
-                ColorName = tbx_colorNote.Text,
-                ColorCode = lbl_colorCode.Text,
-                Inventory = inventory,
-                Size = selectedSize,
-                ImageUrl = ImageToByteArray(pictureBox1.Image)
-            };
-                _dbContext.ProductColors.Add(productColor);
+                if (existingProduct == null)
+                {
+                    // Nếu sản phẩm chưa tồn tại, thêm mới
+                    _dbContext.Products.Add(product);
+                    await _dbContext.SaveChangesAsync(); // Lưu Product để đảm bảo Product.Id đã tồn tại
+                }
+                else
+                {
+                    // Nếu sản phẩm đã tồn tại, sử dụng Id của sản phẩm đó
+                    product = existingProduct;
+                }
 
+                // Kiểm tra ProductColor (màu sắc sản phẩm) đã tồn tại chưa
+                var existingProductColor = await _dbContext.ProductColors
+                    .FirstOrDefaultAsync(pc => pc.ProductId == product.Id && pc.ColorCode == lbl_colorCode.Text);
+
+                ProductColor productColor;
+                if (existingProductColor == null)
+                {
+                    // Nếu chưa tồn tại, thêm ProductColor mới
+                    productColor = new ProductColor
+                    {
+                        Id = Guid.NewGuid(),
+                        ProductId = product.Id,
+                        ColorName = tbx_colorNote.Text.Trim(),
+                        ColorCode = lbl_colorCode.Text.Trim(),
+                        ImageUrl = imageURL
+                    };
+                    _dbContext.ProductColors.Add(productColor);
+                    await _dbContext.SaveChangesAsync(); // Lưu để lấy ProductColor.Id
+                }
+                else
+                {
+                    productColor = existingProductColor;
+                }
+
+                // Kiểm tra ProductColorSize đã tồn tại chưa
+                var existingProductColorSize = await _dbContext.ProductColorSizes
+                    .FirstOrDefaultAsync(pcs => pcs.ProductColorId == productColor.Id && pcs.SizeId == currentSize);
+
+                if (existingProductColorSize != null)
+                {
+                    // Nếu đã tồn tại, cộng thêm số lượng inventory
+                    existingProductColorSize.Inventory += inventory;
+                }
+                else
+                {
+                    // Nếu chưa tồn tại, thêm ProductColorSize mới
+                    var productColorSize = new ProductColorSize
+                    {
+                        Id = Guid.NewGuid(),
+                        ProductColorId = productColor.Id,
+                        SizeId = currentSize,
+                        Inventory = inventory
+                    };
+                    _dbContext.ProductColorSizes.Add(productColorSize);
+                }
+
+                // Lưu tất cả thay đổi vào database
                 await _dbContext.SaveChangesAsync();
             }
         }
 
-        private async Task UpdateProductAndColorAsync()
+
+        private async Task UpdateProductAndColorAsync() // update / edit
         {
             using (var _dbContext = new ShopNoirContext())
             {
-                var productColor = _dbContext.ProductColors.FirstOrDefault(c => c.Id == currentProductColorId);
+                var productColor = await _dbContext.ProductColors.FirstOrDefaultAsync(c => c.Id == currentProductColorId);
                 if (productColor == null) return;
 
                 decimal.TryParse(tbx_width.Text, out decimal width);
@@ -238,15 +352,37 @@ namespace QuanLyNoir_BTL.Views
                 int.TryParse(tbx_inventory.Text, out int inventory);
                 decimal.TryParse(tbx_price.Text, out decimal price);
 
+                // Cập nhật thông tin màu sắc
                 productColor.ColorName = tbx_colorNote.Text;
                 productColor.ColorCode = lbl_colorCode.Text;
-                productColor.Inventory = inventory;
-                productColor.Size = selectedSize;
-                productColor.ImageUrl = ImageToByteArray(pictureBox1.Image);
+                productColor.ImageUrl = imageURL;
 
-                var product = _dbContext.Products.FirstOrDefault(p => p.Id == productColor.ProductId);
+                // Truy vấn hoặc tạo mới ProductColorSize
+                var productColorSize = await _dbContext.ProductColorSizes
+                    .FirstOrDefaultAsync(pcs => pcs.ProductColorId == productColor.Id && pcs.SizeId == currentSize);
+
+                if (productColorSize != null)
+                {
+                    // Cập nhật nếu đã tồn tại
+                    productColorSize.Inventory = inventory;
+                }
+                else
+                {
+                    // Nếu không tồn tại, tạo mới ProductColorSize
+                    productColorSize = new ProductColorSize
+                    {
+                        ProductColorId = productColor.Id,
+                        SizeId = currentSize,
+                        Inventory = inventory
+                    };
+                    _dbContext.ProductColorSizes.Add(productColorSize);
+                }
+
+                // Cập nhật thông tin sản phẩm
+                var product = await _dbContext.Products.FirstOrDefaultAsync(p => p.Id == productColor.ProductId);
                 if (product != null)
                 {
+                    // Kiểm tra nếu đang chạy trên luồng phụ
                     if (this.InvokeRequired)
                     {
                         this.Invoke((MethodInvoker)delegate
@@ -270,9 +406,11 @@ namespace QuanLyNoir_BTL.Views
                     }
                 }
 
+                // Lưu thay đổi
                 await _dbContext.SaveChangesAsync();
             }
         }
+
 
 
         // Phương thức để xóa các dấu *
@@ -358,7 +496,11 @@ namespace QuanLyNoir_BTL.Views
                 ShowValidationMark(lbl_type, "Vui lòng chọn loại sản phẩm!");
                 return;
             }
-
+            if (currentSize == null)
+            {
+                ShowValidationMark(lbl_size, "Vui lòng chọn size sản phẩm");
+                return;
+            }
             if (string.IsNullOrWhiteSpace(lbl_colorCode.Text))
             {
                 ShowValidationMark(lbl_color, "Vui lòng chọn màu sắc!");
@@ -395,37 +537,6 @@ namespace QuanLyNoir_BTL.Views
             MessageBox.Show("Thêm dữ liệu thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
             this.Close();
         }
-        private Image ByteArrayToImage(byte[] byteArray)
-        {
-            if (byteArray == null) return null;
-            using (var ms = new MemoryStream(byteArray))
-            {
-                Image img = Image.FromStream(ms);
-                return new Bitmap(img); // Tạo bản sao để không phụ thuộc vào MemoryStream
-            }
-        }
-        private byte[] ImageToByteArray(Image image)
-        {
-            try
-            {
-                if (image == null)
-                {
-                    // Return null or an empty byte array, depending on your requirements
-
-                    return null;
-                }
-                using (MemoryStream ms = new MemoryStream())
-                {
-                    image.Save(ms, System.Drawing.Imaging.ImageFormat.Jpeg); // Save as PNG or desired format
-                    return ms.ToArray();
-                }
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show("Lỗi tải ảnh");
-                return null;
-            }
-        }
 
         private void SetupBackgroundWorker()
         {
@@ -456,7 +567,8 @@ namespace QuanLyNoir_BTL.Views
             // Kiểm tra xem có phải là tệp hình ảnh không, rồi hiển thị trong PictureBox
             if (files.Length > 0 && (files[0].EndsWith(".jpg") || files[0].EndsWith(".png") || files[0].EndsWith(".jpeg")))
             {
-                pictureBox1.Image = Image.FromFile(files[0]);
+                imageURL = files[0];
+                pictureBox1.Image = Image.FromFile(imageURL);
                 pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage; // Tuỳ chọn hiển thị ảnh
             }
             else
@@ -472,40 +584,44 @@ namespace QuanLyNoir_BTL.Views
                 ofd.Filter = "Image Files|*.jpg;*.jpeg;*.png";
                 if (ofd.ShowDialog() == DialogResult.OK)
                 {
-                    pictureBox1.Image = Image.FromFile(ofd.FileName);
+                    imageURL = ofd.FileName;
+                    pictureBox1.Image = Image.FromFile(imageURL);
                     pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
                 }
             }
         }
 
-        private void resetSizeOfProductColor(System.Windows.Forms.Button sizeButton)
+        private async void resetSizeOfProductColor(System.Windows.Forms.Button sizeButton)
         {
-            btn_xs.BackColor = Color.White;
+            btn_none.BackColor = Color.White;
             btn_s.BackColor = Color.White;
             btn_m.BackColor = Color.White;
             btn_l.BackColor = Color.White;
             btn_xl.BackColor = Color.White;
-            btn_xxl.BackColor = Color.White;
-            btn_xxxl.BackColor = Color.White;
 
-            btn_xs.ForeColor = Color.Black;
+            btn_none.ForeColor = Color.Black;
             btn_s.ForeColor = Color.Black;
             btn_m.ForeColor = Color.Black;
             btn_l.ForeColor = Color.Black;
             btn_xl.ForeColor = Color.Black;
-            btn_xxl.ForeColor = Color.Black;
-            btn_xxxl.ForeColor = Color.Black;
 
             sizeButton.ForeColor = Color.AliceBlue;
             sizeButton.BackColor = Color.DarkSeaGreen;
 
             // Gán giá trị của enum dựa trên nút đã chọn
-            selectedSize = sizeButton.Text;
+
+            if (sizeButton.Text == btn_none.Text) { currentSize = null; }
+            else
+            {
+                currentSize = sizeButton.Text;
+            }
+            if (reload) await LoadProductData(currentProductColorId);
+
         }
 
-        private void btn_xs_Click(object sender, EventArgs e)
+        private void btn_none_Click(object sender, EventArgs e)
         {
-            resetSizeOfProductColor(btn_xs);
+            resetSizeOfProductColor(btn_none);
         }
 
         private void btn_s_Click(object sender, EventArgs e)
@@ -526,16 +642,6 @@ namespace QuanLyNoir_BTL.Views
         private void btn_xl_Click(object sender, EventArgs e)
         {
             resetSizeOfProductColor(btn_xl);
-        }
-
-        private void btn_xxl_Click(object sender, EventArgs e)
-        {
-            resetSizeOfProductColor(btn_xxl);
-        }
-
-        private void btn_3xl_Click(object sender, EventArgs e)
-        {
-            resetSizeOfProductColor(btn_xxxl);
         }
 
         private void btn_choosecolor_Click(object sender, EventArgs e)
@@ -569,8 +675,6 @@ namespace QuanLyNoir_BTL.Views
             // Nếu tên màu là "Color [R,G,B]" (khi không có tên định nghĩa), trả về "Unknown"
             return name == "Color [0, 0, 0]" ? "Unknown Color" : name;
         }
-
-
         private void SetupPlaceholder()
         {
             tbx_colorNote.Text = colorName;
@@ -580,7 +684,6 @@ namespace QuanLyNoir_BTL.Views
             tbx_colorNote.Enter += RemovePlaceholder;
             tbx_colorNote.Leave += SetPlaceholder;
         }
-
         private void RemovePlaceholder(object sender, EventArgs e)
         {
             if (tbx_colorNote.Text == colorName)
@@ -589,7 +692,6 @@ namespace QuanLyNoir_BTL.Views
                 tbx_colorNote.ForeColor = Color.Black; // Màu chữ khi nhập
             }
         }
-
         private void SetPlaceholder(object sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(tbx_colorNote.Text))

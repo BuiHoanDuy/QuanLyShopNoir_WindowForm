@@ -32,16 +32,6 @@
             loadWorker = new System.ComponentModel.BackgroundWorker();
             progressBar1 = new ProgressBar();
             panel1 = new Panel();
-            groupBox4 = new GroupBox();
-            btn_allSize = new Button();
-            lbl_size = new Label();
-            btn_xxxl = new Button();
-            btn_xxl = new Button();
-            btn_xl = new Button();
-            btn_l = new Button();
-            btn_m = new Button();
-            btn_s = new Button();
-            btn_xs = new Button();
             btn_reset = new Button();
             groupBox3 = new GroupBox();
             lbl_priceFilter = new Label();
@@ -69,7 +59,6 @@
             btn_previous = new Button();
             pnl_product = new Panel();
             panel1.SuspendLayout();
-            groupBox4.SuspendLayout();
             groupBox3.SuspendLayout();
             groupBox2.SuspendLayout();
             groupBox1.SuspendLayout();
@@ -95,7 +84,6 @@
             // panel1
             // 
             panel1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            panel1.Controls.Add(groupBox4);
             panel1.Controls.Add(btn_reset);
             panel1.Controls.Add(groupBox3);
             panel1.Controls.Add(groupBox2);
@@ -110,117 +98,6 @@
             panel1.Size = new Size(429, 673);
             panel1.TabIndex = 37;
             // 
-            // groupBox4
-            // 
-            groupBox4.Controls.Add(btn_allSize);
-            groupBox4.Controls.Add(lbl_size);
-            groupBox4.Controls.Add(btn_xxxl);
-            groupBox4.Controls.Add(btn_xxl);
-            groupBox4.Controls.Add(btn_xl);
-            groupBox4.Controls.Add(btn_l);
-            groupBox4.Controls.Add(btn_m);
-            groupBox4.Controls.Add(btn_s);
-            groupBox4.Controls.Add(btn_xs);
-            groupBox4.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
-            groupBox4.Location = new Point(10, 90);
-            groupBox4.Name = "groupBox4";
-            groupBox4.Size = new Size(242, 116);
-            groupBox4.TabIndex = 45;
-            groupBox4.TabStop = false;
-            groupBox4.Text = "Size of product";
-            // 
-            // btn_allSize
-            // 
-            btn_allSize.BackColor = Color.DarkSeaGreen;
-            btn_allSize.ForeColor = Color.AliceBlue;
-            btn_allSize.Location = new Point(6, 26);
-            btn_allSize.Name = "btn_allSize";
-            btn_allSize.Size = new Size(48, 35);
-            btn_allSize.TabIndex = 20;
-            btn_allSize.Text = "All";
-            btn_allSize.UseVisualStyleBackColor = false;
-            btn_allSize.Click += btn_allSize_Click;
-            // 
-            // lbl_size
-            // 
-            lbl_size.AutoSize = true;
-            lbl_size.ForeColor = Color.Red;
-            lbl_size.Location = new Point(118, -2);
-            lbl_size.Name = "lbl_size";
-            lbl_size.Size = new Size(13, 20);
-            lbl_size.TabIndex = 19;
-            lbl_size.Text = " ";
-            // 
-            // btn_xxxl
-            // 
-            btn_xxxl.Location = new Point(168, 67);
-            btn_xxxl.Name = "btn_xxxl";
-            btn_xxxl.Size = new Size(51, 35);
-            btn_xxxl.TabIndex = 6;
-            btn_xxxl.Text = "XXXL";
-            btn_xxxl.UseVisualStyleBackColor = true;
-            btn_xxxl.Click += btn_3xl_Click;
-            // 
-            // btn_xxl
-            // 
-            btn_xxl.Location = new Point(114, 67);
-            btn_xxl.Name = "btn_xxl";
-            btn_xxl.Size = new Size(48, 35);
-            btn_xxl.TabIndex = 5;
-            btn_xxl.Text = "XXL";
-            btn_xxl.UseVisualStyleBackColor = true;
-            btn_xxl.Click += btn_xxl_Click;
-            // 
-            // btn_xl
-            // 
-            btn_xl.Location = new Point(60, 67);
-            btn_xl.Name = "btn_xl";
-            btn_xl.Size = new Size(48, 35);
-            btn_xl.TabIndex = 4;
-            btn_xl.Text = "XL";
-            btn_xl.UseVisualStyleBackColor = true;
-            btn_xl.Click += btn_xl_Click;
-            // 
-            // btn_l
-            // 
-            btn_l.Location = new Point(6, 67);
-            btn_l.Name = "btn_l";
-            btn_l.Size = new Size(48, 35);
-            btn_l.TabIndex = 3;
-            btn_l.Text = "L";
-            btn_l.UseVisualStyleBackColor = true;
-            btn_l.Click += btn_l_Click;
-            // 
-            // btn_m
-            // 
-            btn_m.Location = new Point(168, 26);
-            btn_m.Name = "btn_m";
-            btn_m.Size = new Size(48, 35);
-            btn_m.TabIndex = 2;
-            btn_m.Text = "M";
-            btn_m.UseVisualStyleBackColor = true;
-            btn_m.Click += btn_m_Click;
-            // 
-            // btn_s
-            // 
-            btn_s.Location = new Point(114, 26);
-            btn_s.Name = "btn_s";
-            btn_s.Size = new Size(48, 35);
-            btn_s.TabIndex = 1;
-            btn_s.Text = "S";
-            btn_s.UseVisualStyleBackColor = true;
-            btn_s.Click += btn_s_Click;
-            // 
-            // btn_xs
-            // 
-            btn_xs.Location = new Point(60, 26);
-            btn_xs.Name = "btn_xs";
-            btn_xs.Size = new Size(48, 35);
-            btn_xs.TabIndex = 0;
-            btn_xs.Text = "XS";
-            btn_xs.UseVisualStyleBackColor = true;
-            btn_xs.Click += btn_xs_Click;
-            // 
             // btn_reset
             // 
             btn_reset.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
@@ -228,7 +105,7 @@
             btn_reset.Cursor = Cursors.Hand;
             btn_reset.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 163);
             btn_reset.ForeColor = Color.AliceBlue;
-            btn_reset.Location = new Point(8, 590);
+            btn_reset.Location = new Point(8, 471);
             btn_reset.Name = "btn_reset";
             btn_reset.Size = new Size(325, 46);
             btn_reset.TabIndex = 44;
@@ -246,7 +123,7 @@
             groupBox3.Controls.Add(label8);
             groupBox3.Controls.Add(scrb_price);
             groupBox3.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 163);
-            groupBox3.Location = new Point(8, 437);
+            groupBox3.Location = new Point(8, 318);
             groupBox3.Name = "groupBox3";
             groupBox3.Size = new Size(325, 132);
             groupBox3.TabIndex = 43;
@@ -315,7 +192,7 @@
             groupBox2.Controls.Add(tbx_inventory);
             groupBox2.Controls.Add(label3);
             groupBox2.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 163);
-            groupBox2.Location = new Point(8, 338);
+            groupBox2.Location = new Point(8, 219);
             groupBox2.Name = "groupBox2";
             groupBox2.Size = new Size(325, 78);
             groupBox2.TabIndex = 42;
@@ -345,7 +222,7 @@
             groupBox1.Controls.Add(pictureBox2);
             groupBox1.Controls.Add(tbx_search);
             groupBox1.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 163);
-            groupBox1.Location = new Point(8, 218);
+            groupBox1.Location = new Point(8, 99);
             groupBox1.Name = "groupBox1";
             groupBox1.Size = new Size(325, 102);
             groupBox1.TabIndex = 41;
@@ -532,8 +409,6 @@
             Load += ManageProductControl_Load;
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
-            groupBox4.ResumeLayout(false);
-            groupBox4.PerformLayout();
             groupBox3.ResumeLayout(false);
             groupBox3.PerformLayout();
             groupBox2.ResumeLayout(false);
@@ -576,15 +451,5 @@
         private Button btn_next;
         private Button btn_previous;
         private Panel pnl_product;
-        private GroupBox groupBox4;
-        private Label lbl_size;
-        private Button btn_xxxl;
-        private Button btn_xxl;
-        private Button btn_xl;
-        private Button btn_l;
-        private Button btn_m;
-        private Button btn_s;
-        private Button btn_xs;
-        private Button btn_allSize;
     }
 }
