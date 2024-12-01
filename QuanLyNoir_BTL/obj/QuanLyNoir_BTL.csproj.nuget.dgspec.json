@@ -46,6 +46,10 @@
         "net8.0-windows7.0": {
           "targetAlias": "net8.0-windows",
           "dependencies": {
+            "EPPlus": {
+              "target": "Package",
+              "version": "[7.5.1, )"
+            },
             "LiveCharts.WinForms.NetCore3": {
               "target": "Package",
               "version": "[0.9.8, )"

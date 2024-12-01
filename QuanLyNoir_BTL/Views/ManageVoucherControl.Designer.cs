@@ -266,6 +266,7 @@
             // 
             // dtgv_voucherlist
             // 
+            dtgv_voucherlist.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dtgv_voucherlist.BackgroundColor = Color.White;
             dtgv_voucherlist.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dtgv_voucherlist.Location = new Point(381, 100);

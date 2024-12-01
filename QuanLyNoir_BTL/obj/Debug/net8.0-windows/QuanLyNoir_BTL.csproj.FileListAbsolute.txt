@@ -157,3 +157,10 @@ C:\Users\Aus\Documents\Subjects\LapTrinhTrucQuan\BTL\QuanLyNoir_BTL\QuanLyNoir_B
 C:\Users\Aus\Documents\Subjects\LapTrinhTrucQuan\BTL\QuanLyNoir_BTL\QuanLyNoir_BTL\bin\Debug\net8.0-windows\LiveCharts.WinForms.dll
 C:\Users\Aus\Documents\Subjects\LapTrinhTrucQuan\BTL\QuanLyNoir_BTL\QuanLyNoir_BTL\bin\Debug\net8.0-windows\LiveCharts.Wpf.dll
 C:\Users\Aus\Documents\Subjects\LapTrinhTrucQuan\BTL\QuanLyNoir_BTL\QuanLyNoir_BTL\obj\Debug\net8.0-windows\QuanLyNoir_BTL.Views.AnalyseRevenueControl.resources
+C:\Users\Aus\Documents\Subjects\LapTrinhTrucQuan\BTL\QuanLyNoir_BTL\QuanLyNoir_BTL\bin\Debug\net8.0-windows\EPPlus.dll
+C:\Users\Aus\Documents\Subjects\LapTrinhTrucQuan\BTL\QuanLyNoir_BTL\QuanLyNoir_BTL\bin\Debug\net8.0-windows\EPPlus.Interfaces.dll
+C:\Users\Aus\Documents\Subjects\LapTrinhTrucQuan\BTL\QuanLyNoir_BTL\QuanLyNoir_BTL\bin\Debug\net8.0-windows\EPPlus.System.Drawing.dll
+C:\Users\Aus\Documents\Subjects\LapTrinhTrucQuan\BTL\QuanLyNoir_BTL\QuanLyNoir_BTL\bin\Debug\net8.0-windows\Microsoft.IO.RecyclableMemoryStream.dll
+C:\Users\Aus\Documents\Subjects\LapTrinhTrucQuan\BTL\QuanLyNoir_BTL\QuanLyNoir_BTL\bin\Debug\net8.0-windows\System.Drawing.Common.dll
+C:\Users\Aus\Documents\Subjects\LapTrinhTrucQuan\BTL\QuanLyNoir_BTL\QuanLyNoir_BTL\bin\Debug\net8.0-windows\System.Security.Cryptography.Pkcs.dll
+C:\Users\Aus\Documents\Subjects\LapTrinhTrucQuan\BTL\QuanLyNoir_BTL\QuanLyNoir_BTL\bin\Debug\net8.0-windows\runtimes\win\lib\net8.0\System.Security.Cryptography.Pkcs.dll

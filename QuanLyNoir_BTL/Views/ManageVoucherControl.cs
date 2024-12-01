@@ -2,6 +2,7 @@
 using QuanLyNoir_BTL.Models;
 using System.Data;
 using System.Linq.Dynamic.Core;
+using System.Windows.Forms;
 
 namespace QuanLyNoir_BTL.Views
 {
@@ -47,11 +48,17 @@ namespace QuanLyNoir_BTL.Views
             dtgv_voucherlist.Columns["StartDate"].DefaultCellStyle.Format = "dd/MM/yyyy";
             dtgv_voucherlist.Columns["EndDate"].DefaultCellStyle.Format = "dd/MM/yyyy";
 
+            dtgv_voucherlist.EnableHeadersVisualStyles = false; // Bắt buộc để thay đổi kiểu
+            dtgv_voucherlist.ColumnHeadersDefaultCellStyle.BackColor = System.Drawing.Color.DarkSlateGray; // Màu nền
+            dtgv_voucherlist.ColumnHeadersDefaultCellStyle.ForeColor = System.Drawing.Color.Pink; // Màu chữ
+            dtgv_voucherlist.ColumnHeadersDefaultCellStyle.Font = new Font("Arial", 10, FontStyle.Regular); // Font chữ
+
             dtgv_voucherlist.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
         }
         private void ManageVoucherControl_Load(object sender, EventArgs e)
         {
             LoadDataIntoDataGridBox();
+
         }
 
         private void LoadDataIntoDataGridBox()

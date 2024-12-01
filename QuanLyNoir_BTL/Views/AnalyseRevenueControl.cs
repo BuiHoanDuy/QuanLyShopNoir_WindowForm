@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using QuanLyNoir_BTL.Models;
 using System.Windows.Media;
 using System.Linq.Dynamic.Core;
+using OfficeOpenXml;
 
 namespace QuanLyNoir_BTL.Views
 {
@@ -231,7 +232,7 @@ namespace QuanLyNoir_BTL.Views
             // Cập nhật giao diện trên luồng chính
             this.Invoke((MethodInvoker)delegate
             {
-                lbl_totalRevenue.Text = $"{totalRevenue:C}";
+                lbl_totalRevenue.Text = $"{((double)totalRevenue*0.9):C}";
                 lbl_totalOrder.Text = $"{totalOrders} orders";
             });
         }
@@ -326,6 +327,7 @@ namespace QuanLyNoir_BTL.Views
                 lbl_trang.Hide();
                 btn_trangsau.Hide();
                 btn_trangtruoc.Hide();
+                lbl_nameOfReport.Text = "Revenue Chart";
             }
             else
             {
@@ -336,6 +338,7 @@ namespace QuanLyNoir_BTL.Views
                 lbl_trang.Show();
                 btn_trangsau.Show();
                 btn_trangtruoc.Show();
+                lbl_nameOfReport.Text = "Revenue Detail";
             }
             LoadChartData(cartesianChart1, typeFilter);
         }
@@ -402,7 +405,7 @@ namespace QuanLyNoir_BTL.Views
 
         private void btn_trangsau_Click(object sender, EventArgs e)
         {
-             if (currentPage < Math.Ceiling((double)totalRecords / pageSize))
+            if (currentPage < Math.Ceiling((double)totalRecords / pageSize))
             {
                 currentPage++;
                 LoadDataIntoDataGridBox(); // Tải lại dữ liệu cho trang tiếp theo
@@ -415,6 +418,114 @@ namespace QuanLyNoir_BTL.Views
             {
                 currentPage--;
                 LoadDataIntoDataGridBox(); // Tải lại dữ liệu cho trang trước
+            }
+        }
+
+        private async void btn_printReport_Click(object sender, EventArgs e)
+        {
+            // Dữ liệu cần in
+            List<InvoiceInformation> allData;
+            using (var context = new ShopNoirContext())
+            {
+                IQueryable<Invoice> query;
+
+                // Xác định truy vấn dựa trên bộ lọc
+                if (typeFilter == "monthly")
+                {
+                    query = context.Invoices
+                        .Where(invoice => invoice.CreatedAt.HasValue
+                                          && invoice.CreatedAt.Value.Year == year);
+                }
+                else
+                {
+                    query = context.Invoices
+                        .Where(invoice => invoice.CreatedAt.HasValue
+                                          && invoice.CreatedAt.Value.Year == year
+                                          && invoice.CreatedAt.Value.Month == month);
+                }
+                 allData = await query
+                .OrderByDescending(invoice => invoice.CreatedAt)
+                .Select(invoiceInfo => new InvoiceInformation
+                {
+                    CreatedAt = invoiceInfo.CreatedAt,
+                    Total = invoiceInfo.Total,
+                    PaymentMethod = invoiceInfo.PaymentMethod,
+                    Amount = invoiceInfo.InvoiceDetails.Sum(d => d.Amount), // Tổng số lượng sản phẩm
+                    Name = invoiceInfo.CreatedByNavigation.Name,
+                })
+                .AsNoTracking()
+                .ToListAsync();
+            }
+
+            // Xuất sang Excel
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial; // Thêm dòng này
+            SaveFileDialog saveFileDialog = new SaveFileDialog
+            {
+                Filter = "Excel Files|*.xlsx",
+                Title = "Save Report",
+                FileName = $"RevenueReport_{DateTime.Now:yyyyMMdd}.xlsx"
+            };
+
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    using (var package = new OfficeOpenXml.ExcelPackage())
+                    {
+                        // Thêm worksheet dữ liệu
+                        var dataSheet = package.Workbook.Worksheets.Add("Data");
+                        dataSheet.Cells["A1"].Value = "Created At";
+                        dataSheet.Cells["B1"].Value = "Amount";
+                        dataSheet.Cells["C1"].Value = "Total";
+                        dataSheet.Cells["D1"].Value = "Tax rate";
+                        dataSheet.Cells["E1"].Value = "Tax";
+                        dataSheet.Cells["F1"].Value = "Revenue";
+                        dataSheet.Cells["G1"].Value = "Payment Method";
+                        dataSheet.Cells["H1"].Value = "Created By";
+
+                        // Thêm dữ liệu
+                        for (int i = 0; i < allData.Count; i++)
+                        {
+                            var row = i + 2;
+                            dataSheet.Cells[row, 1].Value = allData[i].CreatedAt?.ToString("yyyy-MM-dd");
+                            dataSheet.Cells[row, 2].Value = allData[i].Amount;
+                            dataSheet.Cells[row, 3].Value = allData[i].Total;
+                            dataSheet.Cells[row, 4].Value = allData[i].TaxRate;
+                            dataSheet.Cells[row, 5].Value = allData[i].Tax;
+                            dataSheet.Cells[row, 6].Value = allData[i].Revenue;
+                            dataSheet.Cells[row, 7].Value = allData[i].PaymentMethod;
+                            dataSheet.Cells[row, 8].Value = allData[i].Name;
+                        }
+
+                        // Thêm worksheet biểu đồ
+                        var chartSheet = package.Workbook.Worksheets.Add("Chart");
+                        var chart = chartSheet.Drawings.AddChart("RevenueChart", OfficeOpenXml.Drawing.Chart.eChartType.Line);
+                        chart.Title.Text = "Revenue Report";
+
+                        // Thêm dữ liệu biểu đồ
+                        var revenueData = await GetRevenueDataAsync(year, typeFilter == "daily" ? month : (int?)null);
+                        var labels = typeFilter == "daily" ? GetDayLabels(year, month) : GetMonthLabels();
+
+                        // Gán dữ liệu biểu đồ
+                        var labelRange = chartSheet.Cells[1, 1, labels.Count, 1];
+                        var revenueRange = chartSheet.Cells[1, 2, revenueData.Count, 2];
+                        labelRange.LoadFromCollection(labels);
+                        revenueRange.LoadFromCollection(revenueData);
+
+                        chart.Series.Add(revenueRange, labelRange);
+                        chart.SetPosition(1, 0, 4, 0); // Đặt vị trí cho biểu đồ
+                        chart.SetSize(800, 400); // Đặt kích thước cho biểu đồ
+
+                        // Lưu tệp
+                        var filePath = saveFileDialog.FileName;
+                        await package.SaveAsAsync(new FileInfo(filePath));
+                        MessageBox.Show("Report exported successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error while exporting: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
     }

@@ -46,6 +46,10 @@ namespace QuanLyNoir_BTL.Views
         private void ManageAccountControl_Load(object sender, EventArgs e)
         {
             LoadDataIntoDataGridBox();
+            dtgv_accountList.EnableHeadersVisualStyles = false; // Bắt buộc để thay đổi kiểu
+            dtgv_accountList.ColumnHeadersDefaultCellStyle.BackColor = System.Drawing.Color.DarkSlateGray; // Màu nền
+            dtgv_accountList.ColumnHeadersDefaultCellStyle.ForeColor = System.Drawing.Color.Pink; // Màu chữ
+            dtgv_accountList.ColumnHeadersDefaultCellStyle.Font = new Font("Arial", 10, FontStyle.Bold); // Font chữ
         }
         private void LoadDataIntoDataGridBox()
         {
@@ -85,6 +89,7 @@ namespace QuanLyNoir_BTL.Views
 
                     dtgv_accountList.Columns["Invoices"].Visible = false;
                     dtgv_accountList.Columns["Status"].Visible = false;
+                    dtgv_accountList.Columns["Id"].Visible = false;
                     // Kích hoạt hoặc vô hiệu hóa nút điều hướng
                     btn_trangtruoc.Enabled = currentPage > 1;
                     btn_trangsau.Enabled = currentPage < Math.Ceiling((double)totalRecords / pageSize);

@@ -33,7 +33,7 @@
             btn_jacket = new Button();
             btn_bag = new Button();
             btn_newcollection = new Button();
-            label2 = new Label();
+            lbl_nameOfReport = new Label();
             llbl_daily = new LinkLabel();
             llbl_monthly = new LinkLabel();
             cartesianChart1 = new LiveCharts.WinForms.CartesianChart();
@@ -53,6 +53,7 @@
             lbl_trang = new Label();
             btn_trangsau = new Button();
             btn_trangtruoc = new Button();
+            btn_printReport = new Button();
             panel1.SuspendLayout();
             panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
@@ -127,15 +128,15 @@
             btn_newcollection.Text = "Product";
             btn_newcollection.UseVisualStyleBackColor = false;
             // 
-            // label2
+            // lbl_nameOfReport
             // 
-            label2.AutoSize = true;
-            label2.Font = new Font("Segoe UI Semibold", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 163);
-            label2.Location = new Point(59, 148);
-            label2.Name = "label2";
-            label2.Size = new Size(223, 31);
-            label2.TabIndex = 44;
-            label2.Text = "Daily Revenue Chart";
+            lbl_nameOfReport.AutoSize = true;
+            lbl_nameOfReport.Font = new Font("Segoe UI Semibold", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 163);
+            lbl_nameOfReport.Location = new Point(59, 148);
+            lbl_nameOfReport.Name = "lbl_nameOfReport";
+            lbl_nameOfReport.Size = new Size(164, 31);
+            lbl_nameOfReport.TabIndex = 44;
+            lbl_nameOfReport.Text = "Revenue Chart";
             // 
             // llbl_daily
             // 
@@ -353,11 +354,25 @@
             btn_trangtruoc.Visible = false;
             btn_trangtruoc.Click += btn_trangtruoc_Click;
             // 
+            // btn_printReport
+            // 
+            btn_printReport.BackColor = Color.DarkSlateGray;
+            btn_printReport.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 163);
+            btn_printReport.ForeColor = Color.Pink;
+            btn_printReport.Location = new Point(1153, 719);
+            btn_printReport.Name = "btn_printReport";
+            btn_printReport.Size = new Size(242, 37);
+            btn_printReport.TabIndex = 57;
+            btn_printReport.Text = "Print report ";
+            btn_printReport.UseVisualStyleBackColor = false;
+            btn_printReport.Click += btn_printReport_Click;
+            // 
             // AnalyseRevenueControl
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.ControlLightLight;
+            Controls.Add(btn_printReport);
             Controls.Add(lbl_trang);
             Controls.Add(btn_trangsau);
             Controls.Add(btn_trangtruoc);
@@ -369,7 +384,7 @@
             Controls.Add(cartesianChart1);
             Controls.Add(llbl_monthly);
             Controls.Add(llbl_daily);
-            Controls.Add(label2);
+            Controls.Add(lbl_nameOfReport);
             Controls.Add(btn_revenueAnalyse);
             Controls.Add(btn_jacket);
             Controls.Add(btn_bag);
@@ -394,7 +409,7 @@
         private Button btn_jacket;
         private Button btn_bag;
         private Button btn_newcollection;
-        private Label label2;
+        private Label lbl_nameOfReport;
         private LinkLabel llbl_daily;
         private LinkLabel llbl_monthly;
         private LiveCharts.WinForms.CartesianChart cartesianChart1;
@@ -414,5 +429,6 @@
         private Label lbl_trang;
         private Button btn_trangsau;
         private Button btn_trangtruoc;
+        private Button btn_printReport;
     }
 }
