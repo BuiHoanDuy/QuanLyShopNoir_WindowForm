@@ -39,8 +39,6 @@ namespace QuanLyNoir_BTL
             label6 = new Label();
             lbl_name = new Label();
             pnl_control = new Panel();
-            backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
-            backgroundWorker2 = new System.ComponentModel.BackgroundWorker();
             panel1.SuspendLayout();
             SuspendLayout();
             // 
@@ -192,7 +190,5 @@ namespace QuanLyNoir_BTL
         private Button btn_manageAccount;
         private Button btn_manageVoucher;
         private Panel pnl_control;
-        private System.ComponentModel.BackgroundWorker backgroundWorker1;
-        private System.ComponentModel.BackgroundWorker backgroundWorker2;
     }
 }

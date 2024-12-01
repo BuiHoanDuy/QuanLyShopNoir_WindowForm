@@ -67,6 +67,25 @@
           }
         }
       },
+      "LiveCharts.WinForms.NetCore3/0.9.8": {
+        "dependencies": {
+          "System.Data.DataSetExtensions": "4.5.0"
+        },
+        "runtime": {
+          "lib/net8.0-windows7.0/LiveCharts.WinForms.dll": {
+            "assemblyVersion": "0.9.8.0",
+            "fileVersion": "0.9.8.0"
+          },
+          "lib/net8.0-windows7.0/LiveCharts.Wpf.dll": {
+            "assemblyVersion": "0.9.8.0",
+            "fileVersion": "0.9.8.0"
+          },
+          "lib/net8.0-windows7.0/LiveCharts.dll": {
+            "assemblyVersion": "0.9.8.0",
+            "fileVersion": "0.9.8.0"
+          }
+        }
+      },
       "Microsoft.Bcl.AsyncInterfaces/6.0.0": {
         "runtime": {
           "lib/netstandard2.1/Microsoft.Bcl.AsyncInterfaces.dll": {
@@ -967,6 +986,14 @@
           }
         }
       },
+      "System.Data.DataSetExtensions/4.5.0": {
+        "runtime": {
+          "lib/netstandard2.0/System.Data.DataSetExtensions.dll": {
+            "assemblyVersion": "4.0.0.0",
+            "fileVersion": "4.6.26515.6"
+          }
+        }
+      },
       "System.Data.SqlClient/4.8.6": {
         "dependencies": {
           "Microsoft.Win32.Registry": "4.7.0",
@@ -1340,6 +1367,13 @@
       "sha512": "sha512-lQKvtaTDOXnoVJ20ibTuSIOf2i0uO0MPbDhd1jm238I+U/2ZnRENj0cktKZhtchBMtCUSRQ5v4xBCUbKNmyVMw==",
       "path": "humanizer.core/2.14.1",
       "hashPath": "humanizer.core.2.14.1.nupkg.sha512"
+    },
+    "LiveCharts.WinForms.NetCore3/0.9.8": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-pIiJErHE6mxIktJiLBKAmEoas8dOmEtodJQZ0o0KUnelTYfQJJqgUB2kR5476x33TM19yvC9rUjnei3US61Jbg==",
+      "path": "livecharts.winforms.netcore3/0.9.8",
+      "hashPath": "livecharts.winforms.netcore3.0.9.8.nupkg.sha512"
     },
     "Microsoft.Bcl.AsyncInterfaces/6.0.0": {
       "type": "package",
@@ -1781,6 +1815,13 @@
       "sha512": "sha512-jXw9MlUu/kRfEU0WyTptAVueupqIeE3/rl0EZDMlf8pcvJnitQ8HeVEp69rZdaStXwTV72boi/Bhw8lOeO+U2w==",
       "path": "system.configuration.configurationmanager/6.0.1",
       "hashPath": "system.configuration.configurationmanager.6.0.1.nupkg.sha512"
+    },
+    "System.Data.DataSetExtensions/4.5.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-221clPs1445HkTBZPL+K9sDBdJRB8UN8rgjO3ztB0CQ26z//fmJXtlsr6whGatscsKGBrhJl5bwJuKSA8mwFOw==",
+      "path": "system.data.datasetextensions/4.5.0",
+      "hashPath": "system.data.datasetextensions.4.5.0.nupkg.sha512"
     },
     "System.Data.SqlClient/4.8.6": {
       "type": "package",

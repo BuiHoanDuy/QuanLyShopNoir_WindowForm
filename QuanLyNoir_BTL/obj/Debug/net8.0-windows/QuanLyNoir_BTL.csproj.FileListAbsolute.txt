@@ -153,3 +153,7 @@ C:\Users\Aus\Documents\Subjects\LapTrinhTrucQuan\BTL\QuanLyNoir_BTL\QuanLyNoir_B
 C:\Users\Aus\Documents\Subjects\LapTrinhTrucQuan\BTL\QuanLyNoir_BTL\QuanLyNoir_BTL\obj\Debug\net8.0-windows\QuanLyNoir_BTL.pdb
 C:\Users\Aus\Documents\Subjects\LapTrinhTrucQuan\BTL\QuanLyNoir_BTL\QuanLyNoir_BTL\obj\Debug\net8.0-windows\QuanLyNoir_BTL.genruntimeconfig.cache
 C:\Users\Aus\Documents\Subjects\LapTrinhTrucQuan\BTL\QuanLyNoir_BTL\QuanLyNoir_BTL\obj\Debug\net8.0-windows\ref\QuanLyNoir_BTL.dll
+C:\Users\Aus\Documents\Subjects\LapTrinhTrucQuan\BTL\QuanLyNoir_BTL\QuanLyNoir_BTL\bin\Debug\net8.0-windows\LiveCharts.dll
+C:\Users\Aus\Documents\Subjects\LapTrinhTrucQuan\BTL\QuanLyNoir_BTL\QuanLyNoir_BTL\bin\Debug\net8.0-windows\LiveCharts.WinForms.dll
+C:\Users\Aus\Documents\Subjects\LapTrinhTrucQuan\BTL\QuanLyNoir_BTL\QuanLyNoir_BTL\bin\Debug\net8.0-windows\LiveCharts.Wpf.dll
+C:\Users\Aus\Documents\Subjects\LapTrinhTrucQuan\BTL\QuanLyNoir_BTL\QuanLyNoir_BTL\obj\Debug\net8.0-windows\QuanLyNoir_BTL.Views.AnalyseRevenueControl.resources
