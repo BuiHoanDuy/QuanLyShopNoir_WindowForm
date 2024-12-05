@@ -1,11 +1,11 @@
 ﻿using LiveCharts;
-using LiveCharts.WinForms;
 using LiveCharts.Wpf;
 using Microsoft.EntityFrameworkCore;
 using QuanLyNoir_BTL.Models;
 using System.Windows.Media;
 using System.Linq.Dynamic.Core;
 using OfficeOpenXml;
+using Timer = System.Windows.Forms.Timer;
 
 namespace QuanLyNoir_BTL.Views
 {
@@ -19,6 +19,11 @@ namespace QuanLyNoir_BTL.Views
         private int currentPage = 1; // Trang hiện tại
         private int pageSize = 14; // Số lượng bản ghi mỗi trang
         private int totalRecords; // Tổng số bản ghi
+
+        // Khai báo ToolTip và Timer
+        private ToolTip cellToolTip = new ToolTip();
+        private Timer hoverTimer = new Timer();
+        private Point cursorPosition; // Lưu vị trí con trỏ chuột
         public AnalyseRevenueControl()
         {
             InitializeComponent();
@@ -232,7 +237,7 @@ namespace QuanLyNoir_BTL.Views
             // Cập nhật giao diện trên luồng chính
             this.Invoke((MethodInvoker)delegate
             {
-                lbl_totalRevenue.Text = $"{((double)totalRevenue*0.9):C}";
+                lbl_totalRevenue.Text = $"{((double)totalRevenue * 0.9):C}";
                 lbl_totalOrder.Text = $"{totalOrders} orders";
             });
         }
@@ -293,6 +298,12 @@ namespace QuanLyNoir_BTL.Views
             dataGridView1.ColumnHeadersDefaultCellStyle.ForeColor = System.Drawing.Color.Pink; // Màu chữ
             dataGridView1.ColumnHeadersDefaultCellStyle.Font = new Font("Arial", 10, FontStyle.Bold); // Font chữ
 
+            // Cấu hình Timer
+            hoverTimer.Interval = 500; // 0.5 giây
+            hoverTimer.Tick += HoverTimer_Tick;
+
+            // Tắt ToolTip theo mặc định
+            cellToolTip.Active = false;
         }
 
         private void cbbx_year_SelectedIndexChanged(object sender, EventArgs e)
@@ -379,6 +390,7 @@ namespace QuanLyNoir_BTL.Views
                     .Take(pageSize) // Giới hạn số lượng bản ghi mỗi trang
                     .Select(invoiceInfo => new InvoiceInformation
                     {
+                        Id = invoiceInfo.Id,
                         CreatedAt = invoiceInfo.CreatedAt,
                         Total = invoiceInfo.Total,
                         PaymentMethod = invoiceInfo.PaymentMethod,
@@ -400,6 +412,11 @@ namespace QuanLyNoir_BTL.Views
             this.Invoke((MethodInvoker)delegate
             {
                 dataGridView1.DataSource = data;
+                // Ẩn cột Id nếu không muốn hiển thị
+                if (dataGridView1.Columns["Id"] != null)
+                {
+                    dataGridView1.Columns["Id"].Visible = false;
+                }
             });
         }
 
@@ -443,18 +460,18 @@ namespace QuanLyNoir_BTL.Views
                                           && invoice.CreatedAt.Value.Year == year
                                           && invoice.CreatedAt.Value.Month == month);
                 }
-                 allData = await query
-                .OrderByDescending(invoice => invoice.CreatedAt)
-                .Select(invoiceInfo => new InvoiceInformation
-                {
-                    CreatedAt = invoiceInfo.CreatedAt,
-                    Total = invoiceInfo.Total,
-                    PaymentMethod = invoiceInfo.PaymentMethod,
-                    Amount = invoiceInfo.InvoiceDetails.Sum(d => d.Amount), // Tổng số lượng sản phẩm
-                    Name = invoiceInfo.CreatedByNavigation.Name,
-                })
-                .AsNoTracking()
-                .ToListAsync();
+                allData = await query
+               .OrderByDescending(invoice => invoice.CreatedAt)
+               .Select(invoiceInfo => new InvoiceInformation
+               {
+                   CreatedAt = invoiceInfo.CreatedAt,
+                   Total = invoiceInfo.Total,
+                   PaymentMethod = invoiceInfo.PaymentMethod,
+                   Amount = invoiceInfo.InvoiceDetails.Sum(d => d.Amount), // Tổng số lượng sản phẩm
+                   Name = invoiceInfo.CreatedByNavigation.Name,
+               })
+               .AsNoTracking()
+               .ToListAsync();
             }
 
             // Xuất sang Excel
@@ -525,6 +542,62 @@ namespace QuanLyNoir_BTL.Views
                 catch (Exception ex)
                 {
                     MessageBox.Show($"Error while exporting: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+
+        private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+
+        }
+
+        private void dataGridView1_CellMouseEnter(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0 && e.ColumnIndex >= 0) // Đảm bảo ô hợp lệ
+            {
+                // Lưu vị trí con trỏ chuột hiện tại
+                cursorPosition = Cursor.Position;
+
+                // Khởi động Timer
+                hoverTimer.Stop(); // Đảm bảo không bị trùng lặp
+                hoverTimer.Start();
+            }
+        }
+
+        // Sự kiện khi Timer đạt đến 1 giây
+        private void HoverTimer_Tick(object sender, EventArgs e)
+        {
+            // Dừng Timer để không lặp lại
+            hoverTimer.Stop();
+
+            // Hiển thị ToolTip tại vị trí con trỏ
+            cellToolTip.Active = true;
+            cellToolTip.Show("Double click to see detail", this, PointToClient(cursorPosition));
+        }
+
+        private void dataGridView1_CellMouseLeave(object sender, DataGridViewCellEventArgs e)
+        {
+            // Ẩn ToolTip và dừng Timer
+            hoverTimer.Stop();
+            cellToolTip.Hide(this);
+            cellToolTip.Active = false;
+        }
+
+        private void dataGridView1_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0) // Đảm bảo dòng được chọn hợp lệ
+            {
+                // Lấy dữ liệu dòng hiện tại
+                var row = dataGridView1.Rows[e.RowIndex];
+
+                // Lấy giá trị Id từ dòng
+                var invoiceId = row.Cells["Id"].Value;
+                if (invoiceId != null)
+                {
+                    Guid selectedInvoiceId = Guid.Parse(invoiceId.ToString());
+                    RevenueDetail revenueDetail = new RevenueDetail(selectedInvoiceId);
+                    revenueDetail.Show();
                 }
             }
         }

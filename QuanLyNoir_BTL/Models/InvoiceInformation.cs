@@ -2,6 +2,7 @@
 {
     public class InvoiceInformation
     {
+        public Guid Id { get; set; } //Id của Invoice
         public DateTime? CreatedAt { get; set; } // Ngày tạo
         public int Amount { get; set; } // Số lượng sản phẩm bán ra
         public string PaymentMethod { get; set; } // Phương thức thanh toán

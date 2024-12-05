@@ -166,7 +166,7 @@ namespace QuanLyNoir_BTL.Views
 
             // Tạo context menu
             ContextMenuStrip optionsMenu = new ContextMenuStrip();
-            optionsMenu.Items.Add("Edit/Add Size").Click += (s, e) => EditProduct(product.Id);
+            optionsMenu.Items.Add("Edit/Add Size").Click += (s, e) => EditProduct(product.Id); 
             optionsMenu.Items.Add("Delete").Click += (s, e) => DeleteProduct(product.Id);
             optionsMenu.Items.Add("Add Color").Click += (s, e) => AddColorToProduct(product.ProductId);
 

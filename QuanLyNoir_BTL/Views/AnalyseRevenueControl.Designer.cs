@@ -305,6 +305,10 @@
             dataGridView1.Size = new Size(1336, 442);
             dataGridView1.TabIndex = 52;
             dataGridView1.Visible = false;
+            dataGridView1.CellClick += dataGridView1_CellClick;
+            dataGridView1.CellDoubleClick += dataGridView1_CellDoubleClick;
+            dataGridView1.CellMouseEnter += dataGridView1_CellMouseEnter;
+            dataGridView1.CellMouseLeave += dataGridView1_CellMouseLeave;
             // 
             // btn_chart
             // 
