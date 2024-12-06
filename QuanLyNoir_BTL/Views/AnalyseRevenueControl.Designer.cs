@@ -29,10 +29,6 @@
         private void InitializeComponent()
         {
             label1 = new Label();
-            btn_revenueAnalyse = new Button();
-            btn_jacket = new Button();
-            btn_bag = new Button();
-            btn_newcollection = new Button();
             lbl_nameOfReport = new Label();
             llbl_daily = new LinkLabel();
             llbl_monthly = new LinkLabel();
@@ -63,76 +59,17 @@
             // 
             label1.AutoSize = true;
             label1.Font = new Font("Segoe UI", 19.8000011F, FontStyle.Bold, GraphicsUnit.Point, 163);
-            label1.Location = new Point(59, 24);
+            label1.Location = new Point(59, 50);
             label1.Name = "label1";
-            label1.Size = new Size(144, 46);
+            label1.Size = new Size(281, 46);
             label1.TabIndex = 0;
-            label1.Text = "Analyse";
-            // 
-            // btn_revenueAnalyse
-            // 
-            btn_revenueAnalyse.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            btn_revenueAnalyse.BackColor = Color.DarkSlateGray;
-            btn_revenueAnalyse.Cursor = Cursors.Hand;
-            btn_revenueAnalyse.FlatStyle = FlatStyle.Flat;
-            btn_revenueAnalyse.Font = new Font("Microsoft Sans Serif", 7.8F, FontStyle.Bold);
-            btn_revenueAnalyse.ForeColor = Color.Pink;
-            btn_revenueAnalyse.Location = new Point(59, 82);
-            btn_revenueAnalyse.Name = "btn_revenueAnalyse";
-            btn_revenueAnalyse.Size = new Size(82, 33);
-            btn_revenueAnalyse.TabIndex = 43;
-            btn_revenueAnalyse.Text = "Revenue";
-            btn_revenueAnalyse.UseVisualStyleBackColor = false;
-            // 
-            // btn_jacket
-            // 
-            btn_jacket.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            btn_jacket.BackColor = SystemColors.ControlLightLight;
-            btn_jacket.Cursor = Cursors.Hand;
-            btn_jacket.FlatStyle = FlatStyle.Flat;
-            btn_jacket.Font = new Font("Microsoft Sans Serif", 7.8F, FontStyle.Bold);
-            btn_jacket.Location = new Point(318, 82);
-            btn_jacket.Name = "btn_jacket";
-            btn_jacket.Size = new Size(75, 33);
-            btn_jacket.TabIndex = 42;
-            btn_jacket.Text = "Orders";
-            btn_jacket.UseVisualStyleBackColor = false;
-            // 
-            // btn_bag
-            // 
-            btn_bag.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            btn_bag.BackColor = SystemColors.ControlLightLight;
-            btn_bag.Cursor = Cursors.Hand;
-            btn_bag.FlatStyle = FlatStyle.Flat;
-            btn_bag.Font = new Font("Microsoft Sans Serif", 7.8F, FontStyle.Bold);
-            btn_bag.ForeColor = Color.Black;
-            btn_bag.Location = new Point(242, 82);
-            btn_bag.Name = "btn_bag";
-            btn_bag.Size = new Size(63, 33);
-            btn_bag.TabIndex = 41;
-            btn_bag.Text = "Profit";
-            btn_bag.UseVisualStyleBackColor = false;
-            // 
-            // btn_newcollection
-            // 
-            btn_newcollection.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            btn_newcollection.BackColor = SystemColors.ControlLightLight;
-            btn_newcollection.Cursor = Cursors.Hand;
-            btn_newcollection.FlatStyle = FlatStyle.Flat;
-            btn_newcollection.Font = new Font("Microsoft Sans Serif", 7.8F, FontStyle.Bold);
-            btn_newcollection.ForeColor = SystemColors.ActiveCaptionText;
-            btn_newcollection.Location = new Point(151, 82);
-            btn_newcollection.Name = "btn_newcollection";
-            btn_newcollection.Size = new Size(80, 33);
-            btn_newcollection.TabIndex = 40;
-            btn_newcollection.Text = "Product";
-            btn_newcollection.UseVisualStyleBackColor = false;
+            label1.Text = "Analyse revenue";
             // 
             // lbl_nameOfReport
             // 
             lbl_nameOfReport.AutoSize = true;
             lbl_nameOfReport.Font = new Font("Segoe UI Semibold", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 163);
-            lbl_nameOfReport.Location = new Point(59, 148);
+            lbl_nameOfReport.Location = new Point(59, 129);
             lbl_nameOfReport.Name = "lbl_nameOfReport";
             lbl_nameOfReport.Size = new Size(164, 31);
             lbl_nameOfReport.TabIndex = 44;
@@ -145,7 +82,7 @@
             llbl_daily.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 163);
             llbl_daily.ForeColor = Color.Silver;
             llbl_daily.LinkColor = Color.DimGray;
-            llbl_daily.Location = new Point(1277, 95);
+            llbl_daily.Location = new Point(1277, 76);
             llbl_daily.Name = "llbl_daily";
             llbl_daily.Size = new Size(44, 20);
             llbl_daily.TabIndex = 45;
@@ -160,7 +97,7 @@
             llbl_monthly.AutoSize = true;
             llbl_monthly.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 163);
             llbl_monthly.LinkColor = Color.Black;
-            llbl_monthly.Location = new Point(1338, 95);
+            llbl_monthly.Location = new Point(1338, 76);
             llbl_monthly.Name = "llbl_monthly";
             llbl_monthly.Size = new Size(67, 20);
             llbl_monthly.TabIndex = 47;
@@ -184,7 +121,7 @@
             panel1.Controls.Add(lbl_totalOrder);
             panel1.Controls.Add(lbl_totalRevenue);
             panel1.Controls.Add(label3);
-            panel1.Location = new Point(497, 82);
+            panel1.Location = new Point(497, 63);
             panel1.Name = "panel1";
             panel1.Size = new Size(293, 125);
             panel1.TabIndex = 49;
@@ -227,7 +164,7 @@
             panel2.Controls.Add(label5);
             panel2.Controls.Add(cbbx_year);
             panel2.Controls.Add(label4);
-            panel2.Location = new Point(827, 82);
+            panel2.Location = new Point(827, 63);
             panel2.Name = "panel2";
             panel2.Size = new Size(278, 125);
             panel2.TabIndex = 50;
@@ -244,6 +181,7 @@
             // 
             // cbbx_month
             // 
+            cbbx_month.Enabled = false;
             cbbx_month.FormattingEnabled = true;
             cbbx_month.Location = new Point(97, 81);
             cbbx_month.Name = "cbbx_month";
@@ -285,7 +223,7 @@
             btn_detail.BackColor = Color.DarkSlateGray;
             btn_detail.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 163);
             btn_detail.ForeColor = Color.Pink;
-            btn_detail.Location = new Point(1227, 173);
+            btn_detail.Location = new Point(1227, 154);
             btn_detail.Name = "btn_detail";
             btn_detail.Size = new Size(168, 34);
             btn_detail.TabIndex = 51;
@@ -315,7 +253,7 @@
             btn_chart.BackColor = Color.DarkSlateGray;
             btn_chart.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 163);
             btn_chart.ForeColor = Color.Pink;
-            btn_chart.Location = new Point(1227, 174);
+            btn_chart.Location = new Point(1227, 155);
             btn_chart.Name = "btn_chart";
             btn_chart.Size = new Size(168, 34);
             btn_chart.TabIndex = 53;
@@ -389,10 +327,6 @@
             Controls.Add(llbl_monthly);
             Controls.Add(llbl_daily);
             Controls.Add(lbl_nameOfReport);
-            Controls.Add(btn_revenueAnalyse);
-            Controls.Add(btn_jacket);
-            Controls.Add(btn_bag);
-            Controls.Add(btn_newcollection);
             Controls.Add(label1);
             Name = "AnalyseRevenueControl";
             Size = new Size(1528, 788);
@@ -409,10 +343,6 @@
         #endregion
 
         private Label label1;
-        private Button btn_revenueAnalyse;
-        private Button btn_jacket;
-        private Button btn_bag;
-        private Button btn_newcollection;
         private Label lbl_nameOfReport;
         private LinkLabel llbl_daily;
         private LinkLabel llbl_monthly;

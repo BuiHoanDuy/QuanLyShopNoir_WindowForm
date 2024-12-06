@@ -593,10 +593,14 @@ namespace QuanLyNoir_BTL.Views
 
                 // Lấy giá trị Id từ dòng
                 var invoiceId = row.Cells["Id"].Value;
+                var total = row.Cells["Total"].Value.ToString();
+                var revenue = row.Cells["Revenue"].Value.ToString();
+                var name = row.Cells["Name"].Value.ToString();
+                var date = row.Cells["CreatedAt"].Value.ToString();
                 if (invoiceId != null)
                 {
                     Guid selectedInvoiceId = Guid.Parse(invoiceId.ToString());
-                    RevenueDetail revenueDetail = new RevenueDetail(selectedInvoiceId);
+                    RevenueDetail revenueDetail = new RevenueDetail(selectedInvoiceId,total, revenue, name, date);
                     revenueDetail.Show();
                 }
             }
