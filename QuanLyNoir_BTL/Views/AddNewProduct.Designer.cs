@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            label1 = new Label();
+            lbl_formName = new Label();
             pictureBox1 = new PictureBox();
             groupBox1 = new GroupBox();
             lbl_name = new Label();
@@ -86,15 +86,15 @@
             groupBox7.SuspendLayout();
             SuspendLayout();
             // 
-            // label1
+            // lbl_formName
             // 
-            label1.AutoSize = true;
-            label1.Font = new Font("Calibri", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 163);
-            label1.Location = new Point(91, 28);
-            label1.Name = "label1";
-            label1.Size = new Size(180, 28);
-            label1.TabIndex = 0;
-            label1.Text = "Add new product ";
+            lbl_formName.AutoSize = true;
+            lbl_formName.Font = new Font("Calibri", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 163);
+            lbl_formName.Location = new Point(91, 28);
+            lbl_formName.Name = "lbl_formName";
+            lbl_formName.Size = new Size(180, 28);
+            lbl_formName.TabIndex = 0;
+            lbl_formName.Text = "Add new product ";
             // 
             // pictureBox1
             // 
@@ -238,15 +238,15 @@
             // 
             // btn_none
             // 
+            btn_none.BackColor = Color.DarkSeaGreen;
+            btn_none.ForeColor = Color.AliceBlue;
             btn_none.Location = new Point(6, 35);
             btn_none.Name = "btn_none";
             btn_none.Size = new Size(71, 35);
             btn_none.TabIndex = 0;
             btn_none.Text = "None";
-            btn_none.UseVisualStyleBackColor = true;
+            btn_none.UseVisualStyleBackColor = false;
             btn_none.Click += btn_none_Click;
-            btn_none.ForeColor = Color.AliceBlue;
-            btn_none.BackColor = Color.DarkSeaGreen;
             // 
             // groupBox4
             // 
@@ -592,7 +592,7 @@
             Controls.Add(groupBox2);
             Controls.Add(groupBox1);
             Controls.Add(pictureBox1);
-            Controls.Add(label1);
+            Controls.Add(lbl_formName);
             Name = "AddNewProduct";
             Text = "AddNewProduct";
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
@@ -616,7 +616,7 @@
 
         #endregion
 
-        private Label label1;
+        private Label lbl_formName;
         private PictureBox pictureBox1;
         private GroupBox groupBox1;
         private TextBox tbx_name;

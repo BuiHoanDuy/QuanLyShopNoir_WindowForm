@@ -30,6 +30,7 @@ namespace QuanLyNoir_BTL.Views
             if (isNew)
             {
                 this.Text = "Add New Product";
+                lbl_formName.Text = "Add New Product";
                 btn_update.Visible = false;
                 btn_addtostore.Visible = true;
                 cbbx_type.SelectedIndex = 0;
@@ -37,6 +38,7 @@ namespace QuanLyNoir_BTL.Views
             else
             {
                 this.Text = "Edit Product";
+                lbl_formName.Text = "Edit Product";
                 btn_update.Visible = true;
                 btn_addtostore.Visible = false;
 
@@ -50,6 +52,7 @@ namespace QuanLyNoir_BTL.Views
 
             this.StartPosition = FormStartPosition.CenterScreen;
             this.Text = "Add New Color";
+            lbl_formName.Text = "Add New Color";
             this.Focus();
             SetupBackgroundWorker();
             SetupPlaceholder();
@@ -68,6 +71,7 @@ namespace QuanLyNoir_BTL.Views
             if (Choice == 'S')
             {
                 this.Text = "Add New Size";
+                lbl_formName.Text = "Add New Size";
                 pictureBox1.Enabled = false;
                 LoadProductData(currentProductId);
                 using (var _dbContext = new ShopNoirContext())

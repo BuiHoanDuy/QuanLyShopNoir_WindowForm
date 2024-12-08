@@ -16,6 +16,9 @@
     <Compile Update="Views\ManageVoucherControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Update="Views\MasterForm_SellProduct.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="Views\MenuForm.cs">
       <SubType>Form</SubType>
     </Compile>

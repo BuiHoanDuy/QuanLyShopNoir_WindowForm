@@ -347,9 +347,7 @@ namespace QuanLyNoir_BTL.Views
             tbx_search.Clear();
             scrb_price.Value = 1000;
             currentType = null;
-            resetButtonTypeFilter();
-            btn_all.ForeColor = Color.Pink;
-            btn_all.BackColor = Color.DarkSlateGray;
+            updateEffectClickedButton(btn_all);
             _timer.Start();
         }
 
@@ -367,11 +365,17 @@ namespace QuanLyNoir_BTL.Views
             btn_all.ForeColor = Color.Black;
             btn_all.BackColor = SystemColors.ControlLightLight;
         }
+        private void updateEffectClickedButton(System.Windows.Forms.Button btn)
+        {
+            resetButtonTypeFilter();
+
+            btn.BackColor = Color.DarkSlateGray;
+            btn.ForeColor = Color.Pink;
+        }
         private void btn_bag_Click(object sender, EventArgs e)
         {
             resetButtonTypeFilter();
-            btn_bag.ForeColor = Color.Pink;
-            btn_bag.BackColor = Color.DarkSlateGray;
+            updateEffectClickedButton(btn_bag);
             currentType = "Bag"; // Đặt loại sản phẩm là 'bag'
             currentPage = 1; // Quay lại trang đầu
             if (!loadWorker.IsBusy)
@@ -382,9 +386,7 @@ namespace QuanLyNoir_BTL.Views
 
         private void btn_jacket_Click(object sender, EventArgs e)
         {
-            resetButtonTypeFilter();
-            btn_jacket.ForeColor = Color.Pink;
-            btn_jacket.BackColor = Color.DarkSlateGray;
+            updateEffectClickedButton(btn_jacket);
             currentType = "Jacket"; // Đặt loại sản phẩm là 'jacket'
             currentPage = 1; // Quay lại trang đầu
             if (!loadWorker.IsBusy)
@@ -395,9 +397,7 @@ namespace QuanLyNoir_BTL.Views
 
         private void btn_newcollection_Click(object sender, EventArgs e)
         {
-            resetButtonTypeFilter();
-            btn_newcollection.ForeColor = Color.Pink;
-            btn_newcollection.BackColor = Color.DarkSlateGray;
+            updateEffectClickedButton(btn_newcollection);
             currentType = "New Collection"; // select tất cả các sản phẩm
             currentPage = 1; // Quay lại trang đầu
             if (!loadWorker.IsBusy)
@@ -408,9 +408,7 @@ namespace QuanLyNoir_BTL.Views
 
         private void btn_all_Click(object sender, EventArgs e)
         {
-            resetButtonTypeFilter();
-            btn_all.ForeColor = Color.Pink;
-            btn_all.BackColor = Color.DarkSlateGray;
+            updateEffectClickedButton(btn_all);
             currentType = null; // Đặt loại sản phẩm là 'null' => chon tat ca
             currentPage = 1; // Quay lại trang đầu
             if (!loadWorker.IsBusy)

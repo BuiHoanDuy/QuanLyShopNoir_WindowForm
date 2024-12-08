@@ -1,4 +1,5 @@
 ﻿using QuanLyNoir_BTL.Models;
+using QuanLyNoir_BTL.Views;
 using System;
 using System.Linq;
 using System.Windows.Forms;
@@ -33,9 +34,18 @@ namespace QuanLyNoir_BTL
                 if (user != null && user.Status == true)
                 {
                     // Đăng nhập thành công
-                    MenuForm manageProductForm = new MenuForm(user.Name);
-                    this.Hide(); // Ẩn form đăng nhập
-                    manageProductForm.Show();
+                    if (user.Role == true)
+                    {
+                        MenuForm manageProductForm = new MenuForm(user.Name);
+                        this.Hide(); // Ẩn form đăng nhập
+                        manageProductForm.Show();
+                    }else
+                    {
+                        MasterForm_SellProduct masterForm_SellProduct = new MasterForm_SellProduct(user.Name);
+                        this.Hide();
+                        masterForm_SellProduct.Show();
+                    }
+                    
 
                     // Xử lý Remember Me
                     if (chbx_rememberme.Checked)
