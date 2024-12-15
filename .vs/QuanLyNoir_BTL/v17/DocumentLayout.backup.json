@@ -3,20 +3,32 @@
   "WorkspaceRootPath": "C:\\Users\\Aus\\Documents\\Subjects\\LapTrinhTrucQuan\\BTL\\QuanLyNoir_BTL\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{1A3CB0F7-E1EE-4981-83B7-CABD400B1737}|QuanLyNoir_BTL\\QuanLyNoir_BTL.csproj|c:\\users\\aus\\documents\\subjects\\laptrinhtrucquan\\btl\\quanlynoir_btl\\quanlynoir_btl\\views\\manageproductcontrol.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{1A3CB0F7-E1EE-4981-83B7-CABD400B1737}|QuanLyNoir_BTL\\QuanLyNoir_BTL.csproj|solutionrelative:quanlynoir_btl\\views\\manageproductcontrol.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{1A3CB0F7-E1EE-4981-83B7-CABD400B1737}|QuanLyNoir_BTL\\QuanLyNoir_BTL.csproj|c:\\users\\aus\\documents\\subjects\\laptrinhtrucquan\\btl\\quanlynoir_btl\\quanlynoir_btl\\views\\manageproductcontrol.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
-      "RelativeMoniker": "D:0:0:{1A3CB0F7-E1EE-4981-83B7-CABD400B1737}|QuanLyNoir_BTL\\QuanLyNoir_BTL.csproj|solutionrelative:quanlynoir_btl\\views\\manageproductcontrol.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{1A3CB0F7-E1EE-4981-83B7-CABD400B1737}|QuanLyNoir_BTL\\QuanLyNoir_BTL.csproj|c:\\users\\aus\\documents\\subjects\\laptrinhtrucquan\\btl\\quanlynoir_btl\\quanlynoir_btl\\views\\addnewproduct.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{1A3CB0F7-E1EE-4981-83B7-CABD400B1737}|QuanLyNoir_BTL\\QuanLyNoir_BTL.csproj|solutionrelative:quanlynoir_btl\\views\\addnewproduct.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{1A3CB0F7-E1EE-4981-83B7-CABD400B1737}|QuanLyNoir_BTL\\QuanLyNoir_BTL.csproj|c:\\users\\aus\\documents\\subjects\\laptrinhtrucquan\\btl\\quanlynoir_btl\\quanlynoir_btl\\views\\addnewproduct.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
       "RelativeMoniker": "D:0:0:{1A3CB0F7-E1EE-4981-83B7-CABD400B1737}|QuanLyNoir_BTL\\QuanLyNoir_BTL.csproj|solutionrelative:quanlynoir_btl\\views\\addnewproduct.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1A3CB0F7-E1EE-4981-83B7-CABD400B1737}|QuanLyNoir_BTL\\QuanLyNoir_BTL.csproj|c:\\users\\aus\\documents\\subjects\\laptrinhtrucquan\\btl\\quanlynoir_btl\\quanlynoir_btl\\views\\takingproductform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1A3CB0F7-E1EE-4981-83B7-CABD400B1737}|QuanLyNoir_BTL\\QuanLyNoir_BTL.csproj|solutionrelative:quanlynoir_btl\\views\\takingproductform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1A3CB0F7-E1EE-4981-83B7-CABD400B1737}|QuanLyNoir_BTL\\QuanLyNoir_BTL.csproj|C:\\Users\\Aus\\Documents\\Subjects\\LapTrinhTrucQuan\\BTL\\QuanLyNoir_BTL\\quanlynoir_btl\\views\\masterform_sellproduct.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{1A3CB0F7-E1EE-4981-83B7-CABD400B1737}|QuanLyNoir_BTL\\QuanLyNoir_BTL.csproj|solutionrelative:quanlynoir_btl\\views\\masterform_sellproduct.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1A3CB0F7-E1EE-4981-83B7-CABD400B1737}|QuanLyNoir_BTL\\QuanLyNoir_BTL.csproj|c:\\users\\aus\\documents\\subjects\\laptrinhtrucquan\\btl\\quanlynoir_btl\\quanlynoir_btl\\views\\masterform_sellproduct.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1A3CB0F7-E1EE-4981-83B7-CABD400B1737}|QuanLyNoir_BTL\\QuanLyNoir_BTL.csproj|solutionrelative:quanlynoir_btl\\views\\masterform_sellproduct.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1A3CB0F7-E1EE-4981-83B7-CABD400B1737}|QuanLyNoir_BTL\\QuanLyNoir_BTL.csproj|c:\\users\\aus\\documents\\subjects\\laptrinhtrucquan\\btl\\quanlynoir_btl\\quanlynoir_btl\\views\\manageproductcontrol.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1A3CB0F7-E1EE-4981-83B7-CABD400B1737}|QuanLyNoir_BTL\\QuanLyNoir_BTL.csproj|solutionrelative:quanlynoir_btl\\views\\manageproductcontrol.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1A3CB0F7-E1EE-4981-83B7-CABD400B1737}|QuanLyNoir_BTL\\QuanLyNoir_BTL.csproj|c:\\users\\aus\\documents\\subjects\\laptrinhtrucquan\\btl\\quanlynoir_btl\\quanlynoir_btl\\views\\takingproductform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{1A3CB0F7-E1EE-4981-83B7-CABD400B1737}|QuanLyNoir_BTL\\QuanLyNoir_BTL.csproj|solutionrelative:quanlynoir_btl\\views\\takingproductform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
     }
   ],
   "DocumentGroupContainers": [
@@ -40,8 +52,12 @@
         },
         {
           "DockedHeight": 115,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 2,
           "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{d78612c7-9962-4b83-95d9-268046dad23a}"
+            },
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
@@ -49,52 +65,90 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "ManageProductControl.cs",
-              "DocumentMoniker": "C:\\Users\\Aus\\Documents\\Subjects\\LapTrinhTrucQuan\\BTL\\QuanLyNoir_BTL\\QuanLyNoir_BTL\\Views\\ManageProductControl.cs",
-              "RelativeDocumentMoniker": "QuanLyNoir_BTL\\Views\\ManageProductControl.cs",
-              "ToolTip": "C:\\Users\\Aus\\Documents\\Subjects\\LapTrinhTrucQuan\\BTL\\QuanLyNoir_BTL\\QuanLyNoir_BTL\\Views\\ManageProductControl.cs",
-              "RelativeToolTip": "QuanLyNoir_BTL\\Views\\ManageProductControl.cs",
-              "ViewState": "AgIAAI0AAAAAAAAAAAAYwKIAAAAtAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-08T10:09:55.381Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "ManageProductControl.cs [Design]",
-              "DocumentMoniker": "C:\\Users\\Aus\\Documents\\Subjects\\LapTrinhTrucQuan\\BTL\\QuanLyNoir_BTL\\QuanLyNoir_BTL\\Views\\ManageProductControl.cs",
-              "RelativeDocumentMoniker": "QuanLyNoir_BTL\\Views\\ManageProductControl.cs",
-              "ToolTip": "C:\\Users\\Aus\\Documents\\Subjects\\LapTrinhTrucQuan\\BTL\\QuanLyNoir_BTL\\QuanLyNoir_BTL\\Views\\ManageProductControl.cs [Design]",
-              "RelativeToolTip": "QuanLyNoir_BTL\\Views\\ManageProductControl.cs [Design]",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-08T10:09:44.995Z",
-              "EditorCaption": " [Design]"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
               "Title": "AddNewProduct.cs",
               "DocumentMoniker": "C:\\Users\\Aus\\Documents\\Subjects\\LapTrinhTrucQuan\\BTL\\QuanLyNoir_BTL\\QuanLyNoir_BTL\\Views\\AddNewProduct.cs",
               "RelativeDocumentMoniker": "QuanLyNoir_BTL\\Views\\AddNewProduct.cs",
               "ToolTip": "C:\\Users\\Aus\\Documents\\Subjects\\LapTrinhTrucQuan\\BTL\\QuanLyNoir_BTL\\QuanLyNoir_BTL\\Views\\AddNewProduct.cs",
               "RelativeToolTip": "QuanLyNoir_BTL\\Views\\AddNewProduct.cs",
-              "ViewState": "AgIAALkAAAAAAAAAAAAAAEkAAAAzAAAAAAAAAA==",
+              "ViewState": "AgIAAIYAAAAAAAAAAAAgwAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-08T10:07:46.448Z",
+              "WhenOpened": "2024-12-15T08:28:29.515Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 2,
+              "Title": "TakingProductForm.cs",
+              "DocumentMoniker": "C:\\Users\\Aus\\Documents\\Subjects\\LapTrinhTrucQuan\\BTL\\QuanLyNoir_BTL\\QuanLyNoir_BTL\\Views\\TakingProductForm.cs",
+              "RelativeDocumentMoniker": "QuanLyNoir_BTL\\Views\\TakingProductForm.cs",
+              "ToolTip": "C:\\Users\\Aus\\Documents\\Subjects\\LapTrinhTrucQuan\\BTL\\QuanLyNoir_BTL\\QuanLyNoir_BTL\\Views\\TakingProductForm.cs",
+              "RelativeToolTip": "QuanLyNoir_BTL\\Views\\TakingProductForm.cs",
+              "ViewState": "AgIAAAwAAAAAAAAAAAAjwBYAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-15T08:14:01.412Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
               "Title": "AddNewProduct.cs [Design]",
               "DocumentMoniker": "C:\\Users\\Aus\\Documents\\Subjects\\LapTrinhTrucQuan\\BTL\\QuanLyNoir_BTL\\QuanLyNoir_BTL\\Views\\AddNewProduct.cs",
               "RelativeDocumentMoniker": "QuanLyNoir_BTL\\Views\\AddNewProduct.cs",
               "ToolTip": "C:\\Users\\Aus\\Documents\\Subjects\\LapTrinhTrucQuan\\BTL\\QuanLyNoir_BTL\\QuanLyNoir_BTL\\Views\\AddNewProduct.cs [Design]",
               "RelativeToolTip": "QuanLyNoir_BTL\\Views\\AddNewProduct.cs [Design]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-08T10:07:43.882Z",
+              "WhenOpened": "2024-12-15T07:55:41.627Z",
               "EditorCaption": " [Design]"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "TakingProductForm.cs [Design]",
+              "DocumentMoniker": "C:\\Users\\Aus\\Documents\\Subjects\\LapTrinhTrucQuan\\BTL\\QuanLyNoir_BTL\\QuanLyNoir_BTL\\Views\\TakingProductForm.cs",
+              "RelativeDocumentMoniker": "QuanLyNoir_BTL\\Views\\TakingProductForm.cs",
+              "ToolTip": "C:\\Users\\Aus\\Documents\\Subjects\\LapTrinhTrucQuan\\BTL\\QuanLyNoir_BTL\\QuanLyNoir_BTL\\Views\\TakingProductForm.cs [Design]",
+              "RelativeToolTip": "QuanLyNoir_BTL\\Views\\TakingProductForm.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-15T07:55:23.473Z",
+              "EditorCaption": " [Design]"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "MasterForm_SellProduct.cs [Design]",
+              "DocumentMoniker": "C:\\Users\\Aus\\Documents\\Subjects\\LapTrinhTrucQuan\\BTL\\QuanLyNoir_BTL\\QuanLyNoir_BTL\\Views\\MasterForm_SellProduct.cs",
+              "RelativeDocumentMoniker": "QuanLyNoir_BTL\\Views\\MasterForm_SellProduct.cs",
+              "ToolTip": "C:\\Users\\Aus\\Documents\\Subjects\\LapTrinhTrucQuan\\BTL\\QuanLyNoir_BTL\\QuanLyNoir_BTL\\Views\\MasterForm_SellProduct.cs [Design]*",
+              "RelativeToolTip": "QuanLyNoir_BTL\\Views\\MasterForm_SellProduct.cs [Design]*",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-14T14:13:05.461Z",
+              "EditorCaption": " [Design]"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "MasterForm_SellProduct.cs",
+              "DocumentMoniker": "C:\\Users\\Aus\\Documents\\Subjects\\LapTrinhTrucQuan\\BTL\\QuanLyNoir_BTL\\QuanLyNoir_BTL\\Views\\MasterForm_SellProduct.cs",
+              "RelativeDocumentMoniker": "QuanLyNoir_BTL\\Views\\MasterForm_SellProduct.cs",
+              "ToolTip": "C:\\Users\\Aus\\Documents\\Subjects\\LapTrinhTrucQuan\\BTL\\QuanLyNoir_BTL\\QuanLyNoir_BTL\\Views\\MasterForm_SellProduct.cs*",
+              "RelativeToolTip": "QuanLyNoir_BTL\\Views\\MasterForm_SellProduct.cs*",
+              "ViewState": "AgIAAIsAAAAAAAAAAAAAACgBAAA0AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-14T14:13:09.263Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "ManageProductControl.cs",
+              "DocumentMoniker": "C:\\Users\\Aus\\Documents\\Subjects\\LapTrinhTrucQuan\\BTL\\QuanLyNoir_BTL\\QuanLyNoir_BTL\\Views\\ManageProductControl.cs",
+              "RelativeDocumentMoniker": "QuanLyNoir_BTL\\Views\\ManageProductControl.cs",
+              "ToolTip": "C:\\Users\\Aus\\Documents\\Subjects\\LapTrinhTrucQuan\\BTL\\QuanLyNoir_BTL\\QuanLyNoir_BTL\\Views\\ManageProductControl.cs",
+              "RelativeToolTip": "QuanLyNoir_BTL\\Views\\ManageProductControl.cs",
+              "ViewState": "AgIAAIwBAAAAAAAAAAArwJIBAAALAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-08T10:09:55.381Z",
+              "EditorCaption": ""
             }
           ]
         },

@@ -32,6 +32,7 @@
             lbl_name = new Label();
             btn_signout = new Button();
             panel1 = new Panel();
+            btn_reset = new Button();
             lbl_datetime = new Label();
             label1 = new Label();
             pictureBox2 = new PictureBox();
@@ -45,10 +46,17 @@
             pnl_side = new Panel();
             btn_checkout = new Button();
             pnl_body = new Panel();
+            pnl_product = new FlowLayoutPanel();
+            lbl_page = new Label();
+            btn_previous = new Button();
+            btn_next = new Button();
+            loadWorker = new System.ComponentModel.BackgroundWorker();
+            progressBar1 = new ProgressBar();
             panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
             pnl_nav.SuspendLayout();
             pnl_side.SuspendLayout();
+            pnl_body.SuspendLayout();
             SuspendLayout();
             // 
             // lbl_name
@@ -77,6 +85,7 @@
             // panel1
             // 
             panel1.BackColor = SystemColors.ControlLightLight;
+            panel1.Controls.Add(btn_reset);
             panel1.Controls.Add(lbl_datetime);
             panel1.Controls.Add(label1);
             panel1.Controls.Add(pictureBox2);
@@ -89,11 +98,21 @@
             panel1.Size = new Size(1715, 76);
             panel1.TabIndex = 22;
             // 
+            // btn_reset
+            // 
+            btn_reset.Location = new Point(869, 23);
+            btn_reset.Name = "btn_reset";
+            btn_reset.Size = new Size(94, 29);
+            btn_reset.TabIndex = 27;
+            btn_reset.Text = "Reset";
+            btn_reset.UseVisualStyleBackColor = true;
+            btn_reset.Click += btn_reset_Click;
+            // 
             // lbl_datetime
             // 
             lbl_datetime.AutoSize = true;
             lbl_datetime.Font = new Font("Arial Narrow", 10.2F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            lbl_datetime.Location = new Point(988, 27);
+            lbl_datetime.Location = new Point(1063, 26);
             lbl_datetime.Name = "lbl_datetime";
             lbl_datetime.Size = new Size(129, 22);
             lbl_datetime.TabIndex = 26;
@@ -102,7 +121,7 @@
             // label1
             // 
             label1.Font = new Font("Arial Rounded MT Bold", 10.2F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label1.Location = new Point(938, 28);
+            label1.Location = new Point(1007, 27);
             label1.Name = "label1";
             label1.Size = new Size(62, 25);
             label1.TabIndex = 25;
@@ -135,6 +154,7 @@
             tbx_search.Name = "tbx_search";
             tbx_search.Size = new Size(621, 27);
             tbx_search.TabIndex = 23;
+            tbx_search.TextChanged += tbx_search_TextChanged;
             // 
             // pnl_nav
             // 
@@ -237,16 +257,73 @@
             // pnl_body
             // 
             pnl_body.BackColor = SystemColors.ControlLightLight;
+            pnl_body.Controls.Add(pnl_product);
+            pnl_body.Controls.Add(lbl_page);
+            pnl_body.Controls.Add(btn_previous);
+            pnl_body.Controls.Add(btn_next);
             pnl_body.Location = new Point(12, 189);
             pnl_body.Name = "pnl_body";
             pnl_body.Size = new Size(1241, 722);
             pnl_body.TabIndex = 25;
+            // 
+            // pnl_product
+            // 
+            pnl_product.Location = new Point(3, 3);
+            pnl_product.Name = "pnl_product";
+            pnl_product.Size = new Size(1235, 674);
+            pnl_product.TabIndex = 47;
+            // 
+            // lbl_page
+            // 
+            lbl_page.AutoSize = true;
+            lbl_page.Location = new Point(563, 687);
+            lbl_page.Name = "lbl_page";
+            lbl_page.Size = new Size(21, 20);
+            lbl_page.TabIndex = 46;
+            lbl_page.Text = "...";
+            // 
+            // btn_previous
+            // 
+            btn_previous.Cursor = Cursors.Hand;
+            btn_previous.Location = new Point(451, 683);
+            btn_previous.Name = "btn_previous";
+            btn_previous.Size = new Size(106, 29);
+            btn_previous.TabIndex = 44;
+            btn_previous.Text = "Previous";
+            btn_previous.UseVisualStyleBackColor = true;
+            btn_previous.Click += btn_previous_Click;
+            // 
+            // btn_next
+            // 
+            btn_next.Cursor = Cursors.Hand;
+            btn_next.Location = new Point(652, 683);
+            btn_next.Name = "btn_next";
+            btn_next.Size = new Size(106, 29);
+            btn_next.TabIndex = 45;
+            btn_next.Text = "Next";
+            btn_next.UseVisualStyleBackColor = true;
+            btn_next.Click += btn_next_Click;
+            // 
+            // loadWorker
+            // 
+            loadWorker.WorkerReportsProgress = true;
+            loadWorker.DoWork += loadWorker_DoWork;
+            loadWorker.ProgressChanged += loadWorker_ProgressChanged;
+            loadWorker.RunWorkerCompleted += loadWorker_RunWorkerCompleted;
+            // 
+            // progressBar1
+            // 
+            progressBar1.Location = new Point(-3, 70);
+            progressBar1.Name = "progressBar1";
+            progressBar1.Size = new Size(1712, 10);
+            progressBar1.TabIndex = 26;
             // 
             // MasterForm_SellProduct
             // 
             AutoScaleDimensions = new SizeF(9F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1708, 923);
+            Controls.Add(progressBar1);
             Controls.Add(pnl_body);
             Controls.Add(pnl_side);
             Controls.Add(pnl_nav);
@@ -255,11 +332,14 @@
             Name = "MasterForm_SellProduct";
             Text = "MasterForm_SellProduct";
             FormClosing += MasterForm_SellProduct_FormClosing;
+            Load += MasterForm_SellProduct_Load;
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox2).EndInit();
             pnl_nav.ResumeLayout(false);
             pnl_side.ResumeLayout(false);
+            pnl_body.ResumeLayout(false);
+            pnl_body.PerformLayout();
             ResumeLayout(false);
         }
 
@@ -281,5 +361,12 @@
         private Button btn_newcollection;
         private Panel pnl_body;
         private Button btn_checkout;
+        private System.ComponentModel.BackgroundWorker loadWorker;
+        private ProgressBar progressBar1;
+        private Label lbl_page;
+        private Button btn_previous;
+        private Button btn_next;
+        private FlowLayoutPanel pnl_product;
+        private Button btn_reset;
     }
 }
