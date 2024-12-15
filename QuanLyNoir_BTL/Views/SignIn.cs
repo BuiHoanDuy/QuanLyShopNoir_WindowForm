@@ -8,7 +8,8 @@ namespace QuanLyNoir_BTL
 {
     public partial class SignIn : Form
     {
-       // private readonly ShopNoirContext _dbContext = new ShopNoirContext();
+        private bool isShowPassword;
+        // private readonly ShopNoirContext _dbContext = new ShopNoirContext();
         public SignIn()
         {
             InitializeComponent();
@@ -16,6 +17,7 @@ namespace QuanLyNoir_BTL
             pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
             btn_signin.MouseEnter += btn_signin_MouseEnter;
             btn_signin.MouseLeave += btn_signin_MouseLeave;
+            isShowPassword = false;
 
             LoginForm_Load(null, null);
         }
@@ -39,13 +41,14 @@ namespace QuanLyNoir_BTL
                         MenuForm manageProductForm = new MenuForm(user.Name);
                         this.Hide(); // Ẩn form đăng nhập
                         manageProductForm.Show();
-                    }else
+                    }
+                    else
                     {
                         MasterForm_SellProduct masterForm_SellProduct = new MasterForm_SellProduct(user.Name);
                         this.Hide();
                         masterForm_SellProduct.Show();
                     }
-                    
+
 
                     // Xử lý Remember Me
                     if (chbx_rememberme.Checked)
@@ -102,5 +105,24 @@ namespace QuanLyNoir_BTL
             btn_signin.ForeColor = SystemColors.Control; // Đặt lại màu chữ mặc định
         }
 
+        private void show_icon_Click(object sender, EventArgs e)
+        {
+            string iconStringPath;
+            if (!isShowPassword)
+            {
+                tbx_password.PasswordChar = '\0';
+                //iconStringPath = "/Content/icon/no_show_icon.png";
+                iconStringPath = "C:\\Users\\Admin\\OneDrive\\Documents\\do_an\\QuanLyShopNoir_WindowForm\\QuanLyNoir_BTL\\Content\\icon\\no_show_icon.png";
+            }
+            else
+            {
+                tbx_password.PasswordChar = '*';
+                //iconStringPath = "/Content/icon/show_icon.png";
+                iconStringPath = "C:\\Users\\Admin\\OneDrive\\Documents\\do_an\\QuanLyShopNoir_WindowForm\\QuanLyNoir_BTL\\Content\\icon\\show_icon.png";
+            }
+
+            show_icon.Image = Image.FromFile(iconStringPath);
+            isShowPassword = !isShowPassword;
+        }
     }
 }

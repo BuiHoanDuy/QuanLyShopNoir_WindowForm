@@ -133,10 +133,10 @@ namespace QuanLyNoir_BTL
             // label6
             // 
             label6.AutoSize = true;
-            label6.Font = new Font("STLiti", 19.8000011F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 134);
+            label6.Font = new Font("Microsoft Sans Serif", 19.8000011F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 134);
             label6.Location = new Point(50, 19);
             label6.Name = "label6";
-            label6.Size = new Size(75, 35);
+            label6.Size = new Size(68, 31);
             label6.TabIndex = 3;
             label6.Text = "Noir";
             // 
@@ -145,7 +145,7 @@ namespace QuanLyNoir_BTL
             lbl_name.AutoSize = true;
             lbl_name.Location = new Point(1358, 16);
             lbl_name.Name = "lbl_name";
-            lbl_name.Size = new Size(47, 20);
+            lbl_name.Size = new Size(37, 15);
             lbl_name.TabIndex = 18;
             lbl_name.Text = "name";
             // 
@@ -156,12 +156,13 @@ namespace QuanLyNoir_BTL
             pnl_control.Name = "pnl_control";
             pnl_control.Size = new Size(1530, 790);
             pnl_control.TabIndex = 19;
+            pnl_control.Paint += pnl_control_Paint;
             // 
             // MenuForm
             // 
             AutoScaleMode = AutoScaleMode.None;
             BackColor = SystemColors.Info;
-            ClientSize = new Size(1524, 895);
+            ClientSize = new Size(1370, 749);
             Controls.Add(lbl_name);
             Controls.Add(panel1);
             Controls.Add(btn_signout);

@@ -13,6 +13,9 @@
     <Compile Update="Views\ManageAccountControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Update="Views\ManageOrderControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Update="Views\ManageVoucherControl.cs">
       <SubType>UserControl</SubType>
     </Compile>

@@ -11,7 +11,8 @@ namespace QuanLyNoir_BTL
         private Lazy<ManageProductControl> manageProductControl = new Lazy<ManageProductControl>(() => new ManageProductControl());
         private Lazy<ManageAccountControl> manageAccountControl = new Lazy<ManageAccountControl>(() => new ManageAccountControl());
         private Lazy<ManageVoucherControl> manageVoucherControl = new Lazy<ManageVoucherControl>(() => new ManageVoucherControl());
-        private Lazy<AnalyseRevenueControl> revenueControl  = new Lazy<AnalyseRevenueControl>(() => new AnalyseRevenueControl());
+        private Lazy<AnalyseRevenueControl> revenueControl = new Lazy<AnalyseRevenueControl>(() => new AnalyseRevenueControl());
+        private Lazy<ManageOrderControl> manageOrderControl = new Lazy<ManageOrderControl>(() => new ManageOrderControl());
         public MenuForm(string username)
         {
             InitializeComponent();
@@ -97,6 +98,12 @@ namespace QuanLyNoir_BTL
         {
             this.Text = "Manage Order";
             updateEffectClickedButton(btn_manageOrder);
+            if (!pnl_control.Controls.Contains(manageOrderControl.Value))
+            {
+                pnl_control.Controls.Add(manageOrderControl.Value);
+            }
+
+            ShowControl(manageOrderControl.Value);
         }
 
         private void btn_analyseRevenue_Click(object sender, EventArgs e)
@@ -119,6 +126,11 @@ namespace QuanLyNoir_BTL
             }
 
             ShowControl(manageProductControl.Value);
+        }
+
+        private void pnl_control_Paint(object sender, PaintEventArgs e)
+        {
+
         }
     }
 }
