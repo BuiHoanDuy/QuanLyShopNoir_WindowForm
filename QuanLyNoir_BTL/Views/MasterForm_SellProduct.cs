@@ -400,12 +400,20 @@ namespace QuanLyNoir_BTL.Views
             {
                 if (e.Button == MouseButtons.Left) // Chỉ xử lý khi nhấn chuột trái
                 {
-                    // Tạo và hiển thị form TakingProductForm
-                    TakingProductForm form = new TakingProductForm(product);
-                    if (form.ShowDialog() == DialogResult.OK)
+                    if (product.TotalInventory <= 0)
                     {
-                        Task.Run(() => AddProductToCart(new KeyValuePair<ProductInfomation, int>(form.product, form.amount)));
+                        MessageBox.Show("This product is sold out!!");
                     }
+                    else
+                    {
+                        // Tạo và hiển thị form TakingProductForm
+                        TakingProductForm form = new TakingProductForm(product);
+                        if (form.ShowDialog() == DialogResult.OK)
+                        {
+                            Task.Run(() => AddProductToCart(new KeyValuePair<ProductInfomation, int>(form.product, form.amount)));
+                        }
+                    }
+
                 }
             };
 
@@ -417,7 +425,7 @@ namespace QuanLyNoir_BTL.Views
             productPanel.Controls.Add(colorPanel);
             productPanel.Controls.Add(lblColor);
             productPanel.Controls.Add(lblInventory);
-
+            productPanel.Cursor = Cursors.Hand;
             // Thêm panel sản phẩm vào FlowLayoutPanel
             flowLayoutPanel.Controls.Add(productPanel);
         }
@@ -425,6 +433,7 @@ namespace QuanLyNoir_BTL.Views
         {
             ProductInfomation product = productPair.Key;
             totalMoney += product.Price * productPair.Value;
+            cartList.Add(productPair);
             // Tạo panel sản phẩm
             Panel productPanel = new Panel
             {
@@ -520,6 +529,7 @@ namespace QuanLyNoir_BTL.Views
 
                 // Cập nhật lại tổng tiền
                 totalMoney -= product.Price * productPair.Value;
+                cartList.Remove(productPair);
 
                 // Cập nhật giao diện hiển thị tổng tiền
                 lbl_totalMoney.Text = "Total Money: " + totalMoney.ToString("F2") + "$";
@@ -565,10 +575,10 @@ namespace QuanLyNoir_BTL.Views
             ConfirmForm confirmForm = new ConfirmForm(cartList, totalMoney, staffId);
             if (confirmForm.ShowDialog() == DialogResult.OK)
             {
-                cartList.Clear();
                 flpnl_cart.Controls.Clear();
-                totalMoney = 0;
-            } 
+                lbl_totalMoney.Text = "Total Money: ";
+            }
+            //cartList.Clear();
         }
     }
 }

@@ -256,6 +256,7 @@
             // 
             // flpnl_cart
             // 
+            flpnl_cart.AutoScroll = true;
             flpnl_cart.FlowDirection = FlowDirection.BottomUp;
             flpnl_cart.Location = new Point(3, 3);
             flpnl_cart.Name = "flpnl_cart";

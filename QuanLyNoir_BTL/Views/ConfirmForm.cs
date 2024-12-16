@@ -1,14 +1,9 @@
-﻿using QuanLyNoir_BTL.Models;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using QuanLyNoir_BTL.Models;
 using System.Data;
-using System.Data.Entity;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+
+
 
 namespace QuanLyNoir_BTL.Views
 {
@@ -31,48 +26,104 @@ namespace QuanLyNoir_BTL.Views
         }
         public async Task SaveInvoiceAsync()
         {
-            // 1. Tạo đối tượng hóa đơn mới
+            if (cartList == null || !cartList.Any())
+            {
+                MessageBox.Show("The cart is empty!", "Error");
+                return;
+            }
+
+            if (string.IsNullOrEmpty(cbbx_paymentMethod.Text))
+            {
+                MessageBox.Show("Please select a payment method!", "Error");
+                return;
+            }
+
             var invoice = new Invoice
             {
                 Id = Guid.NewGuid(),
-                CreatedAt = DateTime.UtcNow,
-                Total = newTotalBill,  // Tính tổng hóa đơn
+                CreatedAt = DateTime.Now,
+                Total = newTotalBill,
                 PaymentMethod = cbbx_paymentMethod.Text,
-                CreatedBy = staffId,  // ID của người tạo hóa đơn (ví dụ, người dùng đang đăng nhập)
+                CreatedBy = staffId,
             };
 
-            // 2. Thêm các chi tiết hóa đơn (InvoiceDetail)
-            using (var _context = new ShopNoirContext())
+            try
             {
-                foreach (var item in cartList)
+                using (var _context = new ShopNoirContext())
                 {
-                    var productInfo = item.Key;
-                    var quantity = item.Value;
+                    var productColorSizes = await _context.ProductColorSizes
+                        .Where(pcs => cartList.Select(c => c.Key.Id).Contains(pcs.ProductColorId))
+                        .ToListAsync();
 
-                    // Tìm ProductColorSize dựa trên ProductId và Size
-                    var productColorSize = await _context.ProductColorSizes
-                        .FirstOrDefaultAsync(pcs => pcs.ProductColorId == productInfo.Id && pcs.SizeId == productInfo.Size);
-
-                    if (productColorSize != null)
+                    foreach (var item in cartList)
                     {
-                        var invoiceDetail = new InvoiceDetail
+                        var productInfo = item.Key;
+                        var quantity = item.Value;
+
+                        var productColorSize = productColorSizes
+                            .FirstOrDefault(pcs => pcs.ProductColorId == productInfo.Id && pcs.SizeId == productInfo.Size);
+
+                        if (productColorSize != null)
                         {
-                            InvoiceId = invoice.Id,  // Liên kết với hóa đơn
-                            ProductColorSizeId = productColorSize.Id,
-                            Amount = quantity,
-                            Price = quantity * productInfo.Price  // Giá của sản phẩm
-                        };
+                            if (!invoice.InvoiceDetails.Any(d => d.ProductColorSizeId == productColorSize.Id))
+                            {
+                                var invoiceDetail = new InvoiceDetail
+                                {
+                                    InvoiceId = invoice.Id,
+                                    ProductColorSizeId = productColorSize.Id,
+                                    Amount = quantity,
+                                    Price = quantity * productInfo.Price
+                                };
 
-                        invoice.InvoiceDetails.Add(invoiceDetail);  // Thêm vào danh sách InvoiceDetails
+                                invoice.InvoiceDetails.Add(invoiceDetail);
+                            }
+                        }
+                        else
+                        {
+                            MessageBox.Show($"ProductColorSize not found for product {productInfo.Id} and size {productInfo.Size}", "Error");
+                            cartList.Clear();
+                            return;
+                        }
                     }
-                }
 
-                // 3. Lưu hóa đơn vào cơ sở dữ liệu
-                _context.Invoices.Add(invoice);
-                await _context.SaveChangesAsync();  // Lưu hóa đơn và các chi tiết hóa đơn vào database
+                    _context.Invoices.Add(invoice);
+                    _context.ChangeTracker.Clear(); // Xóa trạng thái theo dõi
+                    await _context.SaveChangesAsync();
+
+                    cartList.Clear();
+                    MessageBox.Show("Invoice saved successfully!", "Success");
+                }
+            }
+            catch (Exception ex)
+            {
+                cartList.Clear();
+                MessageBox.Show($"Error saving invoice: {ex.Message}", "Error");
             }
         }
 
+
+        public async Task UpdateVoucherUsage(string voucherCode)
+        {
+            using (var _context = new ShopNoirContext())
+            {
+                Voucher voucher = await _context.Vouchers
+                .FirstOrDefaultAsync(v => v.StartDate < DateOnly.FromDateTime(DateTime.Today)
+                && v.EndDate > DateOnly.FromDateTime(DateTime.Today)
+                && v.Status == true
+                && v.UsedCount <= v.MaxUsage
+                && v.Code.Equals(voucherCode)
+                );
+                if (voucher == null)
+                {
+                    return;
+                }
+
+                voucher.UsedCount += 1;
+                // Lưu thay đổi vào cơ sở dữ liệu
+                await _context.SaveChangesAsync();
+                return;
+            }
+        }
         public async Task UpdateProductStockAsync()
         {
             using (var _context = new ShopNoirContext())
@@ -209,8 +260,8 @@ namespace QuanLyNoir_BTL.Views
             using (var _context = new ShopNoirContext())
             {
                 List<Voucher> voucherList = _context.Vouchers
-                    .Where(v => v.StartDate < DateOnly.FromDateTime(DateTime.Today)
-                    && v.EndDate > DateOnly.FromDateTime(DateTime.Today)
+                    .Where(v => v.StartDate <= DateOnly.FromDateTime(DateTime.Today)
+                    && v.EndDate >= DateOnly.FromDateTime(DateTime.Today)
                     && v.Status == true
                     && v.UsedCount <= v.MaxUsage
                     )
@@ -251,7 +302,8 @@ namespace QuanLyNoir_BTL.Views
             // Cập nhật tồn kho
             await UpdateProductStockAsync();
 
-            MessageBox.Show("Successfully!!!");
+            // Cập nhật số lựng đã sử dụng của voucher
+            await UpdateVoucherUsage(cbbx_voucher.Text);
         }
 
         private void btn_cancel_Click(object sender, EventArgs e)
@@ -268,19 +320,27 @@ namespace QuanLyNoir_BTL.Views
             using (var _context = new ShopNoirContext())
             {
                 Voucher voucher = await _context.Vouchers
-                .FirstOrDefaultAsync(v => v.StartDate < DateOnly.FromDateTime(DateTime.Today)
-                && v.EndDate > DateOnly.FromDateTime(DateTime.Today)
+                .FirstOrDefaultAsync(v => v.StartDate <= DateOnly.FromDateTime(DateTime.Today)
+                && v.EndDate >= DateOnly.FromDateTime(DateTime.Today)
                 && v.Status == true
                 && v.UsedCount <= v.MaxUsage
                 && v.Code.Equals(VoucherCode)
                 );
-                if (totalBill < voucher.MinOrderValue)
+                if (voucher == null)
                 {
-                    MessageBox.Show("The current bill's value is less than the minimum one to use!!", "Error");
+                    this.Invoke((MethodInvoker)delegate
+                    {
+                        newTotalBill = totalBill;
+                        lbl_totalBill.Text = $"Total Bill: {totalBill}$";
+                        cbbx_voucher.ForeColor = Color.Black;
+                        cbbx_voucher.Font = new Font("Segoe UI Semibold", 9, FontStyle.Regular);
+                    });
                     return;
                 }
                 this.Invoke((MethodInvoker)delegate
                 {
+                    cbbx_voucher.ForeColor = Color.Red;
+                    cbbx_voucher.Font = new Font("Segoe UI Semibold", 9, FontStyle.Bold);
                     if (voucher.DiscountType == "P")
                     {
                         newTotalBill = totalBill * (1 - voucher.DiscountValue);
@@ -292,13 +352,31 @@ namespace QuanLyNoir_BTL.Views
                         lbl_totalBill.Text = $"Total Bill: {totalBill}$ - {voucher.DiscountValue}$ = {newTotalBill}$";
                     }
                 });
+                if (voucher.MinOrderValue.HasValue && totalBill < voucher.MinOrderValue)
+                {
+                    MessageBox.Show("The current bill's value is less than the minimum one to use!!");
+                    return;
+                }
                 return;
             }
         }
 
+
         private void cbbx_moneyReceive_SelectedIndexChanged(object sender, EventArgs e)
         {
-            
+            try
+            {
+                tbx_refund.Text = (decimal.Parse(cbbx_moneyReceive.Text) == null ? 0 : (decimal.Parse(cbbx_moneyReceive.Text) - newTotalBill)).ToString();
+            }
+            catch (Exception ex)
+            {
+                tbx_refund.Text = "0";
+            }
+
+        }
+
+        private void ConfirmForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
         }
     }
 }

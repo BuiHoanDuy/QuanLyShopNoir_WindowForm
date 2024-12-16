@@ -43,6 +43,11 @@ namespace QuanLyNoir_BTL.Views
         {
             LoadProductData();
             checkAvailableSize();
+            if (product.TotalInventory <= 0)
+            {
+                lbl_amount.Text = "0";
+                amount = 0;
+            }
         }
         private async Task LoadProductData() // load data cho edit
         {

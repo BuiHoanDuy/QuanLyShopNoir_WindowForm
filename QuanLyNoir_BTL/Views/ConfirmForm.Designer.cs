@@ -47,7 +47,7 @@
             flpnl_cart.AutoScroll = true;
             flpnl_cart.Location = new Point(3, 2);
             flpnl_cart.Name = "flpnl_cart";
-            flpnl_cart.Size = new Size(863, 240);
+            flpnl_cart.Size = new Size(842, 240);
             flpnl_cart.TabIndex = 0;
             // 
             // cbbx_voucher
@@ -57,7 +57,7 @@
             cbbx_voucher.Name = "cbbx_voucher";
             cbbx_voucher.Size = new Size(295, 28);
             cbbx_voucher.TabIndex = 1;
-            cbbx_voucher.SelectedIndexChanged += cbbx_voucher_SelectedIndexChanged;
+            cbbx_voucher.TextChanged += cbbx_voucher_SelectedIndexChanged;
             // 
             // cbbx_paymentMethod
             // 
@@ -118,6 +118,7 @@
             cbbx_moneyReceive.Size = new Size(182, 28);
             cbbx_moneyReceive.TabIndex = 7;
             cbbx_moneyReceive.SelectedIndexChanged += cbbx_moneyReceive_SelectedIndexChanged;
+            cbbx_moneyReceive.TextChanged += cbbx_moneyReceive_SelectedIndexChanged;
             // 
             // lbl_totalBill
             // 
@@ -163,7 +164,7 @@
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(881, 426);
+            ClientSize = new Size(859, 426);
             Controls.Add(btn_cancel);
             Controls.Add(btn_confirm);
             Controls.Add(tbx_refund);
@@ -178,6 +179,7 @@
             Controls.Add(flpnl_cart);
             Name = "ConfirmForm";
             Text = "ConfirmForm";
+            FormClosing += ConfirmForm_FormClosing;
             Load += ConfirmForm_Load;
             ResumeLayout(false);
             PerformLayout();

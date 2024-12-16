@@ -201,7 +201,7 @@
             dtpk_end.Name = "dtpk_end";
             dtpk_end.Size = new Size(250, 27);
             dtpk_end.TabIndex = 1;
-            dtpk_end.Value = new DateTime(3000, 1, 1, 0, 0, 0, 0);
+            dtpk_end.Value = new DateTime(2030, 1, 1, 0, 0, 0, 0);
             dtpk_end.ValueChanged += dtpk_end_ValueChanged;
             // 
             // dtpk_start
@@ -211,7 +211,7 @@
             dtpk_start.Name = "dtpk_start";
             dtpk_start.Size = new Size(250, 27);
             dtpk_start.TabIndex = 0;
-            dtpk_start.Value = new DateTime(2000, 1, 1, 0, 0, 0, 0);
+            dtpk_start.Value = new DateTime(2024, 1, 1, 0, 0, 0, 0);
             dtpk_start.ValueChanged += dtpk_start_ValueChanged;
             // 
             // grbx_type

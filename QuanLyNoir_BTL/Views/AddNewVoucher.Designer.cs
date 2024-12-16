@@ -336,6 +336,7 @@
             dtpk_endday.Name = "dtpk_endday";
             dtpk_endday.Size = new Size(250, 27);
             dtpk_endday.TabIndex = 0;
+            dtpk_endday.Value = new DateTime(2025, 1, 31, 0, 0, 0, 0);
             // 
             // groupBox8
             // 
