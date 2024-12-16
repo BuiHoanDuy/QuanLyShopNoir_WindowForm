@@ -41,7 +41,7 @@ namespace QuanLyNoir_BTL
                         manageProductForm.Show();
                     }else
                     {
-                        MasterForm_SellProduct masterForm_SellProduct = new MasterForm_SellProduct(user.Name);
+                        MasterForm_SellProduct masterForm_SellProduct = new MasterForm_SellProduct(user.Id, user.Name);
                         this.Hide();
                         masterForm_SellProduct.Show();
                     }

@@ -10,6 +10,9 @@
     <Compile Update="Views\AnalyseRevenueControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Update="Views\ConfirmForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="Views\ManageAccountControl.cs">
       <SubType>UserControl</SubType>
     </Compile>

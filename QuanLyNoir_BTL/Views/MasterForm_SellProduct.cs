@@ -7,6 +7,7 @@ using System.Data;
 using System.Drawing;
 using System.Drawing.Printing;
 using System.Linq;
+using System.Security.RightsManagement;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -16,20 +17,24 @@ namespace QuanLyNoir_BTL.Views
 {
     public partial class MasterForm_SellProduct : Form
     {
+        private List<KeyValuePair<ProductInfomation, int>> cartList = new List<KeyValuePair<ProductInfomation, int>>();
+        private decimal totalMoney = 0; // Tổng số tiền cảu hóa đơn
         private string currentType = null;
         private int currentPage = 1;
         private const int PageSize = 10; // Giữ số lượng bản ghi trên mỗi trang là 8
         private int totalRecords;
+        private Guid staffId;
 
         private System.Windows.Forms.Timer _timer = new System.Windows.Forms.Timer();
         private const int TimerInterval = 500; // Thời gian chờ 500ms
-        public MasterForm_SellProduct(string username)
+        public MasterForm_SellProduct(Guid userId, string username)
         {
             InitializeComponent();
             this.StartPosition = FormStartPosition.CenterScreen;
             this.MaximizeBox = false;
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
             lbl_name.Text = username;
+            staffId = userId;
             lbl_datetime.Text = DateTime.Now.ToLongDateString();
 
             // Cấu hình Timer
@@ -44,7 +49,6 @@ namespace QuanLyNoir_BTL.Views
         }
 
         // Phần code Logic và truy vấn
-
         private async Task<List<ProductInfomation>> FetchProducts()
         {
             using (var _dbContext = new ShopNoirContext())
@@ -154,7 +158,7 @@ namespace QuanLyNoir_BTL.Views
                         {
                             AddProductToFlowLayout(product, pnl_product);
                         });
-                      
+
                         progress++;
 
                         // Báo cáo tiến độ
@@ -398,7 +402,10 @@ namespace QuanLyNoir_BTL.Views
                 {
                     // Tạo và hiển thị form TakingProductForm
                     TakingProductForm form = new TakingProductForm(product);
-                    form.ShowDialog();
+                    if (form.ShowDialog() == DialogResult.OK)
+                    {
+                        Task.Run(() => AddProductToCart(new KeyValuePair<ProductInfomation, int>(form.product, form.amount)));
+                    }
                 }
             };
 
@@ -414,7 +421,125 @@ namespace QuanLyNoir_BTL.Views
             // Thêm panel sản phẩm vào FlowLayoutPanel
             flowLayoutPanel.Controls.Add(productPanel);
         }
+        private void AddProductToCart(KeyValuePair<ProductInfomation, int> productPair)
+        {
+            ProductInfomation product = productPair.Key;
+            totalMoney += product.Price * productPair.Value;
+            // Tạo panel sản phẩm
+            Panel productPanel = new Panel
+            {
+                Width = 400,
+                Height = 100,
+                BorderStyle = BorderStyle.FixedSingle,
+                Margin = new Padding(5)
+            };
 
+            // Tên sản phẩm
+            Label lblName = new Label
+            {
+                Text = product.ProdName + " x" + productPair.Value.ToString(),
+                Font = new Font("Arial", 11, FontStyle.Bold),
+                Location = new Point(100, 10),
+                AutoSize = true
+            };
+
+            // Hình ảnh sản phẩm
+            PictureBox picImage = new PictureBox
+            {
+                Size = new System.Drawing.Size(100, 100),
+                Location = new Point(0, 0),
+                SizeMode = PictureBoxSizeMode.StretchImage
+            };
+
+            if (!string.IsNullOrEmpty(product.ImageUrl) && File.Exists(product.ImageUrl))
+            {
+                // Tải hình ảnh sản phẩm trong background
+                Task.Run(() =>
+                {
+                    try
+                    {
+                        var image = Image.FromFile(product.ImageUrl);
+                        picImage.Image = image;
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Lỗi tải hình ảnh: {ex.Message}");
+                    }
+                });
+            }
+
+            // Giá sản phẩm
+            Label lblPrice = new Label
+            {
+                Text = $"Price: ${product.Price:F2} x{productPair.Value} = {product.Price * productPair.Value}",
+                Location = new Point(100, 40),
+                AutoSize = true
+            };
+
+            // Kích thước sản phẩm
+            Label lblSize = new Label
+            {
+                Location = new Point(130, 70),
+                AutoSize = true
+            };
+
+            if (product.Wid == 0 && product.Hei == 0 && product.Size != null)
+            {
+                lblSize.Text = $"Size: {product.Size}";
+            }
+            else if ((product.Wid != 0 || product.Hei != 0) && product.Size == null)
+            {
+                lblSize.Text = $"Size: {product.Wid} x {product.Hei}";
+            }
+            else
+            {
+                lblSize.Text = $"Size: {product.Size} ({product.Wid} x {product.Hei})";
+            }
+
+            // Màu sản phẩm
+            Panel colorPanel = new Panel
+            {
+                Size = new System.Drawing.Size(20, 20),
+                Location = new Point(100, 70),
+                BorderStyle = BorderStyle.FixedSingle,
+                BackColor = product.ColorCode != null ? ColorTranslator.FromHtml(product.ColorCode) : Color.Transparent
+            };
+
+            Button kickButton = new Button
+            {
+                Size = new System.Drawing.Size(30, 30),
+                Location = new Point(370, 0),
+                Text = "X",
+
+            };
+
+            kickButton.Click += (s, e) =>
+            {
+                // Xóa panel chứa nút kickButton
+                flpnl_cart.Controls.Remove(productPanel);
+
+                // Cập nhật lại tổng tiền
+                totalMoney -= product.Price * productPair.Value;
+
+                // Cập nhật giao diện hiển thị tổng tiền
+                lbl_totalMoney.Text = "Total Money: " + totalMoney.ToString("F2") + "$";
+            };
+
+            // Thêm các control vào panel
+            productPanel.Controls.Add(lblName);
+            productPanel.Controls.Add(picImage);
+            productPanel.Controls.Add(lblPrice);
+            productPanel.Controls.Add(lblSize);
+            productPanel.Controls.Add(colorPanel);
+            productPanel.Controls.Add(kickButton);
+            kickButton.BringToFront();
+            this.Invoke((MethodInvoker)delegate
+            {
+                // Thêm panel sản phẩm vào FlowLayoutPanel
+                flpnl_cart.Controls.Add(productPanel);
+                lbl_totalMoney.Text = "Total Money: " + totalMoney.ToString() + "$";
+            });
+        }
         private void Timer_Tick(object sender, EventArgs e)
         {
             // Dừng Timer
@@ -433,6 +558,17 @@ namespace QuanLyNoir_BTL.Views
             {
                 loadWorker.RunWorkerAsync();
             }
+        }
+
+        private void btn_checkout_Click(object sender, EventArgs e)
+        {
+            ConfirmForm confirmForm = new ConfirmForm(cartList, totalMoney, staffId);
+            if (confirmForm.ShowDialog() == DialogResult.OK)
+            {
+                cartList.Clear();
+                flpnl_cart.Controls.Clear();
+                totalMoney = 0;
+            } 
         }
     }
 }

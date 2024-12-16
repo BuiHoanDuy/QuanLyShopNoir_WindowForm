@@ -15,6 +15,8 @@ public partial class ProductColorSize
 
     public int Inventory { get; set; }
 
+    public virtual ICollection<InvoiceDetail> InvoiceDetails { get; set; } = new List<InvoiceDetail>();
+
     public virtual ProductColor ProductColor { get; set; }
 
     public virtual Size Size { get; set; }

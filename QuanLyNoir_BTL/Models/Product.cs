@@ -21,7 +21,5 @@ public partial class Product
 
     public string Type { get; set; }
 
-    public virtual ICollection<InvoiceDetail> InvoiceDetails { get; set; } = new List<InvoiceDetail>();
-
     public virtual ICollection<ProductColor> ProductColors { get; set; } = new List<ProductColor>();
 }

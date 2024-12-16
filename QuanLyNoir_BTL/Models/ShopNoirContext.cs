@@ -30,6 +30,7 @@ public partial class ShopNoirContext : DbContext
     public virtual DbSet<Size> Sizes { get; set; }
 
     public virtual DbSet<Voucher> Vouchers { get; set; }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
       => optionsBuilder.UseSqlServer("Server=LAPTOP-2L3R0R91\\MYCOMPUTER_DUY;Database=ShopNoir;Trusted_Connection=True;TrustServerCertificate=true;Connection Timeout=120;");
@@ -37,9 +38,9 @@ public partial class ShopNoirContext : DbContext
     {
         modelBuilder.Entity<Account>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Accounts__3213E83F78E31DF0");
+            entity.HasKey(e => e.Id).HasName("PK__Accounts__3213E83F6E296C81");
 
-            entity.HasIndex(e => e.Username, "UQ__Accounts__F3DBC572C0D4783E").IsUnique();
+            entity.HasIndex(e => e.Username, "UQ__Accounts__F3DBC5721126DF2B").IsUnique();
 
             entity.Property(e => e.Id)
                 .HasDefaultValueSql("(newid())")
@@ -67,7 +68,7 @@ public partial class ShopNoirContext : DbContext
 
         modelBuilder.Entity<Invoice>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Invoices__3213E83FBC2594D7");
+            entity.HasKey(e => e.Id).HasName("PK__Invoices__3213E83F5914F33B");
 
             entity.HasIndex(e => e.CreatedAt, "IDX_Invoices_CreatedAt");
 
@@ -91,17 +92,15 @@ public partial class ShopNoirContext : DbContext
             entity.HasOne(d => d.CreatedByNavigation).WithMany(p => p.Invoices)
                 .HasForeignKey(d => d.CreatedBy)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Invoices__create__220B0B18");
+                .HasConstraintName("FK__Invoices__create__7ABC33CD");
         });
 
         modelBuilder.Entity<InvoiceDetail>(entity =>
         {
-            entity.HasKey(e => new { e.InvoiceId, e.ProductId }).HasName("PK__InvoiceD__B1FDDA96EC1C4B64");
-
-            entity.HasIndex(e => e.InvoiceId, "IDX_InvoiceDetails_InvoiceId");
+            entity.HasKey(e => new { e.InvoiceId, e.ProductColorSizeId }).HasName("PK__InvoiceD__802D6C5398B99C3D");
 
             entity.Property(e => e.InvoiceId).HasColumnName("invoice_id");
-            entity.Property(e => e.ProductId).HasColumnName("product_id");
+            entity.Property(e => e.ProductColorSizeId).HasColumnName("product_color_size_id");
             entity.Property(e => e.Amount).HasColumnName("amount");
             entity.Property(e => e.Price)
                 .HasColumnType("decimal(10, 2)")
@@ -109,20 +108,18 @@ public partial class ShopNoirContext : DbContext
 
             entity.HasOne(d => d.Invoice).WithMany(p => p.InvoiceDetails)
                 .HasForeignKey(d => d.InvoiceId)
-                .HasConstraintName("FK__InvoiceDe__invoi__24E777C3");
+                .HasConstraintName("FK__InvoiceDe__invoi__1387E197");
 
-            entity.HasOne(d => d.Product).WithMany(p => p.InvoiceDetails)
-                .HasForeignKey(d => d.ProductId)
-                .HasConstraintName("FK__InvoiceDe__produ__25DB9BFC");
+            entity.HasOne(d => d.ProductColorSize).WithMany(p => p.InvoiceDetails)
+                .HasForeignKey(d => d.ProductColorSizeId)
+                .HasConstraintName("FK__InvoiceDe__produ__147C05D0");
         });
 
         modelBuilder.Entity<Product>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Products__3213E83FF5BD9B75");
+            entity.HasKey(e => e.Id).HasName("PK__Products__3213E83F6FE66AB4");
 
             entity.HasIndex(e => e.Type, "IDX_Products_Type");
-            entity.HasIndex(e => e.ProdName, "IDX_Products_Name");
-            entity.HasIndex(e => e.Price, "IDX_Products_Price");
 
             entity.Property(e => e.Id)
                 .HasDefaultValueSql("(newid())")
@@ -149,7 +146,7 @@ public partial class ShopNoirContext : DbContext
 
         modelBuilder.Entity<ProductColor>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__ProductC__3213E83F0EF96F29");
+            entity.HasKey(e => e.Id).HasName("PK__ProductC__3213E83FA164E155");
 
             entity.HasIndex(e => e.ProductId, "IDX_ProductColors_ProductId");
 
@@ -168,12 +165,12 @@ public partial class ShopNoirContext : DbContext
 
             entity.HasOne(d => d.Product).WithMany(p => p.ProductColors)
                 .HasForeignKey(d => d.ProductId)
-                .HasConstraintName("FK__ProductCo__produ__14B10FFA");
+                .HasConstraintName("FK__ProductCo__produ__6E565CE8");
         });
 
         modelBuilder.Entity<ProductColorSize>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__ProductC__3213E83F0CFAF528");
+            entity.HasKey(e => e.Id).HasName("PK__ProductC__3213E83F11BCA35E");
 
             entity.HasIndex(e => e.ProductColorId, "IDX_ProductColorSizes_ProductColorId");
 
@@ -184,25 +181,30 @@ public partial class ShopNoirContext : DbContext
                 .HasColumnName("id");
             entity.Property(e => e.Inventory).HasColumnName("inventory");
             entity.Property(e => e.ProductColorId).HasColumnName("product_color_id");
-            entity.Property(e => e.SizeId).HasColumnName("size_id");
+            entity.Property(e => e.SizeId)
+                .IsRequired()
+                .HasMaxLength(5)
+                .IsUnicode(false)
+                .HasColumnName("size_id");
 
             entity.HasOne(d => d.ProductColor).WithMany(p => p.ProductColorSizes)
                 .HasForeignKey(d => d.ProductColorId)
-                .HasConstraintName("FK__ProductCo__produ__1C5231C2");
+                .HasConstraintName("FK__ProductCo__produ__75035A77");
 
             entity.HasOne(d => d.Size).WithMany(p => p.ProductColorSizes)
                 .HasForeignKey(d => d.SizeId)
-                .HasConstraintName("FK__ProductCo__size___1D4655FB");
+                .HasConstraintName("FK__ProductCo__size___75F77EB0");
         });
 
         modelBuilder.Entity<Size>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Sizes__3213E83F210956E9");
+            entity.HasKey(e => e.Id).HasName("PK__Sizes__3213E83F69652710");
 
-            entity.HasIndex(e => e.SizeName, "UQ__Sizes__75FCE556217E374E").IsUnique();
+            entity.HasIndex(e => e.SizeName, "UQ__Sizes__75FCE556D69C57FD").IsUnique();
 
             entity.Property(e => e.Id)
-                .HasDefaultValueSql("(newid())")
+                .HasMaxLength(5)
+                .IsUnicode(false)
                 .HasColumnName("id");
             entity.Property(e => e.SizeName)
                 .IsRequired()
@@ -212,11 +214,11 @@ public partial class ShopNoirContext : DbContext
 
         modelBuilder.Entity<Voucher>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Vouchers__3213E83F42C4B838");
+            entity.HasKey(e => e.Id).HasName("PK__Vouchers__3213E83F5FB020E6");
 
             entity.HasIndex(e => e.Status, "IDX_Vouchers_Status");
 
-            entity.HasIndex(e => e.Code, "UQ__Vouchers__357D4CF9C1417028").IsUnique();
+            entity.HasIndex(e => e.Code, "UQ__Vouchers__357D4CF9B2A9F297").IsUnique();
 
             entity.Property(e => e.Id)
                 .HasDefaultValueSql("(newid())")

@@ -30,16 +30,13 @@ namespace QuanLyNoir_BTL.Views
                     .Where(id => id.InvoiceId == invoiceId)
                     .Select(id => new
                     {
-                        ProductName = id.Product.ProdName,
-                        Price = id.Product.Price,
+                        ProductName = id.ProductColorSize.ProductColor.Product.ProdName,
+                        Price = id.ProductColorSize.ProductColor.Product.Price,
                         Amount = id.Amount,
-                        Type = id.Product.Type,
-                        Color = id.Product.ProductColors.FirstOrDefault().ColorName,
-                        Image = id.Product.ProductColors.FirstOrDefault().ImageUrl, // Lấy đường dẫn ảnh
-                        Size = id.Product.ProductColors
-                                        .FirstOrDefault()
-                                        .ProductColorSizes
-                                        .FirstOrDefault().Size.SizeName,
+                        Type = id.ProductColorSize.ProductColor.Product.Type,
+                        Color = id.ProductColorSize.ProductColor.ColorName,
+                        Image = id.ProductColorSize.ProductColor.ImageUrl, // Lấy đường dẫn ảnh
+                        Size = id.ProductColorSize.Size.SizeName,
                     })
                     .ToList();
 

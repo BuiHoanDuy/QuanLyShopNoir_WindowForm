@@ -44,6 +44,8 @@
             btn_bag = new Button();
             btn_newcollection = new Button();
             pnl_side = new Panel();
+            lbl_totalMoney = new Label();
+            flpnl_cart = new FlowLayoutPanel();
             btn_checkout = new Button();
             pnl_body = new Panel();
             pnl_product = new FlowLayoutPanel();
@@ -234,11 +236,31 @@
             // pnl_side
             // 
             pnl_side.BackColor = SystemColors.ControlLightLight;
+            pnl_side.Controls.Add(lbl_totalMoney);
+            pnl_side.Controls.Add(flpnl_cart);
             pnl_side.Controls.Add(btn_checkout);
             pnl_side.Location = new Point(1259, 90);
             pnl_side.Name = "pnl_side";
             pnl_side.Size = new Size(440, 821);
             pnl_side.TabIndex = 24;
+            // 
+            // lbl_totalMoney
+            // 
+            lbl_totalMoney.AutoSize = true;
+            lbl_totalMoney.Font = new Font("Segoe UI", 15F);
+            lbl_totalMoney.Location = new Point(22, 719);
+            lbl_totalMoney.Name = "lbl_totalMoney";
+            lbl_totalMoney.Size = new Size(189, 35);
+            lbl_totalMoney.TabIndex = 28;
+            lbl_totalMoney.Text = "Total Money: 0$";
+            // 
+            // flpnl_cart
+            // 
+            flpnl_cart.FlowDirection = FlowDirection.BottomUp;
+            flpnl_cart.Location = new Point(3, 3);
+            flpnl_cart.Name = "flpnl_cart";
+            flpnl_cart.Size = new Size(434, 686);
+            flpnl_cart.TabIndex = 46;
             // 
             // btn_checkout
             // 
@@ -253,6 +275,7 @@
             btn_checkout.TabIndex = 45;
             btn_checkout.Text = "CHECKOUT";
             btn_checkout.UseVisualStyleBackColor = false;
+            btn_checkout.Click += btn_checkout_Click;
             // 
             // pnl_body
             // 
@@ -338,6 +361,7 @@
             ((System.ComponentModel.ISupportInitialize)pictureBox2).EndInit();
             pnl_nav.ResumeLayout(false);
             pnl_side.ResumeLayout(false);
+            pnl_side.PerformLayout();
             pnl_body.ResumeLayout(false);
             pnl_body.PerformLayout();
             ResumeLayout(false);
@@ -368,5 +392,7 @@
         private Button btn_next;
         private FlowLayoutPanel pnl_product;
         private Button btn_reset;
+        private FlowLayoutPanel flpnl_cart;
+        private Label lbl_totalMoney;
     }
 }
