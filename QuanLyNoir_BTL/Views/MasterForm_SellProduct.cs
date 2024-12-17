@@ -577,8 +577,9 @@ namespace QuanLyNoir_BTL.Views
             {
                 flpnl_cart.Controls.Clear();
                 lbl_totalMoney.Text = "Total Money: ";
+                //cartList.Clear();
+                totalMoney = 0;
             }
-            //cartList.Clear();
         }
     }
 }

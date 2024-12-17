@@ -38,6 +38,7 @@ namespace QuanLyNoir_BTL.Views
                 return;
             }
 
+            var voucherId = await getVoucherIdForSave(cbbx_voucher.Text);
             var invoice = new Invoice
             {
                 Id = Guid.NewGuid(),
@@ -46,11 +47,15 @@ namespace QuanLyNoir_BTL.Views
                 PaymentMethod = cbbx_paymentMethod.Text,
                 CreatedBy = staffId,
             };
-
+            if (voucherId != Guid.Empty)
+            {
+                invoice.VoucherId = voucherId;
+            }
             try
             {
                 using (var _context = new ShopNoirContext())
                 {
+                    _context.ChangeTracker.Clear(); // Xóa trạng thái theo dõi
                     var productColorSizes = await _context.ProductColorSizes
                         .Where(pcs => cartList.Select(c => c.Key.Id).Contains(pcs.ProductColorId))
                         .ToListAsync();
@@ -82,25 +87,42 @@ namespace QuanLyNoir_BTL.Views
                         {
                             MessageBox.Show($"ProductColorSize not found for product {productInfo.Id} and size {productInfo.Size}", "Error");
                             cartList.Clear();
+                            totalBill = 0;
                             return;
                         }
                     }
 
                     _context.Invoices.Add(invoice);
-                    _context.ChangeTracker.Clear(); // Xóa trạng thái theo dõi
                     await _context.SaveChangesAsync();
 
-                    cartList.Clear();
                     MessageBox.Show("Invoice saved successfully!", "Success");
                 }
-            }
+        }
             catch (Exception ex)
             {
                 cartList.Clear();
+                totalBill = 0;
                 MessageBox.Show($"Error saving invoice: {ex.Message}", "Error");
             }
+}
+        public async Task<Guid> getVoucherIdForSave(string voucherCode)
+        {
+            using (var _context = new ShopNoirContext())
+            {
+                Voucher voucher = await _context.Vouchers
+                .FirstOrDefaultAsync(v => v.StartDate <= DateOnly.FromDateTime(DateTime.Today)
+                && v.EndDate >= DateOnly.FromDateTime(DateTime.Today)
+                && v.Status == true
+                && v.UsedCount <= v.MaxUsage
+                && v.Code.Equals(voucherCode)
+                );
+                if (voucher == null)
+                {
+                    return Guid.Empty;
+                }
+                return voucher.Id;
+            }
         }
-
 
         public async Task UpdateVoucherUsage(string voucherCode)
         {
@@ -304,6 +326,8 @@ namespace QuanLyNoir_BTL.Views
 
             // Cập nhật số lựng đã sử dụng của voucher
             await UpdateVoucherUsage(cbbx_voucher.Text);
+            cartList.Clear();
+            totalBill = 0;
         }
 
         private void btn_cancel_Click(object sender, EventArgs e)
