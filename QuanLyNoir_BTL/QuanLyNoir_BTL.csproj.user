@@ -10,6 +10,9 @@
     <Compile Update="Views\AnalyseRevenueControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Update="Views\ConfirmForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="Views\ManageAccountControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -32,6 +35,9 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="Views\SignIn.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Views\TakingProductForm.cs">
       <SubType>Form</SubType>
     </Compile>
   </ItemGroup>

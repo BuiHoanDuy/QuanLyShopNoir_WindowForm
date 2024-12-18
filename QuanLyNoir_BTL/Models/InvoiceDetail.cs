@@ -9,7 +9,7 @@ public partial class InvoiceDetail
 {
     public Guid InvoiceId { get; set; }
 
-    public Guid ProductId { get; set; }
+    public Guid ProductColorSizeId { get; set; }
 
     public int Amount { get; set; }
 
@@ -17,5 +17,5 @@ public partial class InvoiceDetail
 
     public virtual Invoice Invoice { get; set; }
 
-    public virtual Product Product { get; set; }
+    public virtual ProductColorSize ProductColorSize { get; set; }
 }

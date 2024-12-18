@@ -166,6 +166,7 @@ C:\Users\Aus\Documents\Subjects\LapTrinhTrucQuan\BTL\QuanLyNoir_BTL\QuanLyNoir_B
 C:\Users\Aus\Documents\Subjects\LapTrinhTrucQuan\BTL\QuanLyNoir_BTL\QuanLyNoir_BTL\bin\Debug\net8.0-windows\runtimes\win\lib\net8.0\System.Security.Cryptography.Pkcs.dll
 C:\Users\Aus\Documents\Subjects\LapTrinhTrucQuan\BTL\QuanLyNoir_BTL\QuanLyNoir_BTL\obj\Debug\net8.0-windows\QuanLyNoir_BTL.Views.RevenueDetail.resources
 C:\Users\Aus\Documents\Subjects\LapTrinhTrucQuan\BTL\QuanLyNoir_BTL\QuanLyNoir_BTL\obj\Debug\net8.0-windows\QuanLyNoir_BTL.Views.MasterForm_SellProduct.resources
+<<<<<<< HEAD
 C:\Users\Admin\OneDrive\Documents\do_an\QuanLyShopNoir_WindowForm\QuanLyNoir_BTL\bin\Debug\net8.0-windows\QuanLyNoir_BTL.exe
 C:\Users\Admin\OneDrive\Documents\do_an\QuanLyShopNoir_WindowForm\QuanLyNoir_BTL\bin\Debug\net8.0-windows\QuanLyNoir_BTL.dll.config
 C:\Users\Admin\OneDrive\Documents\do_an\QuanLyShopNoir_WindowForm\QuanLyNoir_BTL\bin\Debug\net8.0-windows\QuanLyNoir_BTL.deps.json
@@ -335,3 +336,9 @@ C:\Users\Admin\OneDrive\Documents\do_an\QuanLyShopNoir_WindowForm\QuanLyNoir_BTL
 C:\Users\Admin\OneDrive\Documents\do_an\QuanLyShopNoir_WindowForm\QuanLyNoir_BTL\obj\Debug\net8.0-windows\QuanLyNoir_BTL.genruntimeconfig.cache
 C:\Users\Admin\OneDrive\Documents\do_an\QuanLyShopNoir_WindowForm\QuanLyNoir_BTL\obj\Debug\net8.0-windows\ref\QuanLyNoir_BTL.dll
 C:\Users\Admin\OneDrive\Documents\do_an\QuanLyShopNoir_WindowForm\QuanLyNoir_BTL\obj\Debug\net8.0-windows\QuanLyNoir_BTL.Views.ManageOrderControl.resources
+=======
+C:\Users\Aus\Documents\Subjects\LapTrinhTrucQuan\BTL\QuanLyNoir_BTL\QuanLyNoir_BTL\obj\Debug\net8.0-windows\QuanLyNoir_BTL.Views.TakingProductForm.resources
+C:\Users\Aus\Documents\Subjects\LapTrinhTrucQuan\BTL\QuanLyNoir_BTL\QuanLyNoir_BTL\obj\Debug\net8.0-windows\QuanLyNoir_BTL.Views.ConfirmForm.resources
+>>>>>>> d696d9a7ff216f7799459a1259aea3b71a41dc9a
+C:\Users\Admin\OneDrive\Documents\do_an\QuanLyShopNoir_WindowForm\QuanLyNoir_BTL\obj\Debug\net8.0-windows\QuanLyNoir_BTL.Views.ConfirmForm.resources
+C:\Users\Admin\OneDrive\Documents\do_an\QuanLyShopNoir_WindowForm\QuanLyNoir_BTL\obj\Debug\net8.0-windows\QuanLyNoir_BTL.Views.TakingProductForm.resources

@@ -26,4 +26,6 @@ public partial class Voucher
     public decimal? MinOrderValue { get; set; }
 
     public bool? Status { get; set; }
+
+    public virtual ICollection<Invoice> Invoices { get; set; } = new List<Invoice>();
 }

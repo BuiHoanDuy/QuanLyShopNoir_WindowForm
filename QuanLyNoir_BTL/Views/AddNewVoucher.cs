@@ -181,6 +181,16 @@ namespace QuanLyNoir_BTL.Views
                 return false;
             }
 
+            if (rdbtn_percentage.Checked)
+            {
+                if (decimal.Parse(tbx_discountValue.Text) >= 1)
+                {
+                    MessageBox.Show("Giá trị của Voucher không thể lớn hơn 1 (100%)", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    tbx_discountValue.Focus();
+                    return false;
+                }
+            }
+
             if (rdbtn_fixedDay.Checked && dtpk_endday.Value <= dtpk_startday.Value)
             {
                 MessageBox.Show("Ngày kết thúc (Fixed day) phải lớn hơn ngày bắt đầu.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);

@@ -3,24 +3,16 @@
   "WorkspaceRootPath": "C:\\Users\\Admin\\OneDrive\\Documents\\do_an\\QuanLyShopNoir_WindowForm\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{1A3CB0F7-E1EE-4981-83B7-CABD400B1737}|QuanLyNoir_BTL\\QuanLyNoir_BTL.csproj|c:\\users\\admin\\onedrive\\documents\\do_an\\quanlyshopnoir_windowform\\quanlynoir_btl\\views\\analyserevenuecontrol.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{1A3CB0F7-E1EE-4981-83B7-CABD400B1737}|QuanLyNoir_BTL\\QuanLyNoir_BTL.csproj|solutionrelative:quanlynoir_btl\\views\\analyserevenuecontrol.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{1A3CB0F7-E1EE-4981-83B7-CABD400B1737}|QuanLyNoir_BTL\\QuanLyNoir_BTL.csproj|c:\\users\\admin\\onedrive\\documents\\do_an\\quanlyshopnoir_windowform\\quanlynoir_btl\\models\\shopnoircontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1A3CB0F7-E1EE-4981-83B7-CABD400B1737}|QuanLyNoir_BTL\\QuanLyNoir_BTL.csproj|solutionrelative:quanlynoir_btl\\models\\shopnoircontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{1A3CB0F7-E1EE-4981-83B7-CABD400B1737}|QuanLyNoir_BTL\\QuanLyNoir_BTL.csproj|C:\\Users\\Admin\\OneDrive\\Documents\\do_an\\QuanLyShopNoir_WindowForm\\quanlynoir_btl\\views\\analyserevenuecontrol.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
-      "RelativeMoniker": "D:0:0:{1A3CB0F7-E1EE-4981-83B7-CABD400B1737}|QuanLyNoir_BTL\\QuanLyNoir_BTL.csproj|solutionrelative:quanlynoir_btl\\views\\analyserevenuecontrol.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+      "AbsoluteMoniker": "D:0:0:{1A3CB0F7-E1EE-4981-83B7-CABD400B1737}|QuanLyNoir_BTL\\QuanLyNoir_BTL.csproj|c:\\users\\admin\\onedrive\\documents\\do_an\\quanlyshopnoir_windowform\\quanlynoir_btl\\views\\signin.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1A3CB0F7-E1EE-4981-83B7-CABD400B1737}|QuanLyNoir_BTL\\QuanLyNoir_BTL.csproj|solutionrelative:quanlynoir_btl\\views\\signin.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{1A3CB0F7-E1EE-4981-83B7-CABD400B1737}|QuanLyNoir_BTL\\QuanLyNoir_BTL.csproj|c:\\users\\admin\\onedrive\\documents\\do_an\\quanlyshopnoir_windowform\\quanlynoir_btl\\views\\manageordercontrol.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{1A3CB0F7-E1EE-4981-83B7-CABD400B1737}|QuanLyNoir_BTL\\QuanLyNoir_BTL.csproj|solutionrelative:quanlynoir_btl\\views\\manageordercontrol.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{1A3CB0F7-E1EE-4981-83B7-CABD400B1737}|QuanLyNoir_BTL\\QuanLyNoir_BTL.csproj|C:\\Users\\Admin\\OneDrive\\Documents\\do_an\\QuanLyShopNoir_WindowForm\\quanlynoir_btl\\views\\manageordercontrol.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
-      "RelativeMoniker": "D:0:0:{1A3CB0F7-E1EE-4981-83B7-CABD400B1737}|QuanLyNoir_BTL\\QuanLyNoir_BTL.csproj|solutionrelative:quanlynoir_btl\\views\\manageordercontrol.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{1A3CB0F7-E1EE-4981-83B7-CABD400B1737}|QuanLyNoir_BTL\\QuanLyNoir_BTL.csproj|c:\\users\\admin\\onedrive\\documents\\do_an\\quanlyshopnoir_windowform\\quanlynoir_btl\\views\\manageproductcontrol.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{1A3CB0F7-E1EE-4981-83B7-CABD400B1737}|QuanLyNoir_BTL\\QuanLyNoir_BTL.csproj|solutionrelative:quanlynoir_btl\\views\\manageproductcontrol.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{1A3CB0F7-E1EE-4981-83B7-CABD400B1737}|QuanLyNoir_BTL\\QuanLyNoir_BTL.csproj|C:\\Users\\Admin\\OneDrive\\Documents\\do_an\\QuanLyShopNoir_WindowForm\\quanlynoir_btl\\views\\signin.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{1A3CB0F7-E1EE-4981-83B7-CABD400B1737}|QuanLyNoir_BTL\\QuanLyNoir_BTL.csproj|solutionrelative:quanlynoir_btl\\views\\signin.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
     }
   ],
   "DocumentGroupContainers": [
@@ -44,71 +36,51 @@
         },
         {
           "DockedHeight": 115,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
             },
             {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "ManageOrderControl.cs [Design]",
-              "DocumentMoniker": "C:\\Users\\Admin\\OneDrive\\Documents\\do_an\\QuanLyShopNoir_WindowForm\\QuanLyNoir_BTL\\Views\\ManageOrderControl.cs",
-              "RelativeDocumentMoniker": "QuanLyNoir_BTL\\Views\\ManageOrderControl.cs",
-              "ToolTip": "C:\\Users\\Admin\\OneDrive\\Documents\\do_an\\QuanLyShopNoir_WindowForm\\QuanLyNoir_BTL\\Views\\ManageOrderControl.cs [Design]",
-              "RelativeToolTip": "QuanLyNoir_BTL\\Views\\ManageOrderControl.cs [Design]",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-15T11:29:15.165Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "ManageOrderControl.cs",
-              "DocumentMoniker": "C:\\Users\\Admin\\OneDrive\\Documents\\do_an\\QuanLyShopNoir_WindowForm\\QuanLyNoir_BTL\\Views\\ManageOrderControl.cs",
-              "RelativeDocumentMoniker": "QuanLyNoir_BTL\\Views\\ManageOrderControl.cs",
-              "ToolTip": "C:\\Users\\Admin\\OneDrive\\Documents\\do_an\\QuanLyShopNoir_WindowForm\\QuanLyNoir_BTL\\Views\\ManageOrderControl.cs",
-              "RelativeToolTip": "QuanLyNoir_BTL\\Views\\ManageOrderControl.cs",
-              "ViewState": "AgIAAKkAAAAAAAAAAAAgwLgAAAAsAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-14T13:38:33.561Z"
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
             },
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "AnalyseRevenueControl.cs",
-              "DocumentMoniker": "C:\\Users\\Admin\\OneDrive\\Documents\\do_an\\QuanLyShopNoir_WindowForm\\QuanLyNoir_BTL\\Views\\AnalyseRevenueControl.cs",
-              "RelativeDocumentMoniker": "QuanLyNoir_BTL\\Views\\AnalyseRevenueControl.cs",
-              "ToolTip": "C:\\Users\\Admin\\OneDrive\\Documents\\do_an\\QuanLyShopNoir_WindowForm\\QuanLyNoir_BTL\\Views\\AnalyseRevenueControl.cs",
-              "RelativeToolTip": "QuanLyNoir_BTL\\Views\\AnalyseRevenueControl.cs",
-              "ViewState": "AgIAAMoAAAAAAAAAAAAQwNEAAAA6AAAAAAAAAA==",
+              "Title": "ShopNoirContext.cs",
+              "DocumentMoniker": "C:\\Users\\Admin\\OneDrive\\Documents\\do_an\\QuanLyShopNoir_WindowForm\\QuanLyNoir_BTL\\Models\\ShopNoirContext.cs",
+              "RelativeDocumentMoniker": "QuanLyNoir_BTL\\Models\\ShopNoirContext.cs",
+              "ToolTip": "C:\\Users\\Admin\\OneDrive\\Documents\\do_an\\QuanLyShopNoir_WindowForm\\QuanLyNoir_BTL\\Models\\ShopNoirContext.cs",
+              "RelativeToolTip": "QuanLyNoir_BTL\\Models\\ShopNoirContext.cs",
+              "ViewState": "AgIAADsAAAAAAAAAAADgv0oAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-15T09:31:49.76Z",
+              "WhenOpened": "2024-12-18T17:33:21.68Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "AnalyseRevenueControl.cs [Design]",
-              "DocumentMoniker": "C:\\Users\\Admin\\OneDrive\\Documents\\do_an\\QuanLyShopNoir_WindowForm\\QuanLyNoir_BTL\\Views\\AnalyseRevenueControl.cs",
-              "RelativeDocumentMoniker": "QuanLyNoir_BTL\\Views\\AnalyseRevenueControl.cs",
-              "ToolTip": "C:\\Users\\Admin\\OneDrive\\Documents\\do_an\\QuanLyShopNoir_WindowForm\\QuanLyNoir_BTL\\Views\\AnalyseRevenueControl.cs [Design]",
-              "RelativeToolTip": "QuanLyNoir_BTL\\Views\\AnalyseRevenueControl.cs [Design]",
+              "DocumentIndex": 2,
+              "Title": "SignIn.cs [Design]",
+              "DocumentMoniker": "C:\\Users\\Admin\\OneDrive\\Documents\\do_an\\QuanLyShopNoir_WindowForm\\QuanLyNoir_BTL\\Views\\SignIn.cs",
+              "RelativeDocumentMoniker": "QuanLyNoir_BTL\\Views\\SignIn.cs",
+              "ToolTip": "C:\\Users\\Admin\\OneDrive\\Documents\\do_an\\QuanLyShopNoir_WindowForm\\QuanLyNoir_BTL\\Views\\SignIn.cs [Design]",
+              "RelativeToolTip": "QuanLyNoir_BTL\\Views\\SignIn.cs [Design]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-14T13:42:41.278Z",
-              "EditorCaption": " [Design]"
+              "WhenOpened": "2024-12-18T17:32:08.83Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "ManageProductControl.cs",
-              "DocumentMoniker": "C:\\Users\\Admin\\OneDrive\\Documents\\do_an\\QuanLyShopNoir_WindowForm\\QuanLyNoir_BTL\\Views\\ManageProductControl.cs",
-              "RelativeDocumentMoniker": "QuanLyNoir_BTL\\Views\\ManageProductControl.cs",
-              "ToolTip": "C:\\Users\\Admin\\OneDrive\\Documents\\do_an\\QuanLyShopNoir_WindowForm\\QuanLyNoir_BTL\\Views\\ManageProductControl.cs",
-              "RelativeToolTip": "QuanLyNoir_BTL\\Views\\ManageProductControl.cs",
-              "ViewState": "AgIAAM4BAAAAAAAAAAAgwM8BAABAAAAAAAAAAA==",
+              "DocumentIndex": 1,
+              "Title": "SignIn.cs",
+              "DocumentMoniker": "C:\\Users\\Admin\\OneDrive\\Documents\\do_an\\QuanLyShopNoir_WindowForm\\QuanLyNoir_BTL\\Views\\SignIn.cs",
+              "RelativeDocumentMoniker": "QuanLyNoir_BTL\\Views\\SignIn.cs",
+              "ToolTip": "C:\\Users\\Admin\\OneDrive\\Documents\\do_an\\QuanLyShopNoir_WindowForm\\QuanLyNoir_BTL\\Views\\SignIn.cs",
+              "RelativeToolTip": "QuanLyNoir_BTL\\Views\\SignIn.cs",
+              "ViewState": "AgIAAFAAAAAAAAAAAAAwwBoAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-15T11:09:01.823Z"
+              "WhenOpened": "2024-12-18T17:31:38.063Z"
             }
           ]
         },

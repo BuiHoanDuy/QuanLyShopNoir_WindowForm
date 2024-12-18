@@ -17,7 +17,11 @@ public partial class Invoice
 
     public Guid CreatedBy { get; set; }
 
+    public Guid? VoucherId { get; set; }
+
     public virtual Account CreatedByNavigation { get; set; }
 
     public virtual ICollection<InvoiceDetail> InvoiceDetails { get; set; } = new List<InvoiceDetail>();
+
+    public virtual Voucher Voucher { get; set; }
 }
