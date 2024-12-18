@@ -6,15 +6,18 @@ using System.Windows.Media;
 using System.Linq.Dynamic.Core;
 using OfficeOpenXml;
 using Timer = System.Windows.Forms.Timer;
+using System.Diagnostics.Eventing.Reader;
+//using System.Reflection;
 
 namespace QuanLyNoir_BTL.Views
 {
+    enum Filter { daily, monthly, yearly };
     public partial class AnalyseRevenueControl : UserControl
     {
         private string xTitle;
-        private int year = 2024; // Năm mặc định
-        private int month = 4;  // Tháng mặc định
-        private string typeFilter = "monthly"; // Bộ lọc ban đầu ("monthly" hoặc "daily")
+        private int year = DateTime.Now.Year; // Năm mặc định
+        private int month = DateTime.Now.Month;  // Tháng mặc định
+        Filter filter;
         private bool typeReport = true; //1; Chart, 0: dataGridView
         private int currentPage = 1; // Trang hiện tại
         private int pageSize = 14; // Số lượng bản ghi mỗi trang
@@ -27,9 +30,11 @@ namespace QuanLyNoir_BTL.Views
         public AnalyseRevenueControl()
         {
             InitializeComponent();
+            filter = Filter.yearly;
+            Load_data();
         }
 
-        private async void LoadChartData(LiveCharts.WinForms.CartesianChart chart, string typeFilter)
+        private async void LoadChartData(LiveCharts.WinForms.CartesianChart chart)
         {
             List<string> labels = null;
             List<decimal> revenues = null;
@@ -39,20 +44,29 @@ namespace QuanLyNoir_BTL.Views
                 await Task.Run(async () =>
                 {
                     SafeSetComboBoxValues();
-                    if (typeFilter == "monthly")
+                    if (filter == Filter.daily)
                     {
-                        xTitle = "Months in Year";
-                        labels = GetMonthLabels();
-                        revenues = await GetRevenueDataAsync(year, null);
-                        GetTotalRevenueAndTotalOrdersAsync(year, null);
+                        xTitle = "Hours in Day";
+                        labels = GetHourLabels();
+                        year = dateTimePicker.Value.Year;
+                        month = dateTimePicker.Value.Month;
+                        int day = dateTimePicker.Value.Day;
+                        revenues = await GetRevenueDataAsync(year, month, day);
+                        GetTotalRevenueAndTotalOrdersAsync(year, month, day);
+                    }
+                    else if (filter == Filter.monthly)
+                    {
+                        xTitle = "Days in Month";
+                        labels = GetDayLabels(year, month);
+                        revenues = await GetRevenueDataAsync(year, month, null);
+                        GetTotalRevenueAndTotalOrdersAsync(year, month, null);
                     }
                     else
                     {
-                        SafeSetComboBoxValues();
-                        xTitle = "Days in Month";
-                        labels = GetDayLabels(year, month);
-                        revenues = await GetRevenueDataAsync(year, month);
-                        GetTotalRevenueAndTotalOrdersAsync(year, month);
+                        xTitle = "Months in Year";
+                        labels = GetMonthLabels();
+                        revenues = await GetRevenueDataAsync(year, null, null);
+                        GetTotalRevenueAndTotalOrdersAsync(year, null, null);
                     }
                 });
                 // Cập nhật biểu đồ
@@ -75,7 +89,8 @@ namespace QuanLyNoir_BTL.Views
             {
                 year = int.Parse(cbbx_year.Text);
             }
-            if (cbbx_month.Enabled)
+
+            if(cbbx_month.Enabled)
             {
                 if (cbbx_month.InvokeRequired)
                 {
@@ -86,6 +101,7 @@ namespace QuanLyNoir_BTL.Views
                     month = int.Parse(cbbx_month.Text);
                 }
             }
+
         }
 
         private async void LoadDataIntoDataGridBox()
@@ -140,17 +156,39 @@ namespace QuanLyNoir_BTL.Views
         }
 
 
-        private async Task<List<decimal>> GetRevenueDataAsync(int year, int? month)
+        private async Task<List<decimal>> GetRevenueDataAsync(int year, int? month, int? day)
         {
             using (var context = new ShopNoirContext())
             {
-                if (month.HasValue)
+                if (day.HasValue)
                 {
-                    // Lấy doanh thu theo ngày
+                    // Lấy doanh thu theo khung giờ trong ngày
+                    var revenuePerTimeSlot = new decimal[7]; // 7 khung giờ
+
+                    var dailyRevenue = await context.Invoices
+                        .AsNoTracking()
+                        .Where(invoice => invoice.CreatedAt.HasValue
+                                          && invoice.CreatedAt.Value.Year == year
+                                          && invoice.CreatedAt.Value.Month == month.Value
+                                          && invoice.CreatedAt.Value.Day == day.Value)
+                        .ToListAsync();
+
+                    foreach (var invoice in dailyRevenue)
+                    {
+                        var hour = invoice.CreatedAt.Value.Hour;
+                        int timeSlotIndex = GetTimeSlotIndex(hour);
+                        revenuePerTimeSlot[timeSlotIndex] += invoice.Total; // Cộng dồn doanh thu vào khung giờ tương ứng
+                    }
+
+                    return revenuePerTimeSlot.ToList();
+                }
+                else if (month.HasValue)
+                {
+                    // Lấy doanh thu theo ngày trong tháng
                     int daysInMonth = DateTime.DaysInMonth(year, month.Value);
                     var revenuePerDay = new decimal[daysInMonth];
 
-                    var dailyRevenue = await context.Invoices
+                    var monthlyRevenue = await context.Invoices
                         .AsNoTracking()
                         .Where(invoice => invoice.CreatedAt.HasValue
                                           && invoice.CreatedAt.Value.Year == year
@@ -159,7 +197,7 @@ namespace QuanLyNoir_BTL.Views
                         .Select(g => new { Day = g.Key, Total = g.Sum(invoice => invoice.Total) })
                         .ToListAsync();
 
-                    foreach (var revenue in dailyRevenue)
+                    foreach (var revenue in monthlyRevenue)
                     {
                         revenuePerDay[revenue.Day - 1] = revenue.Total;
                     }
@@ -168,17 +206,17 @@ namespace QuanLyNoir_BTL.Views
                 }
                 else
                 {
-                    // Lấy doanh thu theo tháng
+                    // Lấy doanh thu theo tháng trong năm
                     var revenuePerMonth = new decimal[12];
 
-                    var monthlyRevenue = await context.Invoices
+                    var yearlyRevenue = await context.Invoices
                         .AsNoTracking()
                         .Where(invoice => invoice.CreatedAt.HasValue && invoice.CreatedAt.Value.Year == year)
                         .GroupBy(invoice => invoice.CreatedAt.Value.Month)
                         .Select(g => new { Month = g.Key, Total = g.Sum(invoice => invoice.Total) })
                         .ToListAsync();
 
-                    foreach (var revenue in monthlyRevenue)
+                    foreach (var revenue in yearlyRevenue)
                     {
                         revenuePerMonth[revenue.Month - 1] = revenue.Total;
                     }
@@ -187,7 +225,20 @@ namespace QuanLyNoir_BTL.Views
                 }
             }
         }
-        private async void GetTotalRevenueAndTotalOrdersAsync(int year, int? month)
+
+        // Hàm xác định chỉ số khung giờ
+        private int GetTimeSlotIndex(int hour)
+        {
+            if (hour < 4) return 0;  // 0:00 - 3:59
+            if (hour < 8) return 1;  // 4:00 - 7:59
+            if (hour < 12) return 2; // 8:00 - 11:59
+            if (hour < 16) return 3; // 12:00 - 15:59
+            if (hour < 20) return 4; // 16:00 - 19:59
+            if (hour < 24) return 5; // 20:00 - 23:59
+            return 6;                // Dự phòng (không xảy ra)
+        }
+
+        private async void GetTotalRevenueAndTotalOrdersAsync(int year, int? month, int? day)
         {
             decimal totalRevenue = 0;
             int totalOrders = 0;
@@ -197,7 +248,26 @@ namespace QuanLyNoir_BTL.Views
             {
                 using (var context = new ShopNoirContext())
                 {
-                    if (month.HasValue)
+                    if(day.HasValue)
+                    {
+                        var result = await context.Invoices
+                            .AsNoTracking()
+                            .Where(invoice => invoice.CreatedAt.HasValue
+                                              && invoice.CreatedAt.Value.Year == year
+                                              && invoice.CreatedAt.Value.Month == month
+                                              && invoice.CreatedAt.Value.Day == day)
+                            .GroupBy(_ => 1)
+                            .Select(g => new
+                            {
+                                TotalRevenue = g.Sum(invoice => invoice.Total),
+                                TotalOrders = g.Count()
+                            })
+                            .FirstOrDefaultAsync();
+
+                        totalRevenue = result?.TotalRevenue ?? 0;
+                        totalOrders = result?.TotalOrders ?? 0;
+                    }
+                    else if (month.HasValue)
                     {
                         var result = await context.Invoices
                             .AsNoTracking()
@@ -242,6 +312,11 @@ namespace QuanLyNoir_BTL.Views
             });
         }
 
+        private List<string> GetHourLabels()
+        {
+            return new List<string> { "0:00", "4:00", "8:00", "12:00", "16:00", "20:00", "23:59" };
+        }
+
 
         private List<string> GetMonthLabels()
         {
@@ -256,43 +331,110 @@ namespace QuanLyNoir_BTL.Views
 
         private void llbl_daily_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            typeFilter = "daily";
-            cbbx_month.Enabled = true;
-            LoadChartData(cartesianChart1, typeFilter);
+            dateTimePicker.Enabled = true;
+            cbbx_month.Enabled = false;
+            cbbx_year.Enabled = false;
+            filter = Filter.daily;
             linkLable_clickedEffect(llbl_daily);
+            updateReportEffect();
         }
 
         private void llbl_monthly_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            typeFilter = "monthly";
-            cbbx_month.Enabled = false;
-            LoadChartData(cartesianChart1, typeFilter);
+            dateTimePicker.Enabled = false;
+            cbbx_month.Enabled = true;
+            cbbx_year.Enabled = true;
+            filter = Filter.monthly;
             linkLable_clickedEffect(llbl_monthly);
+            updateReportEffect();
+        }
 
+        private void llbl_yearly_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            cbbx_month.Enabled = false;
+            dateTimePicker.Enabled = false;
+            cbbx_year.Enabled = true;
+            filter = Filter.yearly;
+            linkLable_clickedEffect(llbl_yearly);
+            updateReportEffect();
         }
 
         private void linkLable_clickedEffect(LinkLabel llbl)
         {
             llbl_daily.LinkColor = System.Drawing.Color.DimGray;
             llbl_monthly.LinkColor = System.Drawing.Color.DimGray;
+            llbl_yearly.LinkColor = System.Drawing.Color.DimGray;
             llbl.LinkColor = System.Drawing.Color.Black;
         }
 
+        private void Load_data()
+        {
+            init_comboBoxYear();
+            init_comboBoxMonth();
+        }
+
+        private int init_comboBoxYear()
+        {
+            // Lấy năm hiện tại
+            int currentYear = DateTime.Now.Year;
+
+            // Tạo danh sách các năm từ 2023 đến năm hiện tại
+            List<int> years = Enumerable.Range(2024, currentYear - 2024 + 1).ToList();
+
+            // Gán danh sách năm vào ComboBox
+            cbbx_year.DataSource = years;
+
+            // Tuỳ chỉnh nếu cần
+            cbbx_year.DropDownStyle = ComboBoxStyle.DropDownList; // Chỉ cho phép chọn, không nhập
+            cbbx_year.SelectedItem = currentYear;
+            //cbbx_year.SelectedItem = currentYear;
+            return currentYear;
+        }
+
+        private void init_comboBoxMonth()
+        {
+            // Lấy năm hiện tại
+            int currentYear = DateTime.Now.Year;
+            int currentMonth = DateTime.Now.Month;
+
+            // Tạo danh sách các năm từ 2023 đến năm hiện tại
+            List<int> months;
+            if ((int)cbbx_year.SelectedValue < currentYear)
+                months = Enumerable.Range(1, 12).ToList();
+            else
+                months = Enumerable.Range(1, currentMonth).ToList();
+
+            // Gán danh sách năm vào ComboBox
+            cbbx_month.DataSource = months;
+
+            // Tuỳ chỉnh nếu cần
+            cbbx_month.DropDownStyle = ComboBoxStyle.DropDownList; // Chỉ cho phép chọn, không nhập
+            cbbx_month.SelectedItem = currentMonth;
+        }
+
+        private void setComboBoxMonth(int currentYear)
+        {
+            int currentMonth = DateTime.Now.Month;
+
+            // Tạo danh sách các năm từ 2023 đến năm hiện tại
+            List<int> months;
+            if ((int)cbbx_year.SelectedValue < currentYear)
+                months = Enumerable.Range(1, 12).ToList();
+            else
+                months = Enumerable.Range(1, currentMonth).ToList();
+
+            // Gán danh sách năm vào ComboBox
+            cbbx_month.DataSource = months;
+
+            // Tuỳ chỉnh nếu cần
+            cbbx_month.DropDownStyle = ComboBoxStyle.DropDownList; // Chỉ cho phép chọn, không nhập
+            cbbx_month.SelectedItem = currentMonth;
+        }
+
+
+
         private void AnalyseRevenueControl_Load(object sender, EventArgs e)
         {
-            // Tạo danh sách năm từ 2000 đến năm hiện tại
-            int currentYear = DateTime.Now.Year;
-            cbbx_year.Items.AddRange(Enumerable.Range(2000, currentYear - 1999).Cast<object>().ToArray());
-            cbbx_year.SelectedItem = currentYear; // Chọn năm hiện tại
-
-            // Tạo danh sách tháng (1 đến 12)
-            cbbx_month.Items.AddRange(new string[]
-            {
-            "1", "2", "3", "4", "5", "6",
-            "7", "8", "9", "10", "11", "12"
-            });
-            cbbx_month.SelectedIndex = DateTime.Now.Month - 1; // Chọn tháng hiện tại
-
             dataGridView1.EnableHeadersVisualStyles = false; // Bắt buộc để thay đổi kiểu
             dataGridView1.ColumnHeadersDefaultCellStyle.BackColor = System.Drawing.Color.DarkSlateGray; // Màu nền
             dataGridView1.ColumnHeadersDefaultCellStyle.ForeColor = System.Drawing.Color.Pink; // Màu chữ
@@ -306,14 +448,19 @@ namespace QuanLyNoir_BTL.Views
             cellToolTip.Active = false;
         }
 
+        private void dateTimePicker_Value_Changed(object sender, EventArgs e)
+        {
+            LoadChartData(cartesianChart1);
+        }
+
         private void cbbx_year_SelectedIndexChanged(object sender, EventArgs e)
         {
-            LoadChartData(cartesianChart1, typeFilter);
+            LoadChartData(cartesianChart1);
         }
 
         private void cbbx_month_SelectedIndexChanged(object sender, EventArgs e)
         {
-            LoadChartData(cartesianChart1, typeFilter);
+            LoadChartData(cartesianChart1);
         }
 
         private void btn_detail_Click(object sender, EventArgs e)
@@ -351,7 +498,7 @@ namespace QuanLyNoir_BTL.Views
                 btn_trangtruoc.Show();
                 lbl_nameOfReport.Text = "Revenue Detail";
             }
-            LoadChartData(cartesianChart1, typeFilter);
+            LoadChartData(cartesianChart1);
         }
         private async Task<List<InvoiceInformation>> FetchInvoiceDataAsync()
         {
@@ -360,19 +507,32 @@ namespace QuanLyNoir_BTL.Views
                 IQueryable<Invoice> query;
 
                 // Xác định truy vấn dựa trên bộ lọc
-                if (typeFilter == "monthly")
+                if (filter == Filter.daily)
                 {
+                    // Truy vấn theo từng khung giờ trong ngày
                     query = context.Invoices
                         .Where(invoice => invoice.CreatedAt.HasValue
-                                          && invoice.CreatedAt.Value.Year == year);
+                        && invoice.CreatedAt.Value == dateTimePicker.Value);
+                                          //&& invoice.CreatedAt.Value.Year == dateTimePicker.Value.Year
+                                          //&& invoice.CreatedAt.Value.Month == dateTimePicker.Value.Month
+                                          //&& invoice.CreatedAt.Value.Day == dateTimePicker.Value.Day);
                 }
-                else
+                else if (filter == Filter.monthly)
                 {
+                    // Truy vấn các ngày trong tháng
                     query = context.Invoices
                         .Where(invoice => invoice.CreatedAt.HasValue
                                           && invoice.CreatedAt.Value.Year == year
                                           && invoice.CreatedAt.Value.Month == month);
                 }
+                else
+                {
+                    // Truy vấn các tháng trong năm
+                    query = context.Invoices
+                        .Where(invoice => invoice.CreatedAt.HasValue
+                                          && invoice.CreatedAt.Value.Year == year);
+                }
+
 
                 // Tính tổng số bản ghi
                 totalRecords = await query.CountAsync();
@@ -438,6 +598,12 @@ namespace QuanLyNoir_BTL.Views
             }
         }
 
+        private int? getMonth()
+        {
+            if (filter == Filter.monthly) return month;
+            else return dateTimePicker.Value.Month;
+        }
+
         private async void btn_printReport_Click(object sender, EventArgs e)
         {
             // Dữ liệu cần in
@@ -447,19 +613,31 @@ namespace QuanLyNoir_BTL.Views
                 IQueryable<Invoice> query;
 
                 // Xác định truy vấn dựa trên bộ lọc
-                if (typeFilter == "monthly")
+                if (filter == Filter.daily)
                 {
+                    // Truy vấn theo từng khung giờ trong ngày
                     query = context.Invoices
                         .Where(invoice => invoice.CreatedAt.HasValue
-                                          && invoice.CreatedAt.Value.Year == year);
+                                          && invoice.CreatedAt.Value.Year == dateTimePicker.Value.Year
+                                          && invoice.CreatedAt.Value.Month == dateTimePicker.Value.Month
+                                          && invoice.CreatedAt.Value.Day == dateTimePicker.Value.Day);
                 }
-                else
+                else if (filter == Filter.monthly)
                 {
+                    // Truy vấn các ngày trong tháng
                     query = context.Invoices
                         .Where(invoice => invoice.CreatedAt.HasValue
                                           && invoice.CreatedAt.Value.Year == year
                                           && invoice.CreatedAt.Value.Month == month);
                 }
+                else
+                {
+                    // Truy vấn các tháng trong năm
+                    query = context.Invoices
+                        .Where(invoice => invoice.CreatedAt.HasValue
+                                          && invoice.CreatedAt.Value.Year == year);
+                }
+
                 allData = await query
                .OrderByDescending(invoice => invoice.CreatedAt)
                .Select(invoiceInfo => new InvoiceInformation
@@ -520,8 +698,22 @@ namespace QuanLyNoir_BTL.Views
                         chart.Title.Text = "Revenue Report";
 
                         // Thêm dữ liệu biểu đồ
-                        var revenueData = await GetRevenueDataAsync(year, typeFilter == "daily" ? month : (int?)null);
-                        var labels = typeFilter == "daily" ? GetDayLabels(year, month) : GetMonthLabels();
+                        var revenueData = await GetRevenueDataAsync(year, filter != Filter.yearly ? getMonth() : (int?)null, filter == Filter.daily ? dateTimePicker.Value.Day : (int?)null);
+
+                        var labels = new List<string>();
+                        if (filter == Filter.daily)
+                        {
+                            labels = GetHourLabels();
+                        }
+                        else if (filter == Filter.monthly)
+                        {
+                            labels = GetDayLabels(year, month);
+                        }
+                        else
+                        {
+                            labels = GetMonthLabels();
+                        }
+
 
                         // Gán dữ liệu biểu đồ
                         var labelRange = chartSheet.Cells[1, 1, labels.Count, 1];
@@ -600,10 +792,20 @@ namespace QuanLyNoir_BTL.Views
                 if (invoiceId != null)
                 {
                     Guid selectedInvoiceId = Guid.Parse(invoiceId.ToString());
-                    RevenueDetail revenueDetail = new RevenueDetail(selectedInvoiceId,total, revenue, name, date);
+                    RevenueDetail revenueDetail = new RevenueDetail(selectedInvoiceId, total, revenue, name, date);
                     revenueDetail.Show();
                 }
             }
+        }
+
+        private void dateTimePicker_ValueChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void FetchInvoiceDataAsync(object sender, EventArgs e)
+        {
+
         }
     }
 }

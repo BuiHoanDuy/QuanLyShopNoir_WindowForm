@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("QuanLyNoir_BTL")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+84fff83d8bd7723522acfd436c523fd8846194e6")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+683b1ad81b9b02605d8b9f8e898a65802bf9fd98")]
 [assembly: System.Reflection.AssemblyProductAttribute("QuanLyNoir_BTL")]
 [assembly: System.Reflection.AssemblyTitleAttribute("QuanLyNoir_BTL")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
