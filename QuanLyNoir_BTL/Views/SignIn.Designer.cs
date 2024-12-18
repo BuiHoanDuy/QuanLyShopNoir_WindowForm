@@ -28,16 +28,19 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SignIn));
             panel1 = new Panel();
             pictureBox1 = new PictureBox();
             label2 = new Label();
             label1 = new Label();
             panel2 = new Panel();
+            panel3 = new Panel();
+            show_icon = new PictureBox();
+            tbx_password = new TextBox();
             splitter1 = new Splitter();
             btn_signin = new Button();
             btn_forgotpassword = new Button();
             chbx_rememberme = new CheckBox();
-            tbx_password = new TextBox();
             tbx_username = new TextBox();
             label5 = new Label();
             label4 = new Label();
@@ -46,6 +49,8 @@
             panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             panel2.SuspendLayout();
+            panel3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)show_icon).BeginInit();
             SuspendLayout();
             // 
             // panel1
@@ -60,7 +65,7 @@
             // 
             // pictureBox1
             // 
-            pictureBox1.Image = Properties.Resources.vector_join_now_sign;
+            pictureBox1.Image = (Image)resources.GetObject("pictureBox1.Image");
             pictureBox1.Location = new Point(59, 24);
             pictureBox1.Name = "pictureBox1";
             pictureBox1.Size = new Size(392, 425);
@@ -81,7 +86,7 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(180, 483);
+            label1.Location = new Point(181, 483);
             label1.Name = "label1";
             label1.Size = new Size(152, 20);
             label1.TabIndex = 0;
@@ -90,26 +95,59 @@
             // panel2
             // 
             panel2.BackColor = Color.White;
+            panel2.Controls.Add(panel3);
             panel2.Controls.Add(splitter1);
             panel2.Controls.Add(btn_signin);
             panel2.Controls.Add(btn_forgotpassword);
             panel2.Controls.Add(chbx_rememberme);
-            panel2.Controls.Add(tbx_password);
             panel2.Controls.Add(tbx_username);
             panel2.Controls.Add(label5);
             panel2.Controls.Add(label4);
             panel2.Controls.Add(label3);
-            panel2.Location = new Point(570, -10);
+            panel2.Location = new Point(570, -11);
             panel2.Name = "panel2";
-            panel2.Size = new Size(636, 780);
+            panel2.Size = new Size(705, 780);
             panel2.TabIndex = 1;
+            // 
+            // panel3
+            // 
+            panel3.BorderStyle = BorderStyle.FixedSingle;
+            panel3.Controls.Add(show_icon);
+            panel3.Controls.Add(tbx_password);
+            panel3.Location = new Point(101, 387);
+            panel3.Margin = new Padding(3, 4, 3, 4);
+            panel3.Name = "panel3";
+            panel3.Size = new Size(461, 30);
+            panel3.TabIndex = 10;
+            // 
+            // show_icon
+            // 
+            show_icon.Cursor = Cursors.Hand;
+            show_icon.Image = Properties.Resources.show_icon;
+            show_icon.Location = new Point(438, 3);
+            show_icon.Margin = new Padding(3, 4, 3, 4);
+            show_icon.Name = "show_icon";
+            show_icon.Size = new Size(18, 21);
+            show_icon.TabIndex = 11;
+            show_icon.TabStop = false;
+            show_icon.Click += show_icon_Click;
+            // 
+            // tbx_password
+            // 
+            tbx_password.Anchor = AnchorStyles.Top;
+            tbx_password.BorderStyle = BorderStyle.None;
+            tbx_password.Location = new Point(3, 4);
+            tbx_password.Name = "tbx_password";
+            tbx_password.PasswordChar = '*';
+            tbx_password.Size = new Size(429, 20);
+            tbx_password.TabIndex = 4;
             // 
             // splitter1
             // 
             splitter1.BackColor = SystemColors.ActiveCaptionText;
             splitter1.Location = new Point(0, 0);
             splitter1.Name = "splitter1";
-            splitter1.Size = new Size(4, 780);
+            splitter1.Size = new Size(5, 780);
             splitter1.TabIndex = 8;
             splitter1.TabStop = false;
             // 
@@ -142,19 +180,12 @@
             // 
             chbx_rememberme.AutoSize = true;
             chbx_rememberme.Cursor = Cursors.Hand;
-            chbx_rememberme.Location = new Point(105, 438);
+            chbx_rememberme.Location = new Point(105, 437);
             chbx_rememberme.Name = "chbx_rememberme";
             chbx_rememberme.Size = new Size(129, 24);
             chbx_rememberme.TabIndex = 5;
             chbx_rememberme.Text = "Remember Me";
             chbx_rememberme.UseVisualStyleBackColor = true;
-            // 
-            // tbx_password
-            // 
-            tbx_password.Location = new Point(101, 386);
-            tbx_password.Name = "tbx_password";
-            tbx_password.Size = new Size(461, 27);
-            tbx_password.TabIndex = 4;
             // 
             // tbx_username
             // 
@@ -186,20 +217,20 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Font = new Font("STKaiti", 19.8000011F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 0);
+            label3.Font = new Font("Microsoft Sans Serif", 19.8000011F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 0);
             label3.Location = new Point(62, 160);
             label3.Name = "label3";
-            label3.Size = new Size(113, 38);
+            label3.Size = new Size(129, 39);
             label3.TabIndex = 0;
             label3.Text = "Sign in";
             // 
             // label6
             // 
             label6.AutoSize = true;
-            label6.Font = new Font("STLiti", 19.8000011F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 134);
+            label6.Font = new Font("Microsoft Sans Serif", 19.8000011F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 134);
             label6.Location = new Point(40, 32);
             label6.Name = "label6";
-            label6.Size = new Size(75, 35);
+            label6.Size = new Size(84, 39);
             label6.TabIndex = 2;
             label6.Text = "Noir";
             // 
@@ -213,6 +244,7 @@
             Controls.Add(label6);
             Controls.Add(panel2);
             Controls.Add(panel1);
+            KeyPreview = true;
             Name = "SignIn";
             Text = "Login";
             TopMost = true;
@@ -221,6 +253,9 @@
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             panel2.ResumeLayout(false);
             panel2.PerformLayout();
+            panel3.ResumeLayout(false);
+            panel3.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)show_icon).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -242,5 +277,10 @@
         private CheckBox chbx_rememberme;
         private Label label6;
         private Splitter splitter1;
+        private Panel panel3;
+        private PictureBox show_icon;
     }
 }
+
+
+

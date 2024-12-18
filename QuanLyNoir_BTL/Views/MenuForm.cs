@@ -9,16 +9,17 @@ namespace QuanLyNoir_BTL
     {
         // Khai báo các đối tượng nhưng chưa khởi tạo
         private Lazy<ManageProductControl> manageProductControl = new Lazy<ManageProductControl>(() => new ManageProductControl());
-        private Lazy<ManageAccountControl> manageAccountControl = new Lazy<ManageAccountControl>(() => new ManageAccountControl());
+        private Lazy<ManageAccountControl> manageAccountControl;
         private Lazy<ManageVoucherControl> manageVoucherControl = new Lazy<ManageVoucherControl>(() => new ManageVoucherControl());
         private Lazy<AnalyseRevenueControl> revenueControl  = new Lazy<AnalyseRevenueControl>(() => new AnalyseRevenueControl());
-        public MenuForm(string username)
+        public MenuForm(Guid userId, string username)
         {
             InitializeComponent();
             this.StartPosition = FormStartPosition.CenterScreen;
             this.MaximizeBox = false;
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
             lbl_name.Text = username;
+            manageAccountControl = new Lazy<ManageAccountControl>(() => new ManageAccountControl(userId));
         }
         private void ManageProduct_FormClosing(object sender, FormClosingEventArgs e)
         {
@@ -77,6 +78,7 @@ namespace QuanLyNoir_BTL
             if (!pnl_control.Controls.Contains(manageAccountControl.Value))
             {
                 pnl_control.Controls.Add(manageAccountControl.Value);
+                //manageAccountControl.setCurrentAccount(userId);
             }
 
             ShowControl(manageAccountControl.Value);

@@ -30,7 +30,6 @@ namespace QuanLyNoir_BTL.Views
                         Type = id.ProductColorSize.ProductColor.Product.Type,
                         Color = id.ProductColorSize.ProductColor.ColorName,
                         Size = id.ProductColorSize.Size.SizeName,
-                        Voucher = id.Invoice.Voucher.Code,
                     })
                     .ToList();
 

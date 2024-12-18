@@ -12,7 +12,9 @@ namespace QuanLyNoir_BTL.Views
         private int pageSize = 10; // Số lượng bản ghi mỗi trang
         private int totalRecords; // Tổng số bản ghi
         private Guid _Id;
-        public ManageAccountControl()
+        private Guid currentAccountId;
+
+        public ManageAccountControl(Guid userId)
         {
             InitializeComponent();
             cbbx_cot.Items.Add("Id");
@@ -41,6 +43,13 @@ namespace QuanLyNoir_BTL.Views
             {
                 column.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
             }
+
+            currentAccountId = userId;
+        }
+
+        public void setCurrentAccount(Guid userID)
+        {
+            currentAccountId = userID;
         }
 
         private void ManageAccountControl_Load(object sender, EventArgs e)
@@ -78,7 +87,8 @@ namespace QuanLyNoir_BTL.Views
                     // Truy vấn dữ liệu cho trang hiện tại
                     var accounts = _context.Accounts
                         .Where(ac => (ac.Name.Contains(keyword)
-                        || ac.Username.Contains(keyword)) && ac.Status == true)
+                        || ac.Username.Contains(keyword)) && ac.Status == true
+                        && ac.Id != currentAccountId)
                         .OrderBy($"{sortColumn} {sortOrder}") // Đảm bảo sắp xếp trước khi phân trang
                         .Skip((currentPage - 1) * pageSize) // Bỏ qua bản ghi trước đó
                         .Take(pageSize) // Lấy số bản ghi theo pageSize
