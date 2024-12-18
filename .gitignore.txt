@@ -1,0 +1,3 @@
+.vs/
+QuanLyNoir_BTL/bin/
+QuanLyNoir_BTL/obj/
