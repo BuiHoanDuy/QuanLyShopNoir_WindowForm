@@ -135,7 +135,7 @@
             lbl_priceFilter.AutoSize = true;
             lbl_priceFilter.Location = new Point(122, 41);
             lbl_priceFilter.Name = "lbl_priceFilter";
-            lbl_priceFilter.Size = new Size(45, 20);
+            lbl_priceFilter.Size = new Size(72, 32);
             lbl_priceFilter.TabIndex = 15;
             lbl_priceFilter.Text = "0.00$";
             // 
@@ -144,7 +144,7 @@
             label10.AutoSize = true;
             label10.Location = new Point(225, 41);
             label10.Name = "label10";
-            label10.Size = new Size(17, 20);
+            label10.Size = new Size(27, 32);
             label10.TabIndex = 14;
             label10.Text = "$";
             // 
@@ -153,7 +153,7 @@
             label9.AutoSize = true;
             label9.Location = new Point(2, 41);
             label9.Name = "label9";
-            label9.Size = new Size(17, 20);
+            label9.Size = new Size(27, 32);
             label9.TabIndex = 2;
             label9.Text = "$";
             // 
@@ -162,7 +162,7 @@
             label11.AutoSize = true;
             label11.Location = new Point(241, 41);
             label11.Name = "label11";
-            label11.Size = new Size(59, 20);
+            label11.Size = new Size(95, 32);
             label11.TabIndex = 13;
             label11.Text = "1000.00";
             // 
@@ -171,7 +171,7 @@
             label8.AutoSize = true;
             label8.Location = new Point(18, 41);
             label8.Name = "label8";
-            label8.Size = new Size(37, 20);
+            label8.Size = new Size(59, 32);
             label8.TabIndex = 1;
             label8.Text = "0.00";
             // 
@@ -204,7 +204,7 @@
             tbx_inventory.Cursor = Cursors.IBeam;
             tbx_inventory.Location = new Point(104, 29);
             tbx_inventory.Name = "tbx_inventory";
-            tbx_inventory.Size = new Size(173, 27);
+            tbx_inventory.Size = new Size(173, 39);
             tbx_inventory.TabIndex = 2;
             tbx_inventory.TextChanged += tbx_inventory_TextChanged;
             // 
@@ -213,7 +213,7 @@
             label3.AutoSize = true;
             label3.Location = new Point(17, 32);
             label3.Name = "label3";
-            label3.Size = new Size(68, 20);
+            label3.Size = new Size(108, 32);
             label3.TabIndex = 0;
             label3.Text = "Amount:";
             // 
@@ -244,7 +244,7 @@
             tbx_search.Cursor = Cursors.IBeam;
             tbx_search.Location = new Point(12, 34);
             tbx_search.Name = "tbx_search";
-            tbx_search.Size = new Size(245, 27);
+            tbx_search.Size = new Size(245, 39);
             tbx_search.TabIndex = 0;
             tbx_search.TextChanged += tbx_search_TextChanged;
             // 
@@ -317,7 +317,7 @@
             label1.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 163);
             label1.Location = new Point(3, 0);
             label1.Name = "label1";
-            label1.Size = new Size(227, 31);
+            label1.Size = new Size(368, 50);
             label1.TabIndex = 35;
             label1.Text = "MANAGE PRODUCT";
             // 
@@ -355,7 +355,7 @@
             llbl_addnewproduct.LinkColor = Color.Black;
             llbl_addnewproduct.Location = new Point(529, 23);
             llbl_addnewproduct.Name = "llbl_addnewproduct";
-            llbl_addnewproduct.Size = new Size(124, 20);
+            llbl_addnewproduct.Size = new Size(198, 32);
             llbl_addnewproduct.TabIndex = 20;
             llbl_addnewproduct.TabStop = true;
             llbl_addnewproduct.Text = "Add new product";
@@ -367,7 +367,7 @@
             lbl_page.AutoSize = true;
             lbl_page.Location = new Point(990, 744);
             lbl_page.Name = "lbl_page";
-            lbl_page.Size = new Size(18, 20);
+            lbl_page.Size = new Size(29, 32);
             lbl_page.TabIndex = 33;
             lbl_page.Text = "...";
             // 

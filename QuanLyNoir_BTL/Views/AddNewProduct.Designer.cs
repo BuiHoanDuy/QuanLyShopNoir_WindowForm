@@ -90,9 +90,10 @@
             // 
             lbl_formName.AutoSize = true;
             lbl_formName.Font = new Font("Calibri", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 163);
-            lbl_formName.Location = new Point(91, 28);
+            lbl_formName.Location = new Point(148, 45);
+            lbl_formName.Margin = new Padding(5, 0, 5, 0);
             lbl_formName.Name = "lbl_formName";
-            lbl_formName.Size = new Size(180, 28);
+            lbl_formName.Size = new Size(294, 45);
             lbl_formName.TabIndex = 0;
             lbl_formName.Text = "Add new product ";
             // 
@@ -101,9 +102,10 @@
             pictureBox1.AllowDrop = true;
             pictureBox1.BackColor = Color.FromArgb(254, 249, 242);
             pictureBox1.BorderStyle = BorderStyle.FixedSingle;
-            pictureBox1.Location = new Point(91, 75);
+            pictureBox1.Location = new Point(148, 120);
+            pictureBox1.Margin = new Padding(5, 5, 5, 5);
             pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(321, 284);
+            pictureBox1.Size = new Size(520, 453);
             pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
             pictureBox1.TabIndex = 1;
             pictureBox1.TabStop = false;
@@ -115,9 +117,11 @@
             groupBox1.Controls.Add(lbl_name);
             groupBox1.Controls.Add(tbx_name);
             groupBox1.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
-            groupBox1.Location = new Point(91, 379);
+            groupBox1.Location = new Point(148, 606);
+            groupBox1.Margin = new Padding(5, 5, 5, 5);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(321, 91);
+            groupBox1.Padding = new Padding(5, 5, 5, 5);
+            groupBox1.Size = new Size(522, 146);
             groupBox1.TabIndex = 2;
             groupBox1.TabStop = false;
             groupBox1.Text = "Name of product";
@@ -126,17 +130,19 @@
             // 
             lbl_name.AutoSize = true;
             lbl_name.ForeColor = Color.Red;
-            lbl_name.Location = new Point(130, 0);
+            lbl_name.Location = new Point(211, 0);
+            lbl_name.Margin = new Padding(5, 0, 5, 0);
             lbl_name.Name = "lbl_name";
-            lbl_name.Size = new Size(13, 20);
+            lbl_name.Size = new Size(21, 32);
             lbl_name.TabIndex = 1;
             lbl_name.Text = " ";
             // 
             // tbx_name
             // 
-            tbx_name.Location = new Point(14, 39);
+            tbx_name.Location = new Point(23, 62);
+            tbx_name.Margin = new Padding(5, 5, 5, 5);
             tbx_name.Name = "tbx_name";
-            tbx_name.Size = new Size(279, 27);
+            tbx_name.Size = new Size(451, 39);
             tbx_name.TabIndex = 0;
             // 
             // groupBox2
@@ -144,9 +150,11 @@
             groupBox2.Controls.Add(lbl_type);
             groupBox2.Controls.Add(cbbx_type);
             groupBox2.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
-            groupBox2.Location = new Point(91, 493);
+            groupBox2.Location = new Point(148, 789);
+            groupBox2.Margin = new Padding(5, 5, 5, 5);
             groupBox2.Name = "groupBox2";
-            groupBox2.Size = new Size(321, 91);
+            groupBox2.Padding = new Padding(5, 5, 5, 5);
+            groupBox2.Size = new Size(522, 146);
             groupBox2.TabIndex = 3;
             groupBox2.TabStop = false;
             groupBox2.Text = "Type of product";
@@ -155,9 +163,10 @@
             // 
             lbl_type.AutoSize = true;
             lbl_type.ForeColor = Color.Red;
-            lbl_type.Location = new Point(122, 0);
+            lbl_type.Location = new Point(198, 0);
+            lbl_type.Margin = new Padding(5, 0, 5, 0);
             lbl_type.Name = "lbl_type";
-            lbl_type.Size = new Size(13, 20);
+            lbl_type.Size = new Size(21, 32);
             lbl_type.TabIndex = 2;
             lbl_type.Text = " ";
             // 
@@ -165,9 +174,10 @@
             // 
             cbbx_type.FormattingEnabled = true;
             cbbx_type.Items.AddRange(new object[] { "New Collection", "Bag", "Jacket" });
-            cbbx_type.Location = new Point(14, 42);
+            cbbx_type.Location = new Point(23, 67);
+            cbbx_type.Margin = new Padding(5, 5, 5, 5);
             cbbx_type.Name = "cbbx_type";
-            cbbx_type.Size = new Size(279, 28);
+            cbbx_type.Size = new Size(451, 40);
             cbbx_type.TabIndex = 0;
             // 
             // groupBox3
@@ -179,9 +189,11 @@
             groupBox3.Controls.Add(btn_s);
             groupBox3.Controls.Add(btn_none);
             groupBox3.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
-            groupBox3.Location = new Point(481, 75);
+            groupBox3.Location = new Point(782, 120);
+            groupBox3.Margin = new Padding(5, 5, 5, 5);
             groupBox3.Name = "groupBox3";
-            groupBox3.Size = new Size(394, 91);
+            groupBox3.Padding = new Padding(5, 5, 5, 5);
+            groupBox3.Size = new Size(640, 146);
             groupBox3.TabIndex = 4;
             groupBox3.TabStop = false;
             groupBox3.Text = "Size of product";
@@ -190,17 +202,19 @@
             // 
             lbl_size.AutoSize = true;
             lbl_size.ForeColor = Color.Red;
-            lbl_size.Location = new Point(118, -2);
+            lbl_size.Location = new Point(192, -3);
+            lbl_size.Margin = new Padding(5, 0, 5, 0);
             lbl_size.Name = "lbl_size";
-            lbl_size.Size = new Size(13, 20);
+            lbl_size.Size = new Size(21, 32);
             lbl_size.TabIndex = 19;
             lbl_size.Text = " ";
             // 
             // btn_xl
             // 
-            btn_xl.Location = new Point(263, 35);
+            btn_xl.Location = new Point(427, 56);
+            btn_xl.Margin = new Padding(5, 5, 5, 5);
             btn_xl.Name = "btn_xl";
-            btn_xl.Size = new Size(48, 35);
+            btn_xl.Size = new Size(78, 56);
             btn_xl.TabIndex = 4;
             btn_xl.Text = "XL";
             btn_xl.UseVisualStyleBackColor = true;
@@ -208,9 +222,10 @@
             // 
             // btn_l
             // 
-            btn_l.Location = new Point(209, 35);
+            btn_l.Location = new Point(340, 56);
+            btn_l.Margin = new Padding(5, 5, 5, 5);
             btn_l.Name = "btn_l";
-            btn_l.Size = new Size(48, 35);
+            btn_l.Size = new Size(78, 56);
             btn_l.TabIndex = 3;
             btn_l.Text = "L";
             btn_l.UseVisualStyleBackColor = true;
@@ -218,9 +233,10 @@
             // 
             // btn_m
             // 
-            btn_m.Location = new Point(155, 35);
+            btn_m.Location = new Point(252, 56);
+            btn_m.Margin = new Padding(5, 5, 5, 5);
             btn_m.Name = "btn_m";
-            btn_m.Size = new Size(48, 35);
+            btn_m.Size = new Size(78, 56);
             btn_m.TabIndex = 2;
             btn_m.Text = "M";
             btn_m.UseVisualStyleBackColor = true;
@@ -228,9 +244,10 @@
             // 
             // btn_s
             // 
-            btn_s.Location = new Point(101, 35);
+            btn_s.Location = new Point(164, 56);
+            btn_s.Margin = new Padding(5, 5, 5, 5);
             btn_s.Name = "btn_s";
-            btn_s.Size = new Size(48, 35);
+            btn_s.Size = new Size(78, 56);
             btn_s.TabIndex = 1;
             btn_s.Text = "S";
             btn_s.UseVisualStyleBackColor = true;
@@ -240,9 +257,10 @@
             // 
             btn_none.BackColor = Color.DarkSeaGreen;
             btn_none.ForeColor = Color.AliceBlue;
-            btn_none.Location = new Point(6, 35);
+            btn_none.Location = new Point(10, 56);
+            btn_none.Margin = new Padding(5, 5, 5, 5);
             btn_none.Name = "btn_none";
-            btn_none.Size = new Size(71, 35);
+            btn_none.Size = new Size(115, 56);
             btn_none.TabIndex = 0;
             btn_none.Text = "None";
             btn_none.UseVisualStyleBackColor = false;
@@ -254,9 +272,11 @@
             groupBox4.Controls.Add(label2);
             groupBox4.Controls.Add(tbx_inventory);
             groupBox4.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
-            groupBox4.Location = new Point(481, 274);
+            groupBox4.Location = new Point(782, 438);
+            groupBox4.Margin = new Padding(5, 5, 5, 5);
             groupBox4.Name = "groupBox4";
-            groupBox4.Size = new Size(394, 91);
+            groupBox4.Padding = new Padding(5, 5, 5, 5);
+            groupBox4.Size = new Size(640, 146);
             groupBox4.TabIndex = 5;
             groupBox4.TabStop = false;
             groupBox4.Text = "Inventory";
@@ -265,26 +285,29 @@
             // 
             lbl_inventory.AutoSize = true;
             lbl_inventory.ForeColor = Color.Red;
-            lbl_inventory.Location = new Point(82, 0);
+            lbl_inventory.Location = new Point(133, 0);
+            lbl_inventory.Margin = new Padding(5, 0, 5, 0);
             lbl_inventory.Name = "lbl_inventory";
-            lbl_inventory.Size = new Size(13, 20);
+            lbl_inventory.Size = new Size(21, 32);
             lbl_inventory.TabIndex = 21;
             lbl_inventory.Text = " ";
             // 
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(311, 42);
+            label2.Location = new Point(505, 67);
+            label2.Margin = new Padding(5, 0, 5, 0);
             label2.Name = "label2";
-            label2.Size = new Size(45, 20);
+            label2.Size = new Size(73, 32);
             label2.TabIndex = 1;
             label2.Text = "items";
             // 
             // tbx_inventory
             // 
-            tbx_inventory.Location = new Point(14, 39);
+            tbx_inventory.Location = new Point(23, 62);
+            tbx_inventory.Margin = new Padding(5, 5, 5, 5);
             tbx_inventory.Name = "tbx_inventory";
-            tbx_inventory.Size = new Size(279, 27);
+            tbx_inventory.Size = new Size(451, 39);
             tbx_inventory.TabIndex = 0;
             // 
             // groupBox5
@@ -293,9 +316,11 @@
             groupBox5.Controls.Add(label3);
             groupBox5.Controls.Add(tbx_price);
             groupBox5.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
-            groupBox5.Location = new Point(481, 379);
+            groupBox5.Location = new Point(782, 606);
+            groupBox5.Margin = new Padding(5, 5, 5, 5);
             groupBox5.Name = "groupBox5";
-            groupBox5.Size = new Size(394, 91);
+            groupBox5.Padding = new Padding(5, 5, 5, 5);
+            groupBox5.Size = new Size(640, 146);
             groupBox5.TabIndex = 6;
             groupBox5.TabStop = false;
             groupBox5.Text = "Price";
@@ -304,41 +329,46 @@
             // 
             lbl_price.AutoSize = true;
             lbl_price.ForeColor = Color.Red;
-            lbl_price.Location = new Point(49, -1);
+            lbl_price.Location = new Point(80, -2);
+            lbl_price.Margin = new Padding(5, 0, 5, 0);
             lbl_price.Name = "lbl_price";
-            lbl_price.Size = new Size(13, 20);
+            lbl_price.Size = new Size(21, 32);
             lbl_price.TabIndex = 2;
             lbl_price.Text = " ";
             // 
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(311, 42);
+            label3.Location = new Point(505, 67);
+            label3.Margin = new Padding(5, 0, 5, 0);
             label3.Name = "label3";
-            label3.Size = new Size(59, 20);
+            label3.Size = new Size(96, 32);
             label3.TabIndex = 1;
             label3.Text = "$/items";
             // 
             // tbx_price
             // 
-            tbx_price.Location = new Point(14, 39);
+            tbx_price.Location = new Point(23, 62);
+            tbx_price.Margin = new Padding(5, 5, 5, 5);
             tbx_price.Name = "tbx_price";
-            tbx_price.Size = new Size(279, 27);
+            tbx_price.Size = new Size(451, 39);
             tbx_price.TabIndex = 0;
             // 
             // tbx_material
             // 
-            tbx_material.Location = new Point(14, 39);
+            tbx_material.Location = new Point(23, 62);
+            tbx_material.Margin = new Padding(5, 5, 5, 5);
             tbx_material.Name = "tbx_material";
-            tbx_material.Size = new Size(279, 27);
+            tbx_material.Size = new Size(451, 39);
             tbx_material.TabIndex = 0;
             // 
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(311, 42);
+            label4.Location = new Point(505, 67);
+            label4.Margin = new Padding(5, 0, 5, 0);
             label4.Name = "label4";
-            label4.Size = new Size(0, 20);
+            label4.Size = new Size(0, 32);
             label4.TabIndex = 1;
             // 
             // groupBox6
@@ -347,9 +377,11 @@
             groupBox6.Controls.Add(label4);
             groupBox6.Controls.Add(tbx_material);
             groupBox6.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
-            groupBox6.Location = new Point(481, 493);
+            groupBox6.Location = new Point(782, 789);
+            groupBox6.Margin = new Padding(5, 5, 5, 5);
             groupBox6.Name = "groupBox6";
-            groupBox6.Size = new Size(394, 91);
+            groupBox6.Padding = new Padding(5, 5, 5, 5);
+            groupBox6.Size = new Size(640, 146);
             groupBox6.TabIndex = 7;
             groupBox6.TabStop = false;
             groupBox6.Text = "Material of product";
@@ -358,9 +390,10 @@
             // 
             lbl_material.AutoSize = true;
             lbl_material.ForeColor = Color.Red;
-            lbl_material.Location = new Point(147, 0);
+            lbl_material.Location = new Point(239, 0);
+            lbl_material.Margin = new Padding(5, 0, 5, 0);
             lbl_material.Name = "lbl_material";
-            lbl_material.Size = new Size(13, 20);
+            lbl_material.Size = new Size(21, 32);
             lbl_material.TabIndex = 21;
             lbl_material.Text = " ";
             // 
@@ -368,17 +401,19 @@
             // 
             label5.AutoSize = true;
             label5.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
-            label5.Location = new Point(484, 204);
+            label5.Location = new Point(786, 326);
+            label5.Margin = new Padding(5, 0, 5, 0);
             label5.Name = "label5";
-            label5.Size = new Size(51, 20);
+            label5.Size = new Size(79, 32);
             label5.TabIndex = 8;
             label5.Text = "Color:";
             // 
             // btn_choosecolor
             // 
-            btn_choosecolor.Location = new Point(557, 200);
+            btn_choosecolor.Location = new Point(905, 320);
+            btn_choosecolor.Margin = new Padding(5, 5, 5, 5);
             btn_choosecolor.Name = "btn_choosecolor";
-            btn_choosecolor.Size = new Size(129, 29);
+            btn_choosecolor.Size = new Size(210, 46);
             btn_choosecolor.TabIndex = 9;
             btn_choosecolor.Text = "choose color";
             btn_choosecolor.UseVisualStyleBackColor = true;
@@ -386,9 +421,10 @@
             // 
             // btn_addtostore
             // 
-            btn_addtostore.Location = new Point(481, 604);
+            btn_addtostore.Location = new Point(782, 966);
+            btn_addtostore.Margin = new Padding(5, 5, 5, 5);
             btn_addtostore.Name = "btn_addtostore";
-            btn_addtostore.Size = new Size(394, 45);
+            btn_addtostore.Size = new Size(640, 72);
             btn_addtostore.TabIndex = 10;
             btn_addtostore.Text = "Add to store";
             btn_addtostore.UseVisualStyleBackColor = true;
@@ -399,9 +435,10 @@
             label6.AutoSize = true;
             label6.BackColor = Color.Transparent;
             label6.Font = new Font("Sitka Display", 10.8F, FontStyle.Italic, GraphicsUnit.Point, 163);
-            label6.Location = new Point(123, 204);
+            label6.Location = new Point(200, 326);
+            label6.Margin = new Padding(5, 0, 5, 0);
             label6.Name = "label6";
-            label6.Size = new Size(192, 26);
+            label6.Size = new Size(308, 42);
             label6.TabIndex = 11;
             label6.Text = "Drop your image here, or ";
             // 
@@ -413,9 +450,10 @@
             linkLabel1.DisabledLinkColor = Color.SeaGreen;
             linkLabel1.Font = new Font("Sitka Heading", 10.8F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 163);
             linkLabel1.LinkColor = Color.SeaGreen;
-            linkLabel1.Location = new Point(306, 204);
+            linkLabel1.Location = new Point(497, 326);
+            linkLabel1.Margin = new Padding(5, 0, 5, 0);
             linkLabel1.Name = "linkLabel1";
-            linkLabel1.Size = new Size(69, 26);
+            linkLabel1.Size = new Size(109, 42);
             linkLabel1.TabIndex = 12;
             linkLabel1.TabStop = true;
             linkLabel1.Text = "browse";
@@ -424,26 +462,29 @@
             // 
             // pnl_colorBox
             // 
-            pnl_colorBox.Location = new Point(703, 202);
+            pnl_colorBox.Location = new Point(1142, 323);
+            pnl_colorBox.Margin = new Padding(5, 5, 5, 5);
             pnl_colorBox.Name = "pnl_colorBox";
-            pnl_colorBox.Size = new Size(33, 27);
+            pnl_colorBox.Size = new Size(54, 43);
             pnl_colorBox.TabIndex = 13;
             // 
             // lbl_colorCode
             // 
             lbl_colorCode.AutoSize = true;
-            lbl_colorCode.Location = new Point(754, 205);
+            lbl_colorCode.Location = new Point(1225, 328);
+            lbl_colorCode.Margin = new Padding(5, 0, 5, 0);
             lbl_colorCode.Name = "lbl_colorCode";
-            lbl_colorCode.Size = new Size(13, 20);
+            lbl_colorCode.Size = new Size(21, 32);
             lbl_colorCode.TabIndex = 14;
             lbl_colorCode.Text = " ";
             // 
             // tbx_colorNote
             // 
             tbx_colorNote.ForeColor = Color.Gray;
-            tbx_colorNote.Location = new Point(757, 201);
+            tbx_colorNote.Location = new Point(1230, 322);
+            tbx_colorNote.Margin = new Padding(5, 5, 5, 5);
             tbx_colorNote.Name = "tbx_colorNote";
-            tbx_colorNote.Size = new Size(125, 27);
+            tbx_colorNote.Size = new Size(201, 39);
             tbx_colorNote.TabIndex = 15;
             tbx_colorNote.Text = "Color Name";
             tbx_colorNote.TextAlign = HorizontalAlignment.Center;
@@ -456,9 +497,11 @@
             groupBox7.Controls.Add(label7);
             groupBox7.Controls.Add(tbx_height);
             groupBox7.Controls.Add(tbx_width);
-            groupBox7.Location = new Point(92, 601);
+            groupBox7.Location = new Point(150, 962);
+            groupBox7.Margin = new Padding(5, 5, 5, 5);
             groupBox7.Name = "groupBox7";
-            groupBox7.Size = new Size(320, 94);
+            groupBox7.Padding = new Padding(5, 5, 5, 5);
+            groupBox7.Size = new Size(520, 150);
             groupBox7.TabIndex = 16;
             groupBox7.TabStop = false;
             groupBox7.Text = "Size";
@@ -467,9 +510,10 @@
             // 
             lbl_height.AutoSize = true;
             lbl_height.ForeColor = Color.Red;
-            lbl_height.Location = new Point(112, 56);
+            lbl_height.Location = new Point(182, 90);
+            lbl_height.Margin = new Padding(5, 0, 5, 0);
             lbl_height.Name = "lbl_height";
-            lbl_height.Size = new Size(13, 20);
+            lbl_height.Size = new Size(21, 32);
             lbl_height.TabIndex = 21;
             lbl_height.Text = " ";
             // 
@@ -477,50 +521,56 @@
             // 
             lbl_width.AutoSize = true;
             lbl_width.ForeColor = Color.Red;
-            lbl_width.Location = new Point(106, 23);
+            lbl_width.Location = new Point(172, 37);
+            lbl_width.Margin = new Padding(5, 0, 5, 0);
             lbl_width.Name = "lbl_width";
-            lbl_width.Size = new Size(13, 20);
+            lbl_width.Size = new Size(21, 32);
             lbl_width.TabIndex = 3;
             lbl_width.Text = " ";
             // 
             // label8
             // 
             label8.AutoSize = true;
-            label8.Location = new Point(59, 57);
+            label8.Location = new Point(96, 91);
+            label8.Margin = new Padding(5, 0, 5, 0);
             label8.Name = "label8";
-            label8.Size = new Size(54, 20);
+            label8.Size = new Size(86, 32);
             label8.TabIndex = 3;
             label8.Text = "Height";
             // 
             // label7
             // 
             label7.AutoSize = true;
-            label7.Location = new Point(59, 24);
+            label7.Location = new Point(96, 38);
+            label7.Margin = new Padding(5, 0, 5, 0);
             label7.Name = "label7";
-            label7.Size = new Size(49, 20);
+            label7.Size = new Size(78, 32);
             label7.TabIndex = 2;
             label7.Text = "Width";
             // 
             // tbx_height
             // 
-            tbx_height.Location = new Point(145, 54);
+            tbx_height.Location = new Point(236, 86);
+            tbx_height.Margin = new Padding(5, 5, 5, 5);
             tbx_height.Name = "tbx_height";
-            tbx_height.Size = new Size(147, 27);
+            tbx_height.Size = new Size(236, 39);
             tbx_height.TabIndex = 1;
             // 
             // tbx_width
             // 
-            tbx_width.Location = new Point(145, 21);
+            tbx_width.Location = new Point(236, 34);
+            tbx_width.Margin = new Padding(5, 5, 5, 5);
             tbx_width.Name = "tbx_width";
-            tbx_width.Size = new Size(147, 27);
+            tbx_width.Size = new Size(236, 39);
             tbx_width.TabIndex = 0;
             // 
             // btn_reset
             // 
             btn_reset.BackColor = SystemColors.Control;
-            btn_reset.Location = new Point(781, 659);
+            btn_reset.Location = new Point(1269, 1054);
+            btn_reset.Margin = new Padding(5, 5, 5, 5);
             btn_reset.Name = "btn_reset";
-            btn_reset.Size = new Size(94, 37);
+            btn_reset.Size = new Size(153, 59);
             btn_reset.TabIndex = 17;
             btn_reset.Text = "Reset";
             btn_reset.UseVisualStyleBackColor = false;
@@ -528,9 +578,10 @@
             // 
             // btn_update
             // 
-            btn_update.Location = new Point(481, 604);
+            btn_update.Location = new Point(782, 966);
+            btn_update.Margin = new Padding(5, 5, 5, 5);
             btn_update.Name = "btn_update";
-            btn_update.Size = new Size(394, 45);
+            btn_update.Size = new Size(640, 72);
             btn_update.TabIndex = 18;
             btn_update.Text = "Update";
             btn_update.UseVisualStyleBackColor = true;
@@ -541,24 +592,27 @@
             // 
             lbl_color.AutoSize = true;
             lbl_color.ForeColor = Color.Red;
-            lbl_color.Location = new Point(535, 200);
+            lbl_color.Location = new Point(869, 320);
+            lbl_color.Margin = new Padding(5, 0, 5, 0);
             lbl_color.Name = "lbl_color";
-            lbl_color.Size = new Size(13, 20);
+            lbl_color.Size = new Size(21, 32);
             lbl_color.TabIndex = 20;
             lbl_color.Text = " ";
             // 
             // progressBar1
             // 
-            progressBar1.Location = new Point(-3, -6);
+            progressBar1.Location = new Point(-5, -10);
+            progressBar1.Margin = new Padding(5, 5, 5, 5);
             progressBar1.Name = "progressBar1";
-            progressBar1.Size = new Size(994, 15);
+            progressBar1.Size = new Size(1615, 24);
             progressBar1.TabIndex = 21;
             // 
             // btn_addcolor
             // 
-            btn_addcolor.Location = new Point(481, 604);
+            btn_addcolor.Location = new Point(782, 966);
+            btn_addcolor.Margin = new Padding(5, 5, 5, 5);
             btn_addcolor.Name = "btn_addcolor";
-            btn_addcolor.Size = new Size(394, 45);
+            btn_addcolor.Size = new Size(640, 72);
             btn_addcolor.TabIndex = 22;
             btn_addcolor.Text = "Add";
             btn_addcolor.UseVisualStyleBackColor = true;
@@ -567,10 +621,10 @@
             // 
             // AddNewProduct
             // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleDimensions = new SizeF(13F, 32F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.ControlLightLight;
-            ClientSize = new Size(987, 715);
+            ClientSize = new Size(1586, 1192);
             Controls.Add(btn_addcolor);
             Controls.Add(progressBar1);
             Controls.Add(lbl_color);
@@ -593,6 +647,7 @@
             Controls.Add(groupBox1);
             Controls.Add(pictureBox1);
             Controls.Add(lbl_formName);
+            Margin = new Padding(5, 5, 5, 5);
             Name = "AddNewProduct";
             Text = "AddNewProduct";
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();

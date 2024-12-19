@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using QuanLyNoir_BTL.Models;
+using QuanLyNoir_BTL.Utils;
 using System.ComponentModel;
-using System.Drawing;
+using System.IO;
+
 
 namespace QuanLyNoir_BTL.Views
 {
@@ -13,6 +15,7 @@ namespace QuanLyNoir_BTL.Views
 
         private string colorName = "Color name";
         private string imageURL;
+        private Image image;
 
         private bool reload;
         //isNew: True -> Add New Item, False -> Update
@@ -563,15 +566,19 @@ namespace QuanLyNoir_BTL.Views
             }
         }
 
-        private void pictureBox1_DragDrop(object sender, DragEventArgs e)
+        private async void pictureBox1_DragDrop(object sender, DragEventArgs e)
         {
             // Lấy đường dẫn tệp từ dữ liệu thả vào
             string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
-
             // Kiểm tra xem có phải là tệp hình ảnh không, rồi hiển thị trong PictureBox
             if (files.Length > 0 && (files[0].EndsWith(".jpg") || files[0].EndsWith(".png") || files[0].EndsWith(".jpeg")))
             {
-                imageURL = files[0];
+                // Upload hình ảnh lên Azure Blob Storage
+                AzureUploader uploader = new();
+                string fileName = Path.GetFileName(imageURL);
+
+                // Upload và lấy URL công khai từ Azure
+                imageURL = await uploader.UploadImageAsync(Image.FromFile(imageURL), fileName);
                 pictureBox1.Image = Image.FromFile(imageURL);
                 pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage; // Tuỳ chọn hiển thị ảnh
             }
