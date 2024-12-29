@@ -75,7 +75,7 @@ namespace QuanLyNoir_BTL.Views
                     {
                         Id = newCusId,
                         Name = cusName,
-                        Phone_Number = cusPhone,
+                        Phone = cusPhone,
                         Email = cusEmail,
                     };
                     _context.Customers.Add(newCus);
