@@ -16,6 +16,9 @@
     <Compile Update="Views\ManageAccountControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Update="Views\ManageCustomer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Update="Views\ManageVoucherControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -40,6 +43,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Update="Views\AddNewProduct.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\MenuForm.resx">
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>

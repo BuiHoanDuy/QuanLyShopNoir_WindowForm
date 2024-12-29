@@ -24,4 +24,8 @@ public partial class Invoice
     public virtual ICollection<InvoiceDetail> InvoiceDetails { get; set; } = new List<InvoiceDetail>();
 
     public virtual Voucher Voucher { get; set; }
+    public virtual Customer Customer { get; set; }
+    public Guid? customer_id { get; set; }
+
+
 }

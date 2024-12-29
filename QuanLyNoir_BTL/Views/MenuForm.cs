@@ -10,6 +10,7 @@ namespace QuanLyNoir_BTL
         // Khai báo các đối tượng nhưng chưa khởi tạo
         private Lazy<ManageProductControl> manageProductControl = new Lazy<ManageProductControl>(() => new ManageProductControl());
         private Lazy<ManageAccountControl> manageAccountControl;
+        private Lazy<ManageCustomer> manageCustomerControl;
         private Lazy<ManageVoucherControl> manageVoucherControl = new Lazy<ManageVoucherControl>(() => new ManageVoucherControl());
         private Lazy<AnalyseRevenueControl> revenueControl  = new Lazy<AnalyseRevenueControl>(() => new AnalyseRevenueControl());
         public MenuForm(Guid userId, string username)
@@ -20,6 +21,8 @@ namespace QuanLyNoir_BTL
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
             lbl_name.Text = username;
             manageAccountControl = new Lazy<ManageAccountControl>(() => new ManageAccountControl(userId));
+            manageCustomerControl = new Lazy<ManageCustomer>(() => new ManageCustomer(userId));
+
         }
         private void ManageProduct_FormClosing(object sender, FormClosingEventArgs e)
         {
@@ -40,13 +43,13 @@ namespace QuanLyNoir_BTL
             btn_manageAccount.BackColor = Color.White;
             btn_manageVoucher.BackColor = Color.White;
             btn_manageproduct.BackColor = Color.White;
-            btn_manageOrder.BackColor = Color.White;
+            btn_manageCustomer.BackColor = Color.White;
             btn_analyseRevenue.BackColor = Color.White;
 
             btn_manageAccount.ForeColor = Color.Black;
             btn_manageVoucher.ForeColor = Color.Black;
             btn_manageproduct.ForeColor = Color.Black;
-            btn_manageOrder.ForeColor = Color.Black;
+            btn_manageCustomer.ForeColor = Color.Black;
             btn_analyseRevenue.ForeColor = Color.Black;
 
             btn.BackColor = Color.FromArgb(0, 64, 0);
@@ -97,8 +100,14 @@ namespace QuanLyNoir_BTL
 
         private void btn_manageOrder_Click(object sender, EventArgs e)
         {
-            this.Text = "Manage Order";
-            updateEffectClickedButton(btn_manageOrder);
+            this.Text = "Manage Customers";
+            updateEffectClickedButton(btn_manageCustomer);
+            if (!pnl_control.Controls.Contains(manageCustomerControl.Value))
+            {
+                pnl_control.Controls.Add(manageCustomerControl.Value);
+            }
+
+            ShowControl(manageCustomerControl.Value);
         }
 
         private void btn_analyseRevenue_Click(object sender, EventArgs e)
