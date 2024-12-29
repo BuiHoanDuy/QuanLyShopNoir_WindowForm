@@ -46,7 +46,45 @@ namespace QuanLyNoir_BTL.Views
                 Total = newTotalBill,
                 PaymentMethod = cbbx_paymentMethod.Text,
                 CreatedBy = staffId,
-            };
+            }; 
+
+            //Xu ly customer
+            var cusName = tbx_nameCus.Text;
+            var cusPhone = tbx_phoneCus.Text;
+            var cusEmail = tbx_emailCus.Text;
+
+            if (!string.IsNullOrEmpty(cusPhone))
+            {
+                using var _context = new ShopNoirContext();
+                var customerDb = _context.Customers.FirstOrDefault(c => c.Name == cusName);
+                if (customerDb != null)
+                {
+                    if (!string.IsNullOrEmpty(cusName) && cusName != customerDb.Name)
+                    {
+                        MessageBox.Show($"This customer already exist with name: {customerDb.Name}!", "Error");
+                        return;
+                    } else if (!string.IsNullOrEmpty(cusEmail) && cusEmail != customerDb.Email)
+                    {
+                        MessageBox.Show($"This customer already exist with email: {customerDb.Name}!", "Error");
+                        return;
+                    }
+                }
+                else { 
+                    var newCusId = Guid.NewGuid();
+                    var newCus = new Customer()
+                    {
+                        Id = newCusId,
+                        Name = cusName,
+                        Phone_Number = cusPhone,
+                        Email = cusEmail,
+                    };
+                    _context.Customers.Add(newCus);
+                    await _context.SaveChangesAsync();
+                    invoice.customer_id = newCusId;
+                }
+            }
+
+
             if (voucherId != Guid.Empty)
             {
                 invoice.VoucherId = voucherId;
@@ -77,7 +115,7 @@ namespace QuanLyNoir_BTL.Views
                                     InvoiceId = invoice.Id,
                                     ProductColorSizeId = productColorSize.Id,
                                     Amount = quantity,
-                                    Price = quantity * productInfo.Price
+                                    Price = quantity * productInfo.Price,
                                 };
 
                                 invoice.InvoiceDetails.Add(invoiceDetail);
