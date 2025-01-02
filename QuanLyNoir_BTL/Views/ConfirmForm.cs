@@ -2,8 +2,27 @@
 using Microsoft.IdentityModel.Tokens;
 using QuanLyNoir_BTL.Models;
 using System.Data;
-
-
+using System.Drawing.Printing;
+using System.Reflection.Metadata;
+using System.Windows.Documents;
+using iText.Kernel.Pdf;
+using iText.Layout;
+using iText.Layout.Element;
+using iText.Layout.Properties;
+using PdfiumViewer;
+using System.IO;
+using System.Drawing.Printing;
+using System.Diagnostics;
+using iText.Layout;
+using iText.Layout.Element;
+using iText.Kernel.Font;
+using iText.IO.Font.Constants;
+using iText.Layout.Properties;
+using iText.Kernel.Colors;
+using PdfDocument = iText.Kernel.Pdf.PdfDocument;
+using Document = iText.Layout.Document;
+using Paragraph = iText.Layout.Element.Paragraph;
+using Color = System.Drawing.Color;
 
 namespace QuanLyNoir_BTL.Views
 {
@@ -38,7 +57,8 @@ namespace QuanLyNoir_BTL.Views
                 return;
             }
 
-            var voucherId = await getVoucherIdForSave(cbbx_voucher.Text);
+            var voucher = await getVoucherForSave(cbbx_voucher.Text);
+
             var invoice = new Invoice
             {
                 Id = Guid.NewGuid(),
@@ -46,10 +66,55 @@ namespace QuanLyNoir_BTL.Views
                 Total = newTotalBill,
                 PaymentMethod = cbbx_paymentMethod.Text,
                 CreatedBy = staffId,
+
             };
-            if (voucherId != Guid.Empty)
+
+            //Xu ly customer
+            var cusId = Guid.NewGuid();
+            var cusName = tbx_nameCus.Text;
+            var cusPhone = tbx_phoneCus.Text;
+            var cusEmail = tbx_emailCus.Text;
+            if (string.IsNullOrEmpty(cusName) && string.IsNullOrEmpty(cusPhone) && string.IsNullOrEmpty(cusEmail))
             {
-                invoice.VoucherId = voucherId;
+                cusName = cusPhone = cusEmail = "Unknown";
+            }
+            if (!string.IsNullOrEmpty(cusPhone))
+            {
+                using var _context = new ShopNoirContext();
+                var customerDb = _context.Customers.FirstOrDefault(c => c.Name == cusName);
+                if (customerDb != null)
+                {
+                    if (!string.IsNullOrEmpty(cusName) && cusName != customerDb.Name)
+                    {
+                        MessageBox.Show($"This customer already exist with name: {customerDb.Name}!", "Error");
+                        return;
+                    } else if (!string.IsNullOrEmpty(cusEmail) && cusEmail != customerDb.Email)
+                    {
+                        MessageBox.Show($"This customer already exist with email: {customerDb.Name}!", "Error");
+                        return;
+                    }
+                    cusId = customerDb.Id;
+                }
+                else
+                {
+                    var newCus = new Customer()
+                    {
+                        Id = cusId,
+                        Name = cusName,
+                        Phone_Number = cusPhone,
+                        Email = cusEmail,
+                    };
+                    _context.Customers.Add(newCus);
+                    await _context.SaveChangesAsync();
+                }
+            }
+            if (cusId != Guid.Empty) { 
+                invoice.Customer_Id = cusId;
+            }
+
+            if (voucher != null)
+            {
+                invoice.VoucherId = voucher.Id;
             }
             try
             {
@@ -58,6 +123,9 @@ namespace QuanLyNoir_BTL.Views
                     _context.ChangeTracker.Clear(); // Xóa trạng thái theo dõi
                     var productColorSizes = await _context.ProductColorSizes
                         .Where(pcs => cartList.Select(c => c.Key.Id).Contains(pcs.ProductColorId))
+                        .Include(pcs => pcs.ProductColor)     // Include related ProductColor
+                        .ThenInclude(pc => pc.Product)        // Include related Product data within ProductColor
+                        .Include(pcs => pcs.Size)             // Include related Size data
                         .ToListAsync();
 
                     foreach (var item in cartList)
@@ -77,7 +145,8 @@ namespace QuanLyNoir_BTL.Views
                                     InvoiceId = invoice.Id,
                                     ProductColorSizeId = productColorSize.Id,
                                     Amount = quantity,
-                                    Price = quantity * productInfo.Price
+                                    Price = quantity * productInfo.Price,
+                                    ProductColorSize = productColorSize,
                                 };
 
                                 invoice.InvoiceDetails.Add(invoiceDetail);
@@ -94,8 +163,16 @@ namespace QuanLyNoir_BTL.Views
 
                     _context.Invoices.Add(invoice);
                     await _context.SaveChangesAsync();
-
+                    if (voucher != null)
+                    {
+                        invoice.Voucher = voucher;
+                    }
                     MessageBox.Show("Invoice saved successfully!", "Success");
+                    // Generate the PDF for the invoice
+                    var pdfFilePath = GenerateInvoicePdf(invoice);
+
+                    // Optionally, print the PDF after generation
+                    OpenPdfWithDefaultViewer(pdfFilePath);
                 }
         }
             catch (Exception ex)
@@ -104,8 +181,8 @@ namespace QuanLyNoir_BTL.Views
                 totalBill = 0;
                 MessageBox.Show($"Error saving invoice: {ex.Message}", "Error");
             }
-}
-        public async Task<Guid> getVoucherIdForSave(string voucherCode)
+        }
+        public async Task<Voucher> getVoucherForSave(string voucherCode)
         {
             using (var _context = new ShopNoirContext())
             {
@@ -118,9 +195,9 @@ namespace QuanLyNoir_BTL.Views
                 );
                 if (voucher == null)
                 {
-                    return Guid.Empty;
+                    return null;
                 }
-                return voucher.Id;
+                return voucher;
             }
         }
 
@@ -218,7 +295,7 @@ namespace QuanLyNoir_BTL.Views
                 {
                     try
                     {
-                        var image = Image.FromFile(product.ImageUrl);
+                        var image = System.Drawing.Image.FromFile(product.ImageUrl);
                         picImage.Image = image;
                     }
                     catch (Exception ex)
@@ -326,6 +403,8 @@ namespace QuanLyNoir_BTL.Views
 
             // Cập nhật số lựng đã sử dụng của voucher
             await UpdateVoucherUsage(cbbx_voucher.Text);
+
+
             cartList.Clear();
             totalBill = 0;
         }
@@ -361,6 +440,12 @@ namespace QuanLyNoir_BTL.Views
                     });
                     return;
                 }
+
+                if (voucher.MinOrderValue.HasValue && totalBill < voucher.MinOrderValue)
+                {
+                    MessageBox.Show("The current bill's value is less than the minimum one to use!!");
+                    return;
+                }
                 this.Invoke((MethodInvoker)delegate
                 {
                     cbbx_voucher.ForeColor = Color.Red;
@@ -376,11 +461,6 @@ namespace QuanLyNoir_BTL.Views
                         lbl_totalBill.Text = $"Total Bill: {totalBill}$ - {voucher.DiscountValue}$ = {newTotalBill}$";
                     }
                 });
-                if (voucher.MinOrderValue.HasValue && totalBill < voucher.MinOrderValue)
-                {
-                    MessageBox.Show("The current bill's value is less than the minimum one to use!!");
-                    return;
-                }
                 return;
             }
         }
@@ -402,5 +482,247 @@ namespace QuanLyNoir_BTL.Views
         private void ConfirmForm_FormClosing(object sender, FormClosingEventArgs e)
         {
         }
+
+        // Method to fetch customer information
+        private Customer GetCustomerInfo(Guid? customerId)
+        {
+            using (var _context = new ShopNoirContext())
+            {
+                // Retrieve the customer by Id
+                var customer = _context.Customers
+                    .FirstOrDefault(c => c.Id == customerId);
+
+                if (customer != null)
+                {
+                    return customer;
+                }
+
+                return null;
+            }
+        }
+
+
+
+        // Method to fetch product details based on the ProductColorSizeId
+        private string GetProductDetails(Guid productColorSizeId)
+        {
+            using (var _context = new ShopNoirContext())
+            {
+                // Retrieve the product and size details
+                var productColorSize = _context.ProductColorSizes
+                    .Include(pcs => pcs.ProductColor)  // Assuming ProductColor contains the product info (name)
+                     .ThenInclude(pc => pc.Product)
+                    .Include(pcs => pcs.Size)          // Assuming Size contains the size info
+                    .FirstOrDefault(pcs => pcs.Id == productColorSizeId);
+
+                if (productColorSize != null)
+                {
+                    // Get the product's name and the size, then return them
+                    var productName = productColorSize.ProductColor.Product.ProdName;
+                    var size = productColorSize.Size.SizeName;
+                    var price = productColorSize.ProductColor.Product.Price;
+
+                    return $"{productName} - {size} - {price:C}";
+                }
+
+                return "Product details not found";
+            }
+        }
+
+
+        private string GenerateInvoicePdf(Invoice invoice)
+        {
+            var pdfFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), $"Invoice_{invoice.Id}.pdf");
+
+            // Create a document object
+            using (var fs = new FileStream(pdfFilePath, FileMode.Create))
+            {
+                var writer = new PdfWriter(fs);
+                var pdf = new iText.Kernel.Pdf.PdfDocument(writer);
+                var document = new iText.Layout.Document(pdf);
+
+
+
+                // Add title with large font
+                AddTitle(document);
+
+                // Customer Info
+                var customer = invoice.Customer_Id != null ? GetCustomerInfo(invoice.Customer_Id) : null;
+
+
+
+                
+
+                // Add invoice summary
+                AddInvoiceSummary(document, invoice);
+                // Add customer information
+                AddCustomerInfo(document, customer);
+
+                // Add product details table
+                // Invoice Details (loop through items in the cart)
+                AddProductDetailsTable(document, invoice.InvoiceDetails);
+
+
+                // Add payment details
+
+                document.Close();
+            }
+
+            return pdfFilePath;
+        }
+
+        // Open the PDF with the default PDF viewer
+        static void OpenPdfWithDefaultViewer(string pdfPath)
+        {
+            try
+            { 
+                // Start the process using the default program for PDF files
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = pdfPath,
+                    UseShellExecute = true  // This ensures that the default program opens the file
+                });
+                Console.WriteLine("PDF opened with default viewer.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error opening PDF: {ex.Message}");
+            }
+        }
+
+        static void AddTitle(Document document)
+        {
+            // Define title style (large, bold font)
+            PdfFont titleFont = PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD);
+            Paragraph title = new Paragraph("Noir Shop - Invoice")
+                .SetFont(titleFont)
+                .SetFontSize(24)
+                .SetTextAlignment(TextAlignment.CENTER)
+                .SetFontColor(ColorConstants.DARK_GRAY)
+                .SetMarginBottom(20);  // Add space below the title
+
+            document.Add(title);
+        }
+
+        static void AddCustomerInfo(Document document, Customer customer)
+        {
+            if (customer == null || (customer.Name == "Unknown" && customer.Email == "Unknown" && customer.Phone_Number == "Unknown")) {
+                return;
+            }
+            // Define body font style
+            PdfFont bodyFont = PdfFontFactory.CreateFont(StandardFonts.HELVETICA);
+
+            // Customer information section
+            Paragraph customerInfoTitle = new Paragraph("Customer Information")
+                .SetFont(bodyFont)
+                .SetFontSize(14)
+                .SetMarginTop(10);
+
+            document.Add(customerInfoTitle);
+
+            Paragraph customerName = new Paragraph($"Customer Name: {customer.Name}")
+                .SetFont(bodyFont)
+                .SetFontSize(12)
+                .SetMarginBottom(5);
+
+            Paragraph customerEmail = new Paragraph($"Email: {customer.Email}")
+                .SetFont(bodyFont)
+                .SetFontSize(12)
+                .SetMarginBottom(5);
+
+            Paragraph customerPhone = new Paragraph($"Phone: {customer.Phone_Number}")
+                .SetFont(bodyFont)
+                .SetFontSize(12)
+                .SetMarginBottom(5);
+
+
+            document.Add(customerName);
+            document.Add(customerEmail);
+            document.Add(customerPhone);
+        }
+
+        static void AddProductDetailsTable(Document document, ICollection<InvoiceDetail> invoiceDetails)
+        {
+            // Define the header for the product details table
+            string[] header = { "Item Description", "Quantity", "Unit Price", "Subtotal" };
+
+            // Create the table with the number of columns equal to the header length
+            iText.Layout.Element.Table table = new iText.Layout.Element.Table(header.Length, true);
+
+            // Add table headers
+            foreach (var column in header)
+            {
+                table.AddHeaderCell(new Cell().Add(new Paragraph(column)
+                    .SetFontSize(12)
+                    .SetBackgroundColor(ColorConstants.LIGHT_GRAY)
+                    .SetTextAlignment(TextAlignment.CENTER)));
+            }
+
+            // Add data to the table using the invoiceDetails collection
+            foreach (var detail in invoiceDetails)
+            {
+                // Add the item description (product name)
+                table.AddCell(new Cell().Add(new Paragraph(detail.ProductColorSize.ProductColor.Product.ProdName)
+                    .SetFontSize(10)
+                    .SetTextAlignment(TextAlignment.LEFT)));
+
+                // Add the quantity
+                table.AddCell(new Cell().Add(new Paragraph(detail.Amount.ToString())
+                    .SetFontSize(10)
+                    .SetTextAlignment(TextAlignment.CENTER)));
+
+                // Add the unit price
+                table.AddCell(new Cell().Add(new Paragraph($"${detail.Price.ToString("0.00")}")
+                    .SetFontSize(10)
+                    .SetTextAlignment(TextAlignment.CENTER)));
+
+                // Add the subtotal (Quantity * UnitPrice)
+                table.AddCell(new Cell().Add(new Paragraph($"${(detail.Amount * detail.Price).ToString("0.00")}")
+                    .SetFontSize(10)
+                    .SetTextAlignment(TextAlignment.CENTER)));
+            }
+
+            // Add the table to the document
+            document.Add(table);
+        }
+
+        static void AddInvoiceSummary(Document document, Invoice invoice)
+        {
+            // Define summary details
+            PdfFont bodyFont = PdfFontFactory.CreateFont(StandardFonts.HELVETICA);
+
+            // Add Summary Title
+            Paragraph summaryTitle = new Paragraph("Invoice Summary")
+                .SetFont(bodyFont)
+                .SetFontSize(14)
+                .SetMarginTop(15);
+
+            document.Add(summaryTitle);
+
+            // Add summary details (Subtotal, Shipping, Discount, Tax, Total)
+
+            // Add content to the document (Invoice details)
+            document.Add(new iText.Layout.Element.Paragraph());
+            document.Add(new iText.Layout.Element.Paragraph());
+            string[] summaryData = {
+                $"Invoice ID: {invoice.Id.ToString().Substring(0, 8)}",
+                $"Date: {invoice.CreatedAt}",
+                $"Subtotal: ${invoice.Total}",
+                invoice.VoucherId != null ?  $"Discount: -${invoice.Voucher.DiscountValue}" : "",
+                $"Tax (10%): ${(double)(invoice.Total - (invoice.VoucherId != null ?  invoice.Voucher.DiscountValue : 0) )* 0.1}",
+                $"Total Amount: ${(double)(invoice.Total - (invoice.VoucherId != null ?  invoice.Voucher.DiscountValue : 0) )* 0.9}",
+                $"Payment Method: {invoice.PaymentMethod}",
+
+            };
+
+            foreach (var line in summaryData)
+            {
+                document.Add(new Paragraph(line)
+                    .SetFont(bodyFont)
+                    .SetFontSize(12)
+                    .SetMarginBottom(5));
+            }
+        }
+
     }
 }

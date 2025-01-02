@@ -30,6 +30,9 @@ public partial class ShopNoirContext : DbContext
     public virtual DbSet<Size> Sizes { get; set; }
 
     public virtual DbSet<Voucher> Vouchers { get; set; }
+
+    public virtual DbSet<Customer> Customers { get; set; }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
      => optionsBuilder.UseSqlServer("Server=LAPTOP-2L3R0R91\\MYCOMPUTER_DUY;Database=ShopNoir;Trusted_Connection=True;TrustServerCertificate=true;Connection Timeout=120;");
@@ -97,6 +100,10 @@ public partial class ShopNoirContext : DbContext
             entity.HasOne(d => d.Voucher).WithMany(p => p.Invoices)
                 .HasForeignKey(d => d.VoucherId)
                 .HasConstraintName("FK_Invoices_VoucherId");
+
+            entity.HasOne(d => d.Customer).WithMany(p => p.Invoices)
+                .HasForeignKey(d => d.Customer_Id)
+                .HasConstraintName("FK_Invoices_CustomerId");
         });
 
         modelBuilder.Entity<InvoiceDetail>(entity =>
@@ -252,6 +259,17 @@ public partial class ShopNoirContext : DbContext
             entity.Property(e => e.UsedCount)
                 .HasDefaultValue(0)
                 .HasColumnName("used_count");
+        });
+
+        modelBuilder.Entity<Customer>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__Customers__3213E83F5FB020E6");
+
+            entity.Property(e => e.Name).HasColumnName("name");
+
+            entity.Property(e => e.Email).HasColumnName("email");
+            
+            entity.Property(e => e.Phone_Number).HasColumnName("Phone_Number");
         });
 
         OnModelCreatingPartial(modelBuilder);

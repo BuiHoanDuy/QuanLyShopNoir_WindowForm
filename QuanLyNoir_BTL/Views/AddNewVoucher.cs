@@ -1,15 +1,5 @@
-﻿using Microsoft.Identity.Client.NativeInterop;
-using QuanLyNoir_BTL.Models;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using QuanLyNoir_BTL.Models;
 using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace QuanLyNoir_BTL.Views
 {
