@@ -10,6 +10,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Linq.Dynamic.Core;
+using System.Data.Entity;
+using System.Data.Entity.Core.Common.CommandTrees.ExpressionBuilder;
 
 namespace QuanLyNoir_BTL.Views
 {
@@ -64,7 +66,7 @@ namespace QuanLyNoir_BTL.Views
                     // Tính tổng số bản ghi
                     totalRecords = _context.Customers
                         .Where(c => c.Name.Contains(tbx_timkiem.Text.Trim())
-                                    || c.Email.Contains(tbx_timkiem.Text.Trim()))
+                                    || c.Phone.Contains(tbx_timkiem.Text.Trim()))
                         .Count();
 
                     lbl_trang.Text = $"Page {currentPage} / {Math.Ceiling((double)totalRecords / pageSize)}";
@@ -82,7 +84,7 @@ namespace QuanLyNoir_BTL.Views
                     // Truy vấn dữ liệu
                     var customers = _context.Customers
                         .Where(c => (c.Name.Contains(tbx_timkiem.Text.Trim())
-                                  || c.Email.Contains(tbx_timkiem.Text.Trim()))
+                                  || c.Phone.Contains(tbx_timkiem.Text.Trim()))
                                   && c.Invoices.Any()) // Lọc khách hàng có hóa đơn
                         .Select(c => new
                         {
@@ -165,8 +167,29 @@ namespace QuanLyNoir_BTL.Views
 
                 // Hiển thị dữ liệu từ DataGridView lên các TextBox
                 _Id = (Guid)row.Cells["Id"].Value;
+                showCustomerDetail(row.Cells["Name"].Value.ToString());
             }
         }
        
+        private void showCustomerDetail(string name)
+        {
+            using (var db = new ShopNoirContext())
+            {
+                var customerInvoices = db.Invoices.Where(i => i.CustomerId == _Id)
+                    .Select(i => new
+                    {
+                        i.CreatedAt,
+                        i.Total,
+                        i.Voucher.Code,
+                        i.PaymentMethod,
+                        i.CreatedByNavigation.Name,
+                    }).ToList();
+
+                dtgv_detail.DataSource = customerInvoices;
+                dtgv_detail.Columns["Name"].HeaderText = "Created By";
+                dtgv_detail.Columns["Code"].HeaderText = "Voucher";
+                 lbl_detail.Text =  $"Purchase history's customer: {name}";
+            }
+        }
     }
 }

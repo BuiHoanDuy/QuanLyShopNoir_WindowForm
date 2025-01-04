@@ -40,12 +40,18 @@
             btn_trangsau = new Button();
             btn_trangtruoc = new Button();
             label10 = new Label();
+            panel1 = new Panel();
+            lbl_detail = new Label();
+            dtgv_detail = new DataGridView();
+            label1 = new Label();
             ((System.ComponentModel.ISupportInitialize)dtgv_customerList).BeginInit();
+            panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dtgv_detail).BeginInit();
             SuspendLayout();
             // 
             // tbx_timkiem
             // 
-            tbx_timkiem.Location = new Point(1187, 34);
+            tbx_timkiem.Location = new Point(589, 85);
             tbx_timkiem.Name = "tbx_timkiem";
             tbx_timkiem.Size = new Size(213, 27);
             tbx_timkiem.TabIndex = 27;
@@ -54,25 +60,25 @@
             // cbbx_cot
             // 
             cbbx_cot.FormattingEnabled = true;
-            cbbx_cot.Location = new Point(921, 33);
+            cbbx_cot.Location = new Point(343, 85);
             cbbx_cot.Name = "cbbx_cot";
-            cbbx_cot.Size = new Size(151, 28);
+            cbbx_cot.Size = new Size(181, 28);
             cbbx_cot.TabIndex = 26;
             cbbx_cot.SelectedIndexChanged += cbbx_cot_SelectedIndexChanged;
             // 
             // cbbx_sapxep
             // 
             cbbx_sapxep.FormattingEnabled = true;
-            cbbx_sapxep.Location = new Point(670, 34);
+            cbbx_sapxep.Location = new Point(133, 86);
             cbbx_sapxep.Name = "cbbx_sapxep";
-            cbbx_sapxep.Size = new Size(151, 28);
+            cbbx_sapxep.Size = new Size(111, 28);
             cbbx_sapxep.TabIndex = 25;
             cbbx_sapxep.SelectedIndexChanged += cbbx_sapxep_SelectedIndexChanged;
             // 
             // label9
             // 
             label9.AutoSize = true;
-            label9.Location = new Point(1144, 41);
+            label9.Location = new Point(546, 92);
             label9.Name = "label9";
             label9.Size = new Size(37, 20);
             label9.TabIndex = 24;
@@ -81,7 +87,7 @@
             // label8
             // 
             label8.AutoSize = true;
-            label8.Location = new Point(843, 41);
+            label8.Location = new Point(277, 93);
             label8.Name = "label8";
             label8.Size = new Size(60, 20);
             label8.TabIndex = 23;
@@ -90,7 +96,7 @@
             // label7
             // 
             label7.AutoSize = true;
-            label7.Location = new Point(587, 41);
+            label7.Location = new Point(50, 93);
             label7.Name = "label7";
             label7.Size = new Size(62, 20);
             label7.TabIndex = 22;
@@ -101,12 +107,12 @@
             dtgv_customerList.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dtgv_customerList.BackgroundColor = SystemColors.ControlLightLight;
             dtgv_customerList.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dtgv_customerList.Location = new Point(522, 84);
+            dtgv_customerList.Location = new Point(47, 131);
             dtgv_customerList.Margin = new Padding(3, 3, 5, 3);
             dtgv_customerList.Name = "dtgv_customerList";
             dtgv_customerList.ReadOnly = true;
             dtgv_customerList.RowHeadersWidth = 51;
-            dtgv_customerList.Size = new Size(976, 588);
+            dtgv_customerList.Size = new Size(782, 588);
             dtgv_customerList.TabIndex = 21;
             dtgv_customerList.CellClick += dtgv_customerList_CellClick;
             dtgv_customerList.CellContentClick += dtgv_customerList_CellClick;
@@ -114,7 +120,7 @@
             // cbbx_sodong
             // 
             cbbx_sodong.FormattingEnabled = true;
-            cbbx_sodong.Location = new Point(862, 691);
+            cbbx_sodong.Location = new Point(177, 730);
             cbbx_sodong.Name = "cbbx_sodong";
             cbbx_sodong.Size = new Size(78, 28);
             cbbx_sodong.TabIndex = 32;
@@ -123,7 +129,7 @@
             // lbl_trang
             // 
             lbl_trang.AutoSize = true;
-            lbl_trang.Location = new Point(1116, 695);
+            lbl_trang.Location = new Point(431, 734);
             lbl_trang.Name = "lbl_trang";
             lbl_trang.Size = new Size(41, 20);
             lbl_trang.TabIndex = 31;
@@ -132,7 +138,7 @@
             // btn_trangsau
             // 
             btn_trangsau.Cursor = Cursors.Hand;
-            btn_trangsau.Location = new Point(1215, 691);
+            btn_trangsau.Location = new Point(530, 730);
             btn_trangsau.Name = "btn_trangsau";
             btn_trangsau.Size = new Size(94, 29);
             btn_trangsau.TabIndex = 30;
@@ -143,7 +149,7 @@
             // btn_trangtruoc
             // 
             btn_trangtruoc.Cursor = Cursors.Hand;
-            btn_trangtruoc.Location = new Point(1001, 691);
+            btn_trangtruoc.Location = new Point(316, 730);
             btn_trangtruoc.Name = "btn_trangtruoc";
             btn_trangtruoc.Size = new Size(94, 29);
             btn_trangtruoc.TabIndex = 29;
@@ -154,34 +160,78 @@
             // label10
             // 
             label10.AutoSize = true;
-            label10.Location = new Point(807, 695);
+            label10.Location = new Point(122, 734);
             label10.Name = "label10";
             label10.Size = new Size(38, 20);
             label10.TabIndex = 28;
             label10.Text = "Row";
             // 
+            // panel1
+            // 
+            panel1.BackColor = SystemColors.ControlLightLight;
+            panel1.Controls.Add(lbl_detail);
+            panel1.Controls.Add(dtgv_detail);
+            panel1.Controls.Add(label1);
+            panel1.Controls.Add(label7);
+            panel1.Controls.Add(cbbx_sodong);
+            panel1.Controls.Add(dtgv_customerList);
+            panel1.Controls.Add(lbl_trang);
+            panel1.Controls.Add(label8);
+            panel1.Controls.Add(btn_trangsau);
+            panel1.Controls.Add(label9);
+            panel1.Controls.Add(btn_trangtruoc);
+            panel1.Controls.Add(cbbx_sapxep);
+            panel1.Controls.Add(label10);
+            panel1.Controls.Add(cbbx_cot);
+            panel1.Controls.Add(tbx_timkiem);
+            panel1.Location = new Point(0, 0);
+            panel1.Name = "panel1";
+            panel1.Size = new Size(1528, 789);
+            panel1.TabIndex = 33;
+            // 
+            // lbl_detail
+            // 
+            lbl_detail.AutoSize = true;
+            lbl_detail.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 163);
+            lbl_detail.Location = new Point(853, 85);
+            lbl_detail.Name = "lbl_detail";
+            lbl_detail.Size = new Size(284, 28);
+            lbl_detail.TabIndex = 35;
+            lbl_detail.Text = "Purchase history's customer:";
+            // 
+            // dtgv_detail
+            // 
+            dtgv_detail.BackgroundColor = SystemColors.ControlLightLight;
+            dtgv_detail.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dtgv_detail.Location = new Point(853, 131);
+            dtgv_detail.Name = "dtgv_detail";
+            dtgv_detail.RowHeadersWidth = 51;
+            dtgv_detail.Size = new Size(652, 588);
+            dtgv_detail.TabIndex = 34;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Font = new Font("Segoe UI", 19.8000011F, FontStyle.Bold, GraphicsUnit.Point, 163);
+            label1.Location = new Point(34, 13);
+            label1.Name = "label1";
+            label1.Size = new Size(312, 46);
+            label1.TabIndex = 33;
+            label1.Text = "Manage Customer";
+            // 
             // ManageCustomer
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            Controls.Add(cbbx_sodong);
-            Controls.Add(lbl_trang);
-            Controls.Add(btn_trangsau);
-            Controls.Add(btn_trangtruoc);
-            Controls.Add(label10);
-            Controls.Add(tbx_timkiem);
-            Controls.Add(cbbx_cot);
-            Controls.Add(cbbx_sapxep);
-            Controls.Add(label9);
-            Controls.Add(label8);
-            Controls.Add(label7);
-            Controls.Add(dtgv_customerList);
+            Controls.Add(panel1);
             Name = "ManageCustomer";
             Size = new Size(1528, 789);
             Load += ManageCustomer_Load;
             ((System.ComponentModel.ISupportInitialize)dtgv_customerList).EndInit();
+            panel1.ResumeLayout(false);
+            panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)dtgv_detail).EndInit();
             ResumeLayout(false);
-            PerformLayout();
         }
 
         #endregion
@@ -198,5 +248,9 @@
         private Button btn_trangsau;
         private Button btn_trangtruoc;
         private Label label10;
+        private Panel panel1;
+        private Label label1;
+        private Label lbl_detail;
+        private DataGridView dtgv_detail;
     }
 }

@@ -181,7 +181,13 @@ namespace QuanLyNoir_BTL.Views
                     optionsMenu.Show(productPanel, e.Location);
                 }
             };
-
+            picImage.MouseDown += (s, e) =>
+            {
+                if (e.Button == MouseButtons.Right)
+                {
+                    optionsMenu.Show(productPanel, e.Location);
+                }
+            };
             // Đảm bảo rằng các điều khiển con không chặn sự kiện chuột phải
             foreach (Control ctrl in productPanel.Controls)
             {
