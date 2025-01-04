@@ -15,6 +15,8 @@ namespace QuanLyNoir_BTL.Views
         private string imageURL;
 
         private bool reload;
+        private int rootInventory;
+
         //isNew: True -> Add New Item, False -> Update
         public AddNewProduct(bool isNew, Guid productColorId) //Chinh sua hoac them moi
         {
@@ -125,7 +127,8 @@ namespace QuanLyNoir_BTL.Views
                 pnl_colorBox.BackColor = ColorTranslator.FromHtml(color.ColorCode);
 
                 // Cập nhật thông tin ProductColorSize
-                tbx_inventory.Text = productColorSize != null ? productColorSize.Inventory.ToString() : "0";
+                rootInventory = productColorSize != null ? productColorSize.Inventory : 0;
+                tbx_inventory.Text = rootInventory.ToString();
 
                 // Cập nhật hình ảnh
                 if (imageUrl != null)
@@ -516,7 +519,11 @@ namespace QuanLyNoir_BTL.Views
                 ShowValidationMark(lbl_inventory, "Vui lòng nhập số lượng tồn kho hợp lệ (phải là số không âm)!");
                 return;
             }
-
+            if (string.IsNullOrWhiteSpace(tbx_addmore.Text) || !int.TryParse(tbx_addmore.Text, out int amount) || amount < 0)
+            {
+                ShowValidationMark(lbl_inventory, "Vui lòng nhập số lượng nhập thêm hợp lệ (phải là số không âm)!");
+                return;
+            }
             if (string.IsNullOrWhiteSpace(tbx_price.Text) || !decimal.TryParse(tbx_price.Text, out decimal price) || price < 0)
             {
                 ShowValidationMark(lbl_price, "Vui lòng nhập giá sản phẩm hợp lệ (phải là số không âm)!");
@@ -703,6 +710,18 @@ namespace QuanLyNoir_BTL.Views
                 tbx_colorNote.Text = colorName;
                 tbx_colorNote.ForeColor = Color.Gray; // Màu sắc cho placeholder
             }
+        }
+
+        private void tbx_addmore_TextChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                if (!String.IsNullOrEmpty(tbx_addmore.Text))
+                {
+                    tbx_inventory.Text = (rootInventory + int.Parse(tbx_addmore.Text.Trim())).ToString();
+                }
+                else tbx_inventory.Text = rootInventory.ToString();
+            } catch { }
         }
     }
 }

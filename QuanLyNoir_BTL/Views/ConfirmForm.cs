@@ -180,7 +180,7 @@ namespace QuanLyNoir_BTL.Views
                     var pdfFilePath = GenerateInvoicePdf(invoice);
 
                     // Optionally, print the PDF after generation
-                    OpenPdfWithDefaultViewer(pdfFilePath);
+                    Task.Run(() => OpenPdfWithDefaultViewer(pdfFilePath));
                 }
             }
             catch (Exception ex)
@@ -212,15 +212,12 @@ namespace QuanLyNoir_BTL.Views
                                 tbx_nameCus.Text = customer.Name;
                                 tbx_emailCus.Text = customer.Email;
                                 customerId = customer.Id;
-
-                                tbx_nameCus.Enabled = false;
-                                tbx_emailCus.Enabled = false;
                             } else
                             {
-                                tbx_nameCus.Enabled = true;
-                                tbx_emailCus.Enabled = true;
                                 customerId = Guid.Empty;
                             }
+                            tbx_nameCus.Enabled = true;
+                            tbx_emailCus.Enabled = true;
                         }
                     }
                 });
@@ -714,7 +711,7 @@ namespace QuanLyNoir_BTL.Views
             foreach (var detail in invoiceDetails)
             {
                 // Add the item description (product name)
-                table.AddCell(new Cell().Add(new Paragraph(detail.ProductColorSize.ProductColor.Product.ProdName)
+                table.AddCell(new Cell().Add(new Paragraph(detail.ProductColorSize.ProductColor.Product.ProdName + " " + detail.ProductColorSize.ProductColor.ColorName + " " + detail.ProductColorSize.SizeId)
                     .SetFontSize(10)
                     .SetTextAlignment(TextAlignment.LEFT)));
 
@@ -724,12 +721,12 @@ namespace QuanLyNoir_BTL.Views
                     .SetTextAlignment(TextAlignment.CENTER)));
 
                 // Add the unit price
-                table.AddCell(new Cell().Add(new Paragraph($"${detail.Price.ToString("0.00")}")
+                table.AddCell(new Cell().Add(new Paragraph($"${(detail.Price/ detail.Amount).ToString("0.00")}")
                     .SetFontSize(10)
                     .SetTextAlignment(TextAlignment.CENTER)));
 
                 // Add the subtotal (Quantity * UnitPrice)
-                table.AddCell(new Cell().Add(new Paragraph($"${(detail.Amount * detail.Price).ToString("0.00")}")
+                table.AddCell(new Cell().Add(new Paragraph($"${(detail.Price).ToString("0.00")}")
                     .SetFontSize(10)
                     .SetTextAlignment(TextAlignment.CENTER)));
             }

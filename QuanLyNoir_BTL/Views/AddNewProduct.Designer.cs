@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             lbl_formName = new Label();
             pictureBox1 = new PictureBox();
             groupBox1 = new GroupBox();
@@ -76,6 +77,12 @@
             bgWorker = new System.ComponentModel.BackgroundWorker();
             progressBar1 = new ProgressBar();
             btn_addcolor = new Button();
+            contextMenuStrip1 = new ContextMenuStrip(components);
+            groupBox8 = new GroupBox();
+            label1 = new Label();
+            label9 = new Label();
+            tbx_addmore = new TextBox();
+            label10 = new Label();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
@@ -84,6 +91,7 @@
             groupBox5.SuspendLayout();
             groupBox6.SuspendLayout();
             groupBox7.SuspendLayout();
+            groupBox8.SuspendLayout();
             SuspendLayout();
             // 
             // lbl_formName
@@ -256,7 +264,7 @@
             groupBox4.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
             groupBox4.Location = new Point(481, 274);
             groupBox4.Name = "groupBox4";
-            groupBox4.Size = new Size(394, 91);
+            groupBox4.Size = new Size(205, 91);
             groupBox4.TabIndex = 5;
             groupBox4.TabStop = false;
             groupBox4.Text = "Inventory";
@@ -274,7 +282,7 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(311, 42);
+            label2.Location = new Point(155, 42);
             label2.Name = "label2";
             label2.Size = new Size(45, 20);
             label2.TabIndex = 1;
@@ -284,7 +292,7 @@
             // 
             tbx_inventory.Location = new Point(14, 39);
             tbx_inventory.Name = "tbx_inventory";
-            tbx_inventory.Size = new Size(279, 27);
+            tbx_inventory.Size = new Size(135, 27);
             tbx_inventory.TabIndex = 0;
             // 
             // groupBox5
@@ -565,12 +573,69 @@
             btn_addcolor.Visible = false;
             btn_addcolor.Click += btn_addcolor_Click;
             // 
+            // contextMenuStrip1
+            // 
+            contextMenuStrip1.ImageScalingSize = new Size(20, 20);
+            contextMenuStrip1.Name = "contextMenuStrip1";
+            contextMenuStrip1.Size = new Size(61, 4);
+            // 
+            // groupBox8
+            // 
+            groupBox8.Controls.Add(label10);
+            groupBox8.Controls.Add(label1);
+            groupBox8.Controls.Add(label9);
+            groupBox8.Controls.Add(tbx_addmore);
+            groupBox8.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+            groupBox8.Location = new Point(695, 274);
+            groupBox8.Name = "groupBox8";
+            groupBox8.Size = new Size(179, 91);
+            groupBox8.TabIndex = 24;
+            groupBox8.TabStop = false;
+            groupBox8.Text = "Add more";
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.ForeColor = Color.Red;
+            label1.Location = new Point(82, 0);
+            label1.Name = "label1";
+            label1.Size = new Size(13, 20);
+            label1.TabIndex = 21;
+            label1.Text = " ";
+            // 
+            // label9
+            // 
+            label9.AutoSize = true;
+            label9.Location = new Point(130, 42);
+            label9.Name = "label9";
+            label9.Size = new Size(45, 20);
+            label9.TabIndex = 1;
+            label9.Text = "items";
+            // 
+            // tbx_addmore
+            // 
+            tbx_addmore.Location = new Point(27, 39);
+            tbx_addmore.Name = "tbx_addmore";
+            tbx_addmore.Size = new Size(97, 27);
+            tbx_addmore.TabIndex = 0;
+            tbx_addmore.TextChanged += tbx_addmore_TextChanged;
+            // 
+            // label10
+            // 
+            label10.AutoSize = true;
+            label10.Location = new Point(6, 42);
+            label10.Name = "label10";
+            label10.Size = new Size(19, 20);
+            label10.TabIndex = 25;
+            label10.Text = "+";
+            // 
             // AddNewProduct
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.ControlLightLight;
             ClientSize = new Size(987, 715);
+            Controls.Add(groupBox8);
             Controls.Add(btn_addcolor);
             Controls.Add(progressBar1);
             Controls.Add(lbl_color);
@@ -610,6 +675,8 @@
             groupBox6.PerformLayout();
             groupBox7.ResumeLayout(false);
             groupBox7.PerformLayout();
+            groupBox8.ResumeLayout(false);
+            groupBox8.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -664,5 +731,11 @@
         private System.ComponentModel.BackgroundWorker bgWorker;
         private ProgressBar progressBar1;
         private Button btn_addcolor;
+        private ContextMenuStrip contextMenuStrip1;
+        private GroupBox groupBox8;
+        private Label label1;
+        private Label label9;
+        private TextBox tbx_addmore;
+        private Label label10;
     }
 }
