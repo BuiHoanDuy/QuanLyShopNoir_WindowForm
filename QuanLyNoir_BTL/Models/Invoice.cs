@@ -7,25 +7,25 @@ namespace QuanLyNoir_BTL.Models;
 
 public partial class Invoice
 {
-    public Guid Id { get; set; }
+   public Guid Id { get; set; }
 
-    public DateTime? CreatedAt { get; set; }
+   public DateTime? CreatedAt { get; set; }
 
-    public decimal Total { get; set; }
+   public decimal Total { get; set; }
 
-    public string PaymentMethod { get; set; }
+   public string PaymentMethod { get; set; }
 
-    public Guid CreatedBy { get; set; }
+   public Guid CreatedBy { get; set; }
 
-    public Guid? VoucherId { get; set; }
+   public Guid? VoucherId { get; set; }
 
-    public virtual Account CreatedByNavigation { get; set; }
+   public Guid? CustomerId { get; set; }
 
-    public virtual ICollection<InvoiceDetail> InvoiceDetails { get; set; } = new List<InvoiceDetail>();
+   public virtual Account CreatedByNavigation { get; set; }
 
-    public virtual Voucher Voucher { get; set; }
-    public virtual Customer Customer { get; set; }
-    public Guid? customer_id { get; set; }
+   public virtual Customer Customer { get; set; }
 
+   public virtual ICollection<InvoiceDetail> InvoiceDetails { get; set; } = new List<InvoiceDetail>();
 
+   public virtual Voucher Voucher { get; set; }
 }

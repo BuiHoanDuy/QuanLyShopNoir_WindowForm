@@ -44,9 +44,9 @@
             lbl_cus = new Label();
             lbl_emailCus = new Label();
             lbl_phoneCus = new Label();
-            tbx_nameCus = new ComboBox();
-            tbx_emailCus = new ComboBox();
-            tbx_phoneCus = new ComboBox();
+            tbx_nameCus = new TextBox();
+            tbx_emailCus = new TextBox();
+            tbx_phoneCus = new TextBox();
             SuspendLayout();
             // 
             // flpnl_cart
@@ -219,30 +219,27 @@
             // 
             // tbx_nameCus
             // 
-            tbx_nameCus.FormattingEnabled = true;
-            tbx_nameCus.Location = new Point(86, 328);
-            tbx_nameCus.Margin = new Padding(3, 2, 3, 2);
+            tbx_nameCus.Location = new Point(86, 326);
             tbx_nameCus.Name = "tbx_nameCus";
             tbx_nameCus.Size = new Size(261, 23);
-            tbx_nameCus.TabIndex = 21;
+            tbx_nameCus.TabIndex = 24;
+            tbx_nameCus.Text = "Unknown";
             // 
             // tbx_emailCus
             // 
-            tbx_emailCus.FormattingEnabled = true;
-            tbx_emailCus.Location = new Point(86, 362);
-            tbx_emailCus.Margin = new Padding(3, 2, 3, 2);
+            tbx_emailCus.Location = new Point(86, 363);
             tbx_emailCus.Name = "tbx_emailCus";
             tbx_emailCus.Size = new Size(261, 23);
-            tbx_emailCus.TabIndex = 22;
+            tbx_emailCus.TabIndex = 25;
+            tbx_emailCus.Text = "Unknown";
             // 
             // tbx_phoneCus
             // 
-            tbx_phoneCus.FormattingEnabled = true;
-            tbx_phoneCus.Location = new Point(86, 398);
-            tbx_phoneCus.Margin = new Padding(3, 2, 3, 2);
+            tbx_phoneCus.Location = new Point(86, 402);
             tbx_phoneCus.Name = "tbx_phoneCus";
             tbx_phoneCus.Size = new Size(261, 23);
-            tbx_phoneCus.TabIndex = 23;
+            tbx_phoneCus.TabIndex = 26;
+            tbx_phoneCus.Text = "Unknown";
             // 
             // ConfirmForm
             // 
@@ -295,8 +292,9 @@
         private Label lbl_cus;
         private Label lbl_emailCus;
         private Label lbl_phoneCus;
-        private ComboBox tbx_nameCus;
-        private ComboBox tbx_emailCus;
-        private ComboBox tbx_phoneCus;
+
+        private TextBox tbx_nameCus;
+        private TextBox tbx_emailCus;
+        private TextBox tbx_phoneCus;
     }
 }

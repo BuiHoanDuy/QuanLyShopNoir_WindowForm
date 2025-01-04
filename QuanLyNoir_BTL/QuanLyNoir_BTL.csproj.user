@@ -46,6 +46,10 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\MenuForm.resx">
+    <EmbeddedResource Update="Views\ConfirmForm.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\MasterForm_SellProduct.resx">
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
