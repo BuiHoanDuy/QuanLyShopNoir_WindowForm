@@ -66,7 +66,7 @@
             lbl_name.AutoSize = true;
             lbl_name.Location = new Point(1540, 28);
             lbl_name.Name = "lbl_name";
-            lbl_name.Size = new Size(37, 15);
+            lbl_name.Size = new Size(47, 20);
             lbl_name.TabIndex = 20;
             lbl_name.Text = "name";
             // 
@@ -116,7 +116,7 @@
             lbl_datetime.Font = new Font("Arial Narrow", 10.2F, FontStyle.Regular, GraphicsUnit.Point, 0);
             lbl_datetime.Location = new Point(1063, 26);
             lbl_datetime.Name = "lbl_datetime";
-            lbl_datetime.Size = new Size(99, 17);
+            lbl_datetime.Size = new Size(129, 22);
             lbl_datetime.TabIndex = 26;
             lbl_datetime.Text = "Tuesday, 1 1 2024";
             // 
@@ -145,7 +145,7 @@
             label6.Font = new Font("Microsoft Sans Serif", 19.8000011F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 134);
             label6.Location = new Point(66, 23);
             label6.Name = "label6";
-            label6.Size = new Size(68, 31);
+            label6.Size = new Size(84, 39);
             label6.TabIndex = 23;
             label6.Text = "Noir";
             // 
@@ -154,7 +154,7 @@
             tbx_search.Cursor = Cursors.IBeam;
             tbx_search.Location = new Point(201, 25);
             tbx_search.Name = "tbx_search";
-            tbx_search.Size = new Size(621, 23);
+            tbx_search.Size = new Size(621, 27);
             tbx_search.TabIndex = 23;
             tbx_search.TextChanged += tbx_search_TextChanged;
             // 
@@ -250,7 +250,7 @@
             lbl_totalMoney.Font = new Font("Segoe UI", 15F);
             lbl_totalMoney.Location = new Point(22, 719);
             lbl_totalMoney.Name = "lbl_totalMoney";
-            lbl_totalMoney.Size = new Size(151, 28);
+            lbl_totalMoney.Size = new Size(189, 35);
             lbl_totalMoney.TabIndex = 28;
             lbl_totalMoney.Text = "Total Money: 0$";
             // 
@@ -302,7 +302,7 @@
             lbl_page.AutoSize = true;
             lbl_page.Location = new Point(563, 687);
             lbl_page.Name = "lbl_page";
-            lbl_page.Size = new Size(16, 15);
+            lbl_page.Size = new Size(21, 20);
             lbl_page.TabIndex = 46;
             lbl_page.Text = "...";
             // 
@@ -344,7 +344,7 @@
             // 
             // MasterForm_SellProduct
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(9F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1708, 923);
             Controls.Add(progressBar1);

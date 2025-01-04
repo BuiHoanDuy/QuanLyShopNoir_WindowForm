@@ -78,7 +78,7 @@ public partial class ShopNoirContext : DbContext
             entity.Property(e => e.Name)
                 .IsRequired()
                 .HasColumnName("name");
-            entity.Property(e => e.PhoneNumber).HasColumnName("phone_number");
+            entity.Property(e => e.Phone).HasColumnName("phone_number");
         });
 
         modelBuilder.Entity<Invoice>(entity =>

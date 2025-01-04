@@ -10,7 +10,7 @@ namespace QuanLyNoir_BTL
         // Khai báo các đối tượng nhưng chưa khởi tạo
         private Lazy<ManageProductControl> manageProductControl = new Lazy<ManageProductControl>(() => new ManageProductControl());
         private Lazy<ManageAccountControl> manageAccountControl;
-        private Lazy<ManageCustomer> manageCustomerControl;
+        private Lazy<ManageCustomer> manageCustomerControl = new Lazy<ManageCustomer>(() => new ManageCustomer());
         private Lazy<ManageVoucherControl> manageVoucherControl = new Lazy<ManageVoucherControl>(() => new ManageVoucherControl());
         private Lazy<AnalyseRevenueControl> revenueControl  = new Lazy<AnalyseRevenueControl>(() => new AnalyseRevenueControl());
         public MenuForm(Guid userId, string username)
@@ -21,8 +21,6 @@ namespace QuanLyNoir_BTL
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
             lbl_name.Text = username;
             manageAccountControl = new Lazy<ManageAccountControl>(() => new ManageAccountControl(userId));
-            manageCustomerControl = new Lazy<ManageCustomer>(() => new ManageCustomer(userId));
-
         }
         private void ManageProduct_FormClosing(object sender, FormClosingEventArgs e)
         {

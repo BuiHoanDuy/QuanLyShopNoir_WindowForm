@@ -31,6 +31,7 @@ namespace QuanLyNoir_BTL.Views
         private List<KeyValuePair<ProductInfomation, int>> cartList;
         decimal totalBill; Guid staffId;
         decimal newTotalBill; // Giá trị của bill sau khi áp dụng voucher
+        Guid customerId; //Dùng để cập nhật lại Khách hàng
         public ConfirmForm(List<KeyValuePair<ProductInfomation, int>> cartList, decimal totalBill, Guid staffId)
         {
             InitializeComponent();
@@ -66,68 +67,70 @@ namespace QuanLyNoir_BTL.Views
                 Total = newTotalBill,
                 PaymentMethod = cbbx_paymentMethod.Text,
                 CreatedBy = staffId,
-
             };
 
-            //Xu ly customer
-            var cusId = Guid.NewGuid();
-            var cusName = tbx_nameCus.Text;
+            // Xử lý khách hàng
             var cusPhone = tbx_phoneCus.Text;
+            var cusName = tbx_nameCus.Text;
             var cusEmail = tbx_emailCus.Text;
-            if (string.IsNullOrEmpty(cusName) && string.IsNullOrEmpty(cusPhone) && string.IsNullOrEmpty(cusEmail))
-            {
-                cusName = cusPhone = cusEmail = "Unknown";
-            }
 
             if (!string.IsNullOrEmpty(cusPhone))
             {
-                using var _context = new ShopNoirContext();
-                var customerDb = _context.Customers.FirstOrDefault(c => c.Name == cusName);
-                if (customerDb != null)
+                using (var _context = new ShopNoirContext())
                 {
-                    if (!string.IsNullOrEmpty(cusName) && cusName != customerDb.Name)
-                    {
-                        MessageBox.Show($"This customer already exist with name: {customerDb.Name}!", "Error");
-                        return;
-                    } else if (!string.IsNullOrEmpty(cusEmail) && cusEmail != customerDb.Email)
-                    {
-                        MessageBox.Show($"This customer already exist with email: {customerDb.Name}!", "Error");
-                        return;
-                    }
+                    // Tìm khách hàng theo số điện thoại
+                    var existingCustomer = await _context.Customers.FirstOrDefaultAsync(c => c.Phone == cusPhone);
 
-                    cusId = customerDb.Id;
-                }
-                else
-                {
-                    var newCus = new Customer()
+                    if (existingCustomer != null)
                     {
-                        Id = cusId,
-                        Name = cusName,
-                        Phone_Number = cusPhone,
-                        Email = cusEmail,
-                    };
-                    _context.Customers.Add(newCus);
-                    await _context.SaveChangesAsync();
+                        // Cập nhật thông tin nếu cần
+                        if (!string.IsNullOrEmpty(cusName) && cusName != existingCustomer.Name)
+                        {
+                            existingCustomer.Name = cusName;
+                        }
+
+                        if (!string.IsNullOrEmpty(cusEmail) && cusEmail != existingCustomer.Email)
+                        {
+                            existingCustomer.Email = cusEmail;
+                        }
+
+                        await _context.SaveChangesAsync();
+                        invoice.CustomerId = existingCustomer.Id; // Gán ID khách hàng vào hóa đơn
+                    }
+                    else
+                    {
+                        // Thêm khách hàng mới nếu không tồn tại
+                        var newCustomer = new Customer
+                        {
+                            Id = Guid.NewGuid(),
+                            Name = cusName,
+                            Phone = cusPhone,
+                            Email = cusEmail,
+                        };
+
+                        _context.Customers.Add(newCustomer);
+                        await _context.SaveChangesAsync();
+                        invoice.CustomerId = newCustomer.Id; // Gán ID khách hàng vào hóa đơn
+                    }
                 }
-            }
-            if (cusId != Guid.Empty) { 
-                invoice.Customer_Id = cusId;
             }
 
             if (voucher != null)
             {
                 invoice.VoucherId = voucher.Id;
             }
+
             try
             {
                 using (var _context = new ShopNoirContext())
                 {
                     _context.ChangeTracker.Clear(); // Xóa trạng thái theo dõi
+
                     var productColorSizes = await _context.ProductColorSizes
                         .Where(pcs => cartList.Select(c => c.Key.Id).Contains(pcs.ProductColorId))
-                        .Include(pcs => pcs.ProductColor)     // Include related ProductColor
-                        .ThenInclude(pc => pc.Product)        // Include related Product data within ProductColor
-                        .Include(pcs => pcs.Size)             // Include related Size data
+                        .Include(pcs => pcs.ProductColor)
+                        .ThenInclude(pc => pc.Product)
+                        .Include(pcs => pcs.Size)
                         .ToListAsync();
 
                     foreach (var item in cartList)
@@ -165,18 +168,21 @@ namespace QuanLyNoir_BTL.Views
 
                     _context.Invoices.Add(invoice);
                     await _context.SaveChangesAsync();
+
                     if (voucher != null)
                     {
                         invoice.Voucher = voucher;
                     }
+
                     MessageBox.Show("Invoice saved successfully!", "Success");
+
                     // Generate the PDF for the invoice
                     var pdfFilePath = GenerateInvoicePdf(invoice);
 
                     // Optionally, print the PDF after generation
                     OpenPdfWithDefaultViewer(pdfFilePath);
                 }
-        }
+            }
             catch (Exception ex)
             {
                 cartList.Clear();
@@ -184,6 +190,43 @@ namespace QuanLyNoir_BTL.Views
                 MessageBox.Show($"Error saving invoice: {ex.Message}", "Error");
             }
         }
+
+        public void loadCustomer()
+        {
+            Task.Run(() =>
+            {
+                this.Invoke((MethodInvoker)delegate
+                {
+                    if (String.IsNullOrEmpty(tbx_phoneCus.Text))
+                    {
+                        tbx_nameCus.Enabled = false;
+                        tbx_emailCus.Enabled = false;
+                    }
+                    else
+                    {
+                        using (var _context = new ShopNoirContext())
+                        {
+                            var customer = _context.Customers.FirstOrDefault(c => c.Phone.Equals(tbx_phoneCus.Text));
+                            if (customer != null)
+                            {
+                                tbx_nameCus.Text = customer.Name;
+                                tbx_emailCus.Text = customer.Email;
+                                customerId = customer.Id;
+
+                                tbx_nameCus.Enabled = false;
+                                tbx_emailCus.Enabled = false;
+                            } else
+                            {
+                                tbx_nameCus.Enabled = true;
+                                tbx_emailCus.Enabled = true;
+                                customerId = Guid.Empty;
+                            }
+                        }
+                    }
+                });
+            });
+        }
+    
         public async Task<Voucher> getVoucherForSave(string voucherCode)
         {
             using (var _context = new ShopNoirContext())
@@ -446,6 +489,12 @@ namespace QuanLyNoir_BTL.Views
                 if (voucher.MinOrderValue.HasValue && totalBill < voucher.MinOrderValue)
                 {
                     MessageBox.Show("The current bill's value is less than the minimum one to use!!");
+                    this.Invoke((MethodInvoker)delegate
+                    {
+                        newTotalBill = totalBill;
+                        lbl_totalBill.Text = $"Total Bill: {totalBill}$";
+                        cbbx_voucher.Text = "";
+                    });
                     return;
                 }
                 this.Invoke((MethodInvoker)delegate
@@ -549,11 +598,11 @@ namespace QuanLyNoir_BTL.Views
                 AddTitle(document);
 
                 // Customer Info
-                var customer = invoice.Customer_Id != null ? GetCustomerInfo(invoice.Customer_Id) : null;
+                var customer = invoice.CustomerId != null ? GetCustomerInfo(invoice.CustomerId) : null;
 
 
 
-                
+
 
                 // Add invoice summary
                 AddInvoiceSummary(document, invoice);
@@ -577,7 +626,7 @@ namespace QuanLyNoir_BTL.Views
         static void OpenPdfWithDefaultViewer(string pdfPath)
         {
             try
-            { 
+            {
                 // Start the process using the default program for PDF files
                 Process.Start(new ProcessStartInfo
                 {
@@ -608,7 +657,8 @@ namespace QuanLyNoir_BTL.Views
 
         static void AddCustomerInfo(Document document, Customer customer)
         {
-            if (customer == null || (customer.Name == "Unknown" && customer.Email == "Unknown" && customer.Phone_Number == "Unknown")) {
+            if (customer == null || (customer.Name == "Unknown" && customer.Email == "Unknown" && customer.Phone == "Unknown"))
+            {
                 return;
             }
             // Define body font style
@@ -632,7 +682,7 @@ namespace QuanLyNoir_BTL.Views
                 .SetFontSize(12)
                 .SetMarginBottom(5);
 
-            Paragraph customerPhone = new Paragraph($"Phone: {customer.Phone_Number}")
+            Paragraph customerPhone = new Paragraph($"Phone: {customer.Phone}")
                 .SetFont(bodyFont)
                 .SetFontSize(12)
                 .SetMarginBottom(5);
@@ -709,14 +759,13 @@ namespace QuanLyNoir_BTL.Views
             string[] summaryData = {
                 $"Invoice ID: {invoice.Id.ToString().Substring(0, 8)}",
                 $"Date: {invoice.CreatedAt}",
-                $"Subtotal: ${invoice.Total}",
-                invoice.VoucherId != null ?  $"Discount: -${invoice.Voucher.DiscountValue}" : "",
+                $"Total: ${invoice.Total}",
+                invoice.VoucherId != null ?  $"Discount: -${invoice.Voucher.DiscountValue} {invoice.Voucher.DiscountType}" : "",
                 $"Tax (10%): ${(double)(invoice.Total - (invoice.VoucherId != null ?  invoice.Voucher.DiscountValue : 0) )* 0.1}",
-                $"Total Amount: ${(double)(invoice.Total - (invoice.VoucherId != null ?  invoice.Voucher.DiscountValue : 0) )* 0.9}",
+                $"Total after tax: ${(double)(invoice.Total - (invoice.VoucherId != null ?  invoice.Voucher.DiscountValue : 0) )* 0.9}",
                 $"Payment Method: {invoice.PaymentMethod}",
 
             };
-
             foreach (var line in summaryData)
             {
                 document.Add(new Paragraph(line)
@@ -726,5 +775,9 @@ namespace QuanLyNoir_BTL.Views
             }
         }
 
+        private void tbx_phoneCus_TextChanged(object sender, EventArgs e)
+        {
+            loadCustomer();
+        }
     }
 }

@@ -1,0 +1,56 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Compile Update="Views\AddNewProduct.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Views\AddNewVoucher.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Views\AnalyseRevenueControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Views\ConfirmForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Views\ManageAccountControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Views\ManageCustomer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Views\ManageVoucherControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Views\MasterForm_SellProduct.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Views\MenuForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Views\ManageProductControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Views\RevenueDetail.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Views\SignIn.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Views\TakingProductForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Update="Views\AddNewProduct.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\MenuForm.resx">
+    <EmbeddedResource Update="Views\ConfirmForm.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\MasterForm_SellProduct.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+</Project>
