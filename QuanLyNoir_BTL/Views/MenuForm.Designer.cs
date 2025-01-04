@@ -34,7 +34,7 @@ namespace QuanLyNoir_BTL
             btn_manageAccount = new Button();
             btn_manageVoucher = new Button();
             btn_analyseRevenue = new Button();
-            btn_manageOrder = new Button();
+            btn_manageCustomer = new Button();
             btn_manageproduct = new Button();
             label6 = new Label();
             lbl_name = new Label();
@@ -59,7 +59,7 @@ namespace QuanLyNoir_BTL
             panel1.Controls.Add(btn_manageAccount);
             panel1.Controls.Add(btn_manageVoucher);
             panel1.Controls.Add(btn_analyseRevenue);
-            panel1.Controls.Add(btn_manageOrder);
+            panel1.Controls.Add(btn_manageCustomer);
             panel1.Controls.Add(btn_manageproduct);
             panel1.Controls.Add(label6);
             panel1.Location = new Point(-2, 47);
@@ -104,17 +104,17 @@ namespace QuanLyNoir_BTL
             btn_analyseRevenue.UseVisualStyleBackColor = true;
             btn_analyseRevenue.Click += btn_analyseRevenue_Click;
             // 
-            // btn_manageOrder
+            // btn_manageCustomer
             // 
-            btn_manageOrder.Cursor = Cursors.Hand;
-            btn_manageOrder.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 163);
-            btn_manageOrder.Location = new Point(998, 10);
-            btn_manageOrder.Name = "btn_manageOrder";
-            btn_manageOrder.Size = new Size(204, 44);
-            btn_manageOrder.TabIndex = 5;
-            btn_manageOrder.Text = "Manage Order";
-            btn_manageOrder.UseVisualStyleBackColor = true;
-            btn_manageOrder.Click += btn_manageOrder_Click;
+            btn_manageCustomer.Cursor = Cursors.Hand;
+            btn_manageCustomer.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 163);
+            btn_manageCustomer.Location = new Point(998, 10);
+            btn_manageCustomer.Name = "btn_manageCustomer";
+            btn_manageCustomer.Size = new Size(204, 44);
+            btn_manageCustomer.TabIndex = 5;
+            btn_manageCustomer.Text = "Manage Customers";
+            btn_manageCustomer.UseVisualStyleBackColor = true;
+            btn_manageCustomer.Click += btn_manageOrder_Click;
             // 
             // btn_manageproduct
             // 
@@ -133,10 +133,10 @@ namespace QuanLyNoir_BTL
             // label6
             // 
             label6.AutoSize = true;
-            label6.Font = new Font("STLiti", 19.8000011F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 134);
+            label6.Font = new Font("Microsoft Sans Serif", 19.8000011F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 134);
             label6.Location = new Point(50, 19);
             label6.Name = "label6";
-            label6.Size = new Size(75, 35);
+            label6.Size = new Size(68, 31);
             label6.TabIndex = 3;
             label6.Text = "Noir";
             // 
@@ -145,7 +145,7 @@ namespace QuanLyNoir_BTL
             lbl_name.AutoSize = true;
             lbl_name.Location = new Point(1358, 16);
             lbl_name.Name = "lbl_name";
-            lbl_name.Size = new Size(47, 20);
+            lbl_name.Size = new Size(37, 15);
             lbl_name.TabIndex = 18;
             lbl_name.Text = "name";
             // 
@@ -183,7 +183,7 @@ namespace QuanLyNoir_BTL
         private Button btn_signout;
         private Panel panel1;
         private Button btn_analyseRevenue;
-        private Button btn_manageOrder;
+        private Button btn_manageCustomer;
         private Button btn_manageproduct;
         private Label label6;
         private Label lbl_name;

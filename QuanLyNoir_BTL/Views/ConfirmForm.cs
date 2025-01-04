@@ -78,6 +78,7 @@ namespace QuanLyNoir_BTL.Views
             {
                 cusName = cusPhone = cusEmail = "Unknown";
             }
+
             if (!string.IsNullOrEmpty(cusPhone))
             {
                 using var _context = new ShopNoirContext();
@@ -93,6 +94,7 @@ namespace QuanLyNoir_BTL.Views
                         MessageBox.Show($"This customer already exist with email: {customerDb.Name}!", "Error");
                         return;
                     }
+
                     cusId = customerDb.Id;
                 }
                 else

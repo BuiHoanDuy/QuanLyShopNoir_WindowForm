@@ -292,6 +292,7 @@
         private Label lbl_cus;
         private Label lbl_emailCus;
         private Label lbl_phoneCus;
+
         private TextBox tbx_nameCus;
         private TextBox tbx_emailCus;
         private TextBox tbx_phoneCus;
