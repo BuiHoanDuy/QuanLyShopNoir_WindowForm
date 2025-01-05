@@ -49,8 +49,6 @@ namespace QuanLyNoir_BTL.Views
             if (discountType) rdbtn_percentage.Checked = true;
             else rdbtn_fixed.Checked = true;
             tbx_discountValue.Text = discountValue;
-            if (status) rdbtn_activated.Checked = true;
-            else rdbtn_unactivated.Checked = true;
             tbx_minOrderValue.Text = minimumOrderValue;
             ntbx_maxUsage.Text = maxUsage;
             dtpk_startday.Value = startDay; // Use TimeOnly.MinValue to set the time part to 00:00:00
@@ -112,7 +110,7 @@ namespace QuanLyNoir_BTL.Views
                     MaxUsage = int.Parse(ntbx_maxUsage.Value.ToString()),
                     UsedCount = 0, // Khởi tạo với giá trị 0 nếu là voucher mới
                     MinOrderValue = string.IsNullOrEmpty(tbx_minOrderValue.Text) ? null : (decimal?)decimal.Parse(tbx_minOrderValue.Text),
-                    Status = rdbtn_activated.Checked
+                    Status = true,
                 };
 
                 // Kiểm tra End Date
@@ -229,8 +227,29 @@ namespace QuanLyNoir_BTL.Views
                         voucher.MaxUsage = Convert.ToInt32(ntbx_maxUsage.Value);
                         voucher.UsedCount = 0;
                         voucher.MinOrderValue = string.IsNullOrEmpty(tbx_minOrderValue.Text) ? null : (decimal?)decimal.Parse(tbx_minOrderValue.Text);
-                        voucher.Status = rdbtn_activated.Checked;
 
+                        // Kiểm tra End Date
+                        if (rdbtn_fixedDay.Checked)
+                        {
+                            voucher.EndDate = DateOnly.FromDateTime(dtpk_endday.Value);
+                        }
+                        else if (rdbtn_validityPeriod.Checked)
+                        {
+                            int periodValue = (int)ntbx_validityPeriod.Value;
+                            DateTime endDate = dtpk_startday.Value;
+
+                            // Thêm khoảng thời gian theo lựa chọn
+                            switch (cbbx_dayOrMonth.SelectedItem.ToString())
+                            {
+                                case "Day":
+                                    endDate = endDate.AddDays(periodValue);
+                                    break;
+                                case "Month":
+                                    endDate = endDate.AddMonths(periodValue);
+                                    break;
+                            }
+                            voucher.EndDate = DateOnly.FromDateTime(endDate);
+                        }
                         // Lưu thay đổi vào cơ sở dữ liệu
                         _context.SaveChanges();
 
