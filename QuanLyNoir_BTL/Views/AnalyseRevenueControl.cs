@@ -364,11 +364,11 @@ namespace QuanLyNoir_BTL.Views
 
         private void Load_data()
         {
-            init_comboBoxYear();
-            init_comboBoxMonth();
+            setComboBoxYear();
+            setComboBoxMonth();
         }
 
-        private int init_comboBoxYear()
+        private int setComboBoxYear()
         {
             // Lấy năm hiện tại
             int currentYear = DateTime.Now.Year;
@@ -386,7 +386,7 @@ namespace QuanLyNoir_BTL.Views
             return currentYear;
         }
 
-        private void init_comboBoxMonth()
+        private void setComboBoxMonth()
         {
             // Lấy năm hiện tại
             int currentYear = DateTime.Now.Year;
@@ -407,24 +407,24 @@ namespace QuanLyNoir_BTL.Views
             cbbx_month.SelectedItem = currentMonth;
         }
 
-        private void setComboBoxMonth(int currentYear)
-        {
-            int currentMonth = DateTime.Now.Month;
+        //private void setComboBoxMonth(int currentYear)
+        //{
+        //    int currentMonth = DateTime.Now.Month;
 
-            // Tạo danh sách các năm từ 2023 đến năm hiện tại
-            List<int> months;
-            if ((int)cbbx_year.SelectedValue < currentYear)
-                months = Enumerable.Range(1, 12).ToList();
-            else
-                months = Enumerable.Range(1, currentMonth).ToList();
+        //    // Tạo danh sách các năm từ 2023 đến năm hiện tại
+        //    List<int> months;
+        //    if ((int)cbbx_year.SelectedValue < currentYear)
+        //        months = Enumerable.Range(1, 12).ToList();
+        //    else
+        //        months = Enumerable.Range(1, currentMonth).ToList();
 
-            // Gán danh sách năm vào ComboBox
-            cbbx_month.DataSource = months;
+        //    // Gán danh sách năm vào ComboBox
+        //    cbbx_month.DataSource = months;
 
-            // Tuỳ chỉnh nếu cần
-            cbbx_month.DropDownStyle = ComboBoxStyle.DropDownList; // Chỉ cho phép chọn, không nhập
-            cbbx_month.SelectedItem = currentMonth;
-        }
+        //    // Tuỳ chỉnh nếu cần
+        //    cbbx_month.DropDownStyle = ComboBoxStyle.DropDownList; // Chỉ cho phép chọn, không nhập
+        //    cbbx_month.SelectedItem = currentMonth;
+        //}
 
 
 
@@ -450,6 +450,7 @@ namespace QuanLyNoir_BTL.Views
 
         private void cbbx_year_SelectedIndexChanged(object sender, EventArgs e)
         {
+            setComboBoxMonth();
             LoadChartData(cartesianChart1);
         }
 
@@ -549,8 +550,9 @@ namespace QuanLyNoir_BTL.Views
                         Total = invoiceInfo.Total,
                         PaymentMethod = invoiceInfo.PaymentMethod,
                         Amount = invoiceInfo.InvoiceDetails.Sum(d => d.Amount), // Tổng số lượng sản phẩm
-                        Name = invoiceInfo.CreatedByNavigation.Name, 
+                        CreateBy = invoiceInfo.CreatedByNavigation.Name, 
                         Voucher = invoiceInfo.Voucher.Code,
+                        Custumer = invoiceInfo.Customer.Name
                     })
                     .AsNoTracking()
                     .ToListAsync();
@@ -643,7 +645,8 @@ namespace QuanLyNoir_BTL.Views
                    Total = invoiceInfo.Total,
                    PaymentMethod = invoiceInfo.PaymentMethod,
                    Amount = invoiceInfo.InvoiceDetails.Sum(d => d.Amount), // Tổng số lượng sản phẩm
-                   Name = invoiceInfo.CreatedByNavigation.Name,
+                   CreateBy = invoiceInfo.CreatedByNavigation.Name,
+                   Custumer = invoiceInfo.Customer.Name
                })
                .AsNoTracking()
                .ToListAsync();
@@ -684,7 +687,8 @@ namespace QuanLyNoir_BTL.Views
                             dataSheet.Cells[row, 4].Value = allData[i].Tax;
                             dataSheet.Cells[row, 5].Value = allData[i].Revenue;
                             dataSheet.Cells[row, 6].Value = allData[i].PaymentMethod;
-                            dataSheet.Cells[row, 7].Value = allData[i].Name;
+                            dataSheet.Cells[row, 7].Value = allData[i].CreateBy;
+                            dataSheet.Cells[row, 8].Value = allData[i].Custumer;
                         }
 
                         // Thêm worksheet biểu đồ
@@ -782,7 +786,7 @@ namespace QuanLyNoir_BTL.Views
                 var invoiceId = row.Cells["Id"].Value;
                 var total = row.Cells["Total"].Value.ToString();
                 var revenue = row.Cells["Revenue"].Value.ToString();
-                var name = row.Cells["Name"].Value.ToString();
+                var name = row.Cells["CreateBy"].Value.ToString();
                 var date = row.Cells["CreatedAt"].Value.ToString();
                 if (invoiceId != null)
                 {

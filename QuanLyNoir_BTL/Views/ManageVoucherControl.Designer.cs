@@ -60,6 +60,7 @@
             btn_reset = new Button();
             btn_edit = new Button();
             btn_delete = new Button();
+            btn_print = new Button();
             grbx_status.SuspendLayout();
             grbx_date.SuspendLayout();
             grbx_type.SuspendLayout();
@@ -422,10 +423,23 @@
             btn_delete.UseVisualStyleBackColor = true;
             btn_delete.Click += btn_delete_Click;
             // 
+            // btn_print
+            // 
+            btn_print.Cursor = Cursors.Hand;
+            btn_print.Enabled = false;
+            btn_print.Location = new Point(963, 66);
+            btn_print.Name = "btn_print";
+            btn_print.Size = new Size(94, 29);
+            btn_print.TabIndex = 56;
+            btn_print.Text = "Print";
+            btn_print.UseVisualStyleBackColor = true;
+            btn_print.Click += btn_print_Click;
+            // 
             // ManageVoucherControl
             // 
             AutoScaleMode = AutoScaleMode.None;
             BackColor = Color.White;
+            Controls.Add(btn_print);
             Controls.Add(btn_delete);
             Controls.Add(btn_edit);
             Controls.Add(btn_reset);
@@ -495,5 +509,6 @@
         private Button btn_today_startday;
         private Button btn_edit;
         private Button btn_delete;
+        private Button btn_print;
     }
 }
