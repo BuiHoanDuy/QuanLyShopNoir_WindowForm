@@ -1,8 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using iText.Kernel.Pdf;
+using iTextSharp.text;
+using iTextSharp.text.pdf;
 using QuanLyNoir_BTL.Models;
 using System.Data;
 using System.Linq.Dynamic.Core;
-using System.Windows.Forms;
+using PageSize = iTextSharp.text.PageSize;
+using Path = System.IO.Path;
+
 
 namespace QuanLyNoir_BTL.Views
 {
@@ -51,7 +55,7 @@ namespace QuanLyNoir_BTL.Views
             dtgv_voucherlist.EnableHeadersVisualStyles = false; // Bắt buộc để thay đổi kiểu
             dtgv_voucherlist.ColumnHeadersDefaultCellStyle.BackColor = System.Drawing.Color.DarkSlateGray; // Màu nền
             dtgv_voucherlist.ColumnHeadersDefaultCellStyle.ForeColor = System.Drawing.Color.Pink; // Màu chữ
-            dtgv_voucherlist.ColumnHeadersDefaultCellStyle.Font = new Font("Arial", 10, FontStyle.Regular); // Font chữ
+            dtgv_voucherlist.ColumnHeadersDefaultCellStyle.Font = new System.Drawing.Font("Arial", 10, FontStyle.Regular); // Font chữ
 
             dtgv_voucherlist.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
         }
@@ -123,6 +127,7 @@ namespace QuanLyNoir_BTL.Views
                     dtgv_voucherlist.DataSource = vouchersQuery.ToList();
 
                     dtgv_voucherlist.Columns["Id"].Visible = false;
+                    dtgv_voucherlist.Columns["Invoices"].Visible = false;
 
                     btn_trangtruoc.Enabled = currentPage > 1;
                     btn_trangsau.Enabled = currentPage < Math.Ceiling((double)totalRecords / pageSize);
@@ -239,6 +244,7 @@ namespace QuanLyNoir_BTL.Views
             dtgv_voucherlist.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             btn_edit.Enabled = true;
             btn_delete.Enabled = true;
+            btn_print.Enabled = true;
         }
 
         private void btn_delete_Click(object sender, EventArgs e)
@@ -302,18 +308,95 @@ namespace QuanLyNoir_BTL.Views
                 Guid _Id = (Guid)row.Cells["Id"].Value; // Lấy Id của voucher
 
                 string voucherCode = row.Cells["Code"].Value.ToString(); // Voucher code
-                bool discountType = row.Cells["DiscountType"].Value.ToString() == "P" ? true : false; 
+                bool discountType = row.Cells["DiscountType"].Value.ToString() == "P" ? true : false;
                 string discountValue = row.Cells["DiscountValue"].Value.ToString(); // Discount value (string)
                 DateTime startDay = ((DateOnly)row.Cells["StartDate"].Value).ToDateTime(TimeOnly.MinValue); // Convert DateOnly to DateTime
                 DateTime endDay = ((DateOnly)row.Cells["EndDate"].Value).ToDateTime(TimeOnly.MinValue); // Convert DateOnly to DateTime
-                string maxUsage = row.Cells["MinOrderValue"].Value?.ToString() ?? string.Empty;
+                string maxUsage = row.Cells["MaxUsage"].Value?.ToString() ?? string.Empty;
                 string minimumOrderValue = row.Cells["MinOrderValue"].Value?.ToString() ?? string.Empty; // Minimum order value (nullable string)
-                bool status =(bool)row.Cells["Status"].Value == true ? true : false;
+                bool status = (bool)row.Cells["Status"].Value == true ? true : false;
 
-                AddNewVoucher addNewVoucher = new AddNewVoucher(_Id, voucherCode,discountType, discountValue, status, minimumOrderValue, maxUsage, startDay, endDay);
+                AddNewVoucher addNewVoucher = new AddNewVoucher(_Id, voucherCode, discountType, discountValue, status, minimumOrderValue, maxUsage, startDay, endDay);
                 addNewVoucher.ShowDialog();
             }
             LoadDataIntoDataGridBox();
+        }
+
+
+        private void btn_print_Click(object sender, EventArgs e)
+        {
+            if (dtgv_voucherlist.SelectedRows.Count > 0)
+            {
+                DialogResult result = MessageBox.Show("Do you want to print this voucher?", "Print voucher", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+
+                if (result == DialogResult.Yes)
+                {
+                    // Lấy dòng đã chọn
+                    DataGridViewRow row = dtgv_voucherlist.SelectedRows[0];
+
+                    // Lấy dữ liệu từ DataGridView
+                    string voucherCode = row.Cells["Code"].Value.ToString();
+                    string discountType = row.Cells["DiscountType"].Value.ToString() == "P" ? "Percentage" : "Fixed Amount";
+                    string discountValue = row.Cells["DiscountValue"].Value.ToString();
+                    string startDay = ((DateOnly)row.Cells["StartDate"].Value).ToDateTime(TimeOnly.MinValue).ToShortDateString();
+                    string endDay = ((DateOnly)row.Cells["EndDate"].Value).ToDateTime(TimeOnly.MinValue).ToShortDateString();
+                    string minOrderValue = row.Cells["MinOrderValue"].Value?.ToString() ?? "None";
+
+                    // Đường dẫn lưu file PDF
+                    string outputPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "Voucher.pdf");
+
+                    try
+                    {
+                        // Tạo file PDF
+                        using (FileStream fs = new FileStream(outputPath, FileMode.Create, FileAccess.Write, FileShare.None))
+                        {
+                            Document pdfDoc = new Document(PageSize.A4, 50, 50, 25, 25);
+                            iTextSharp.text.pdf.PdfWriter writer = iTextSharp.text.pdf.PdfWriter.GetInstance(pdfDoc, fs); // Đảm bảo PdfWriter được nhận diện
+                            pdfDoc.Open();
+
+                            // Thêm tiêu đề
+                            var titleFont = FontFactory.GetFont(FontFactory.HELVETICA_BOLD, 20, BaseColor.BLACK);
+                            var normalFont = FontFactory.GetFont(FontFactory.HELVETICA, 12, BaseColor.BLACK);
+
+                            pdfDoc.Add(new Paragraph("Voucher Details", titleFont));
+                            pdfDoc.Add(new Paragraph("--------------------------------------------------\n"));
+
+                            // Thêm thông tin voucher
+                            pdfDoc.Add(new Paragraph($"Voucher Code: {voucherCode}", normalFont));
+                            if (discountType.Equals("Percentage"))
+                            {
+                                pdfDoc.Add(new Paragraph($"Discount Value: {float.Parse(discountValue)*100}%", normalFont));  
+                            }else
+                            {
+                                pdfDoc.Add(new Paragraph($"Discount Value: {float.Parse(discountValue)} $", normalFont));
+                            }
+
+                            pdfDoc.Add(new Paragraph($"Minimum Order Value: {minOrderValue} $", normalFont));
+
+                            pdfDoc.Add(new Paragraph("--------------------------------------------------\n"));
+
+                            pdfDoc.Add(new Paragraph($"Start Date: {startDay}", normalFont));
+                            pdfDoc.Add(new Paragraph($"End Date: {endDay}", normalFont));
+
+                            pdfDoc.Add(new Paragraph("\nThank you for using our services!", normalFont));
+
+                            pdfDoc.Close();
+                            writer.Close();
+                        }
+
+                        // Thông báo thành công
+                        MessageBox.Show($"Voucher PDF has been saved to {outputPath}.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"An error occurred while generating the PDF: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show("Please select a voucher from the list to print.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }

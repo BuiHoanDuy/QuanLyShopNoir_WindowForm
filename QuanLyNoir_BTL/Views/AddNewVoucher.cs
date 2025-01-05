@@ -150,7 +150,7 @@ namespace QuanLyNoir_BTL.Views
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Đã xảy ra lỗi: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Đã có voucher sử dụng mã này", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

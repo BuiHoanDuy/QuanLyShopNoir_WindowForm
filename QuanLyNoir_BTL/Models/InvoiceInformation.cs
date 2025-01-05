@@ -15,7 +15,8 @@
         // Doanh thu sau thuế: Total - Tax
         public decimal Revenue => Total - Tax;
 
-        public string Name { get; set; } // Tên nhân viên tạo hóa đơn
+        public string CreateBy { get; set; } // Tên nhân viên tạo hóa đơn
         public string Voucher {  get; set; } // voucher
+        public string Custumer {  get; set; } // KH
     }
 }

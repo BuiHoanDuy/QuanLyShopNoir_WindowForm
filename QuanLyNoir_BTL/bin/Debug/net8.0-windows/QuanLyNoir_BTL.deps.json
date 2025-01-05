@@ -20,6 +20,7 @@
           "PdfiumViewer": "2.13.0",
           "System.Linq.Dynamic.Core": "1.5.1",
           "EntityFramework": "6.5.1",
+          "iTextSharp": "5.5.13.4",
           "itext.bouncy-castle-adapter": "9.0.0",
           "itext7": "9.0.0",
           "itext7.bouncy-castle-adapter": "9.0.0",
@@ -256,6 +257,17 @@
       "itext7.bouncy-castle-fips-adapter/9.0.0": {
         "dependencies": {
           "itext.bouncy-castle-fips-adapter": "9.0.0"
+        }
+      },
+      "iTextSharp/5.5.13.4": {
+        "dependencies": {
+          "BouncyCastle.Cryptography": "2.4.0"
+        },
+        "runtime": {
+          "lib/net461/itextsharp.dll": {
+            "assemblyVersion": "5.5.13.4",
+            "fileVersion": "5.5.13.4"
+          }
         }
       },
       "LiveCharts.WinForms.NetCore3/0.9.8": {
@@ -1910,6 +1922,13 @@
       "sha512": "sha512-Xqk0D4CcgrWDJgMwfEiwAC7fVo0dk0teOw3xSQf7BMg1gt9+gkaSvgGNyHMk436Zs9zatC+RaJUzDevThUKcwg==",
       "path": "itext7.bouncy-castle-fips-adapter/9.0.0",
       "hashPath": "itext7.bouncy-castle-fips-adapter.9.0.0.nupkg.sha512"
+    },
+    "iTextSharp/5.5.13.4": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-/cvCNv8AJ+XuD99u4NfHSSxkBJKTdvP36wcfQF9V1Cjzi1ycyFSa4vJ64a3DhFVUTKVO60WF8OmAqngQDTHgYA==",
+      "path": "itextsharp/5.5.13.4",
+      "hashPath": "itextsharp.5.5.13.4.nupkg.sha512"
     },
     "LiveCharts.WinForms.NetCore3/0.9.8": {
       "type": "package",

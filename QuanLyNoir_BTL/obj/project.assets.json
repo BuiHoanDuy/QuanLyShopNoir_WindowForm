@@ -308,6 +308,18 @@
           "itext.bouncy-castle-fips-adapter": "9.0.0"
         }
       },
+      "iTextSharp/5.5.13.4": {
+        "type": "package",
+        "dependencies": {
+          "BouncyCastle.Cryptography": "2.4.0"
+        },
+        "compile": {
+          "lib/net461/itextsharp.dll": {}
+        },
+        "runtime": {
+          "lib/net461/itextsharp.dll": {}
+        }
+      },
       "LiveCharts.WinForms.NetCore3/0.9.8": {
         "type": "package",
         "dependencies": {
@@ -3420,6 +3432,22 @@
         "gnu-agpl-v3.0.md",
         "itext7.bouncy-castle-fips-adapter.9.0.0.nupkg.sha512",
         "itext7.bouncy-castle-fips-adapter.nuspec"
+      ]
+    },
+    "iTextSharp/5.5.13.4": {
+      "sha512": "/cvCNv8AJ+XuD99u4NfHSSxkBJKTdvP36wcfQF9V1Cjzi1ycyFSa4vJ64a3DhFVUTKVO60WF8OmAqngQDTHgYA==",
+      "type": "package",
+      "path": "itextsharp/5.5.13.4",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.md",
+        "gnu-agpl-v3.0.md",
+        "itextsharp.5.5.13.4.nupkg.sha512",
+        "itextsharp.nuspec",
+        "lib/net461/iTextSharp.xml",
+        "lib/net461/itextsharp.dll",
+        "notice.txt"
       ]
     },
     "LiveCharts.WinForms.NetCore3/0.9.8": {
@@ -9557,6 +9585,7 @@
       "PdfiumViewer >= 2.13.0",
       "System.Linq.Dynamic.Core >= 1.5.1",
       "entityframework >= 6.5.1",
+      "iTextSharp >= 5.5.13.4",
       "itext.bouncy-castle-adapter >= 9.0.0",
       "itext7 >= 9.0.0",
       "itext7.bouncy-castle-adapter >= 9.0.0",
@@ -9660,6 +9689,10 @@
             "target": "Package",
             "version": "[6.5.1, )"
           },
+          "iTextSharp": {
+            "target": "Package",
+            "version": "[5.5.13.4, )"
+          },
           "itext.bouncy-castle-adapter": {
             "target": "Package",
             "version": "[9.0.0, )"
@@ -9701,6 +9734,16 @@
     }
   },
   "logs": [
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Package 'iTextSharp 5.5.13.4' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net8.0-windows7.0'. This package may not be fully compatible with your project.",
+      "libraryId": "iTextSharp",
+      "targetGraphs": [
+        "net8.0-windows7.0"
+      ]
+    },
     {
       "code": "NU1701",
       "level": "Warning",

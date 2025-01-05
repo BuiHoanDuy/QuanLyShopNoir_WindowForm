@@ -416,6 +416,27 @@ namespace QuanLyNoir_BTL.Views
 
                 }
             };
+            // Gán sự kiện nhấn chuột trái vào panel để hiển thị TakingProductForm
+            picImage.MouseClick += (s, e) =>
+            {
+                if (e.Button == MouseButtons.Left) // Chỉ xử lý khi nhấn chuột trái
+                {
+                    if (product.TotalInventory <= 0)
+                    {
+                        MessageBox.Show("This product is sold out!!");
+                    }
+                    else
+                    {
+                        // Tạo và hiển thị form TakingProductForm
+                        TakingProductForm form = new TakingProductForm(product);
+                        if (form.ShowDialog() == DialogResult.OK)
+                        {
+                            Task.Run(() => AddProductToCart(new KeyValuePair<ProductInfomation, int>(form.product, form.amount)));
+                        }
+                    }
+
+                }
+            };
 
             // Thêm các control vào panel
             productPanel.Controls.Add(lblName);

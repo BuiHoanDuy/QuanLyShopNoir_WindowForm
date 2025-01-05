@@ -14,14 +14,16 @@ namespace QuanLyNoir_BTL.Views
         private Guid _Id;
         private Guid currentAccountId;
 
+        private System.Windows.Forms.Timer _timer = new System.Windows.Forms.Timer();
+        private const int TimerInterval = 500; // Thời gian chờ 500ms
+
         public ManageAccountControl(Guid userId)
         {
             InitializeComponent();
-            cbbx_cot.Items.Add("Id");
             cbbx_cot.Items.Add("Name");
             cbbx_cot.Items.Add("Username");
             cbbx_cot.Items.Add("Role");
-            cbbx_cot.SelectedIndex = 0; // Chọn mặc định
+            cbbx_cot.SelectedIndex = 1; // Chọn mặc định
 
             // Thêm các tùy chọn cho ComboBox cbbx_sapxep
             cbbx_sapxep.Items.Add("ASC");
@@ -45,6 +47,24 @@ namespace QuanLyNoir_BTL.Views
             }
 
             currentAccountId = userId;
+
+
+            _timer.Interval = TimerInterval; // Thay đổi thời gian nếu cần
+            _timer.Tick += Timer_Tick; // Đăng ký sự kiện
+        }
+
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            // Dừng Timer
+            _timer.Stop();
+
+            // Gọi lại LoadProductsAsync để tải lại sản phẩm
+            //if (!loadWorker.IsBusy)
+            //{
+            //    loadWorker.RunWorkerAsync();
+            //}
+
+            LoadDataIntoDataGridBox();
         }
 
         public void setCurrentAccount(Guid userID)
@@ -60,7 +80,7 @@ namespace QuanLyNoir_BTL.Views
             dtgv_accountList.ColumnHeadersDefaultCellStyle.ForeColor = System.Drawing.Color.Pink; // Màu chữ
             dtgv_accountList.ColumnHeadersDefaultCellStyle.Font = new Font("Arial", 10, FontStyle.Bold); // Font chữ
         }
-        private void LoadDataIntoDataGridBox()
+        private async void LoadDataIntoDataGridBox()
         {
             using (var _context = new ShopNoirContext())
             {
@@ -85,14 +105,14 @@ namespace QuanLyNoir_BTL.Views
                     string keyword = tbx_timkiem.Text.Trim();
 
                     // Truy vấn dữ liệu cho trang hiện tại
-                    var accounts = _context.Accounts
-                        .Where(ac => (ac.Name.Contains(keyword)
+                    var accounts =await _context.Accounts
+                        .Where(ac => (ac.Name.Contains(keyword) || ac.PhoneNumber.Contains(keyword)
                         || ac.Username.Contains(keyword)) && ac.Status == true
                         && ac.Id != currentAccountId)
                         .OrderBy($"{sortColumn} {sortOrder}") // Đảm bảo sắp xếp trước khi phân trang
                         .Skip((currentPage - 1) * pageSize) // Bỏ qua bản ghi trước đó
                         .Take(pageSize) // Lấy số bản ghi theo pageSize
-                        .ToList();
+                        .ToListAsync();
 
                     // Gán dữ liệu vào DataGridView
                     dtgv_accountList.DataSource = accounts;
@@ -138,8 +158,10 @@ namespace QuanLyNoir_BTL.Views
         }
         private void tbx_timkiem_TextChanged(object sender, EventArgs e)
         {
+            _timer.Stop();
             currentPage = 1;
             LoadDataIntoDataGridBox();
+            _timer.Start();
         }
 
         private void cbbx_sapxep_SelectedIndexChanged(object sender, EventArgs e)

@@ -372,3 +372,4 @@ C:\Users\Aus\Documents\Subjects\LapTrinhTrucQuan\BTL\QuanLyShopNoir_WindowForm\Q
 C:\Users\Aus\Documents\Subjects\LapTrinhTrucQuan\BTL\QuanLyShopNoir_WindowForm\QuanLyNoir_BTL\obj\Debug\net8.0-windows\QuanLyNo.78679408.Up2Date
 C:\Users\Aus\Documents\Subjects\LapTrinhTrucQuan\BTL\QuanLyShopNoir_WindowForm\QuanLyNoir_BTL\obj\Debug\net8.0-windows\QuanLyNoir_BTL.genruntimeconfig.cache
 C:\Users\Aus\Documents\Subjects\LapTrinhTrucQuan\BTL\QuanLyShopNoir_WindowForm\QuanLyNoir_BTL\obj\Debug\net8.0-windows\ref\QuanLyNoir_BTL.dll
+C:\Users\Aus\Documents\Subjects\LapTrinhTrucQuan\BTL\QuanLyShopNoir_WindowForm\QuanLyNoir_BTL\bin\Debug\net8.0-windows\itextsharp.dll

@@ -280,6 +280,7 @@
             // 
             // cbbx_month
             // 
+            cbbx_month.Enabled = false;
             cbbx_month.FormattingEnabled = true;
             cbbx_month.Location = new Point(102, 81);
             cbbx_month.Name = "cbbx_month";
