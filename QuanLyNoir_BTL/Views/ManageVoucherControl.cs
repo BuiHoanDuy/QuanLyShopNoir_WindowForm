@@ -88,7 +88,6 @@ namespace QuanLyNoir_BTL.Views
                         "Max Usage" => "MaxUsage",
                         "Usage Count" => "UsedCount",
                         "Minimum Order Value" => "MinOrderValue",
-                        "Status" => "Status",
                         _ => "Code" // Default to sorting by Code
                     };
 
@@ -102,7 +101,18 @@ namespace QuanLyNoir_BTL.Views
                     if (!string.IsNullOrEmpty(status_radioButtonCheck_text))
                     {
                         bool status = bool.Parse(status_radioButtonCheck_text);
-                        vouchersQuery = vouchersQuery.Where(vc => vc.Status == status);
+                        DateOnly currentDate = DateOnly.FromDateTime(DateTime.Now);
+
+                        if(status == true)
+                        {
+
+                        vouchersQuery = vouchersQuery.Where(vc => vc.StartDate <= currentDate &&
+                                                                  vc.EndDate >= currentDate);
+                        } else
+                        {
+                            vouchersQuery = vouchersQuery.Where(vc => vc.StartDate >= currentDate ||
+                                                               vc.EndDate <= currentDate);
+                        }
                     }
 
                     if (type_radioButtonCheck_text != "")
@@ -112,7 +122,7 @@ namespace QuanLyNoir_BTL.Views
 
                     // Filter by date range from DateTimePickers
                     // Lọc các voucher có ngày bắt đầu nằm trong khoảng người dùng chọn
-                    vouchersQuery = vouchersQuery.Where(vc => vc.StartDate >= startDate && vc.StartDate <= endDate);
+                    vouchersQuery = vouchersQuery.Where(vc => vc.StartDate >= startDate && vc.StartDate <= endDate && vc.Status == true);
 
                     // Filter by keyword if provided
                     vouchersQuery = vouchersQuery.Where(vc => vc.Code.Contains(keyword));
@@ -128,6 +138,7 @@ namespace QuanLyNoir_BTL.Views
 
                     dtgv_voucherlist.Columns["Id"].Visible = false;
                     dtgv_voucherlist.Columns["Invoices"].Visible = false;
+                    dtgv_voucherlist.Columns["Status"].Visible = false;
 
                     btn_trangtruoc.Enabled = currentPage > 1;
                     btn_trangsau.Enabled = currentPage < Math.Ceiling((double)totalRecords / pageSize);
@@ -265,21 +276,20 @@ namespace QuanLyNoir_BTL.Views
 
                         if (voucher != null)
                         {
-                            // Xóa voucher khỏi DbContext
-                            _context.Vouchers.Remove(voucher);
-
-                            // Lưu thay đổi vào cơ sở dữ liệu
-                            int rowsAffected = _context.SaveChanges();
-
-                            if (rowsAffected > 0)
+                            try
                             {
+                                // Xóa voucher khỏi DbContext
+                                voucher.Status = false;
+
+                                // Lưu thay đổi vào cơ sở dữ liệu
+                                _context.SaveChanges();
                                 MessageBox.Show("Voucher has been deleted!");
 
                                 LoadDataIntoDataGridBox();
                                 btn_edit.Enabled = false;
                                 btn_delete.Enabled = false;
                             }
-                            else
+                            catch
                             {
                                 MessageBox.Show("Voucher could not be deleted!");
                             }

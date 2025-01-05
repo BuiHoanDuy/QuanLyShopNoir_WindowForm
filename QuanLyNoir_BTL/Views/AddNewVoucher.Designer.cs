@@ -53,9 +53,6 @@
             rdbtn_validityPeriod = new RadioButton();
             rdbtn_fixedDay = new RadioButton();
             dtpk_endday = new DateTimePicker();
-            groupBox8 = new GroupBox();
-            rdbtn_unactivated = new RadioButton();
-            rdbtn_activated = new RadioButton();
             btn_save = new Button();
             btn_reset = new Button();
             btn_update = new Button();
@@ -68,7 +65,6 @@
             groupBox6.SuspendLayout();
             groupBox7.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)ntbx_validityPeriod).BeginInit();
-            groupBox8.SuspendLayout();
             SuspendLayout();
             // 
             // label1
@@ -338,42 +334,6 @@
             dtpk_endday.TabIndex = 0;
             dtpk_endday.Value = new DateTime(2025, 1, 31, 0, 0, 0, 0);
             // 
-            // groupBox8
-            // 
-            groupBox8.BackColor = Color.Transparent;
-            groupBox8.Controls.Add(rdbtn_unactivated);
-            groupBox8.Controls.Add(rdbtn_activated);
-            groupBox8.Location = new Point(81, 573);
-            groupBox8.Name = "groupBox8";
-            groupBox8.Size = new Size(338, 90);
-            groupBox8.TabIndex = 15;
-            groupBox8.TabStop = false;
-            groupBox8.Text = "Status";
-            // 
-            // rdbtn_unactivated
-            // 
-            rdbtn_unactivated.AutoSize = true;
-            rdbtn_unactivated.Cursor = Cursors.Hand;
-            rdbtn_unactivated.Location = new Point(185, 39);
-            rdbtn_unactivated.Name = "rdbtn_unactivated";
-            rdbtn_unactivated.Size = new Size(109, 24);
-            rdbtn_unactivated.TabIndex = 1;
-            rdbtn_unactivated.Text = "Unactivated";
-            rdbtn_unactivated.UseVisualStyleBackColor = true;
-            // 
-            // rdbtn_activated
-            // 
-            rdbtn_activated.AutoSize = true;
-            rdbtn_activated.Checked = true;
-            rdbtn_activated.Cursor = Cursors.Hand;
-            rdbtn_activated.Location = new Point(30, 39);
-            rdbtn_activated.Name = "rdbtn_activated";
-            rdbtn_activated.Size = new Size(93, 24);
-            rdbtn_activated.TabIndex = 0;
-            rdbtn_activated.TabStop = true;
-            rdbtn_activated.Text = "Activated";
-            rdbtn_activated.UseVisualStyleBackColor = true;
-            // 
             // btn_save
             // 
             btn_save.BackColor = Color.FromArgb(190, 210, 180);
@@ -424,7 +384,6 @@
             Controls.Add(btn_update);
             Controls.Add(btn_reset);
             Controls.Add(btn_save);
-            Controls.Add(groupBox8);
             Controls.Add(groupBox7);
             Controls.Add(groupBox6);
             Controls.Add(groupBox5);
@@ -450,8 +409,6 @@
             groupBox7.ResumeLayout(false);
             groupBox7.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)ntbx_validityPeriod).EndInit();
-            groupBox8.ResumeLayout(false);
-            groupBox8.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -477,9 +434,6 @@
         private GroupBox groupBox7;
         private DateTimePicker dtpk_startday;
         private DateTimePicker dtpk_endday;
-        private GroupBox groupBox8;
-        private RadioButton rdbtn_unactivated;
-        private RadioButton rdbtn_activated;
         private Button btn_save;
         private Label label3;
         private Label label4;
